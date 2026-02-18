@@ -1,0 +1,38 @@
+project:
+  type: website
+  title: "Building Agentic AI Systems"
+  preview:
+    port: 4700
+  output-dir: _site
+
+website:
+  navbar:
+    left:
+      - href: index.qmd
+        text: "Home"
+
+execute:
+  # https://quarto.org/docs/computations/python.html#kernel-daemon
+  daemon: 300
+  
+  # https://quarto.org/docs/computations/caching.html#jupyter-cache
+  cache: true
+
+  # https://quarto.org/docs/publishing/github-pages.html#freezing-computations
+  freeze: auto
+
+
+format:
+  html:
+    theme:
+      light: flatly
+      dark: darkly
+    respect-user-color-scheme: true
+    toc: true
+    toc-depth: 3
+    toc-title: "Contents"
+    anchor-sections: true
+    smooth-scroll: true
+
+number-depth: 1
+lightbox: auto

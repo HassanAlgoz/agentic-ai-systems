@@ -1,0 +1,10 @@
+---
+title: "Index"
+format: "html"
+---
+
+| Day | Description | Materials |
+| --- | ----------- | --------- |
+|  1  | **Quick Start with Deep Agents**<br/>an agent with access to a search engine. | [[notebook](./L01/quick-start.ipynb)] |
+|     | **Semantic Search**<br/>search over documents from any source. | [[notebook](./L02/semantic-search.ipynb)] |
+|     | **RAG Agent**<br/>build a Q&A application over an unstructured text data source. | [[notebook](./L03/RAG_agent.ipynb)] |
