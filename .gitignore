@@ -14,3 +14,4 @@ wheels/
 **/*.quarto_ipynb
 _site/
 site_libs/
+*_files/

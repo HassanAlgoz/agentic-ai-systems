@@ -1,0 +1,23 @@
+---
+title: "Projects"
+format: html
+---
+
+See real Use Cases to get ideas: https://docs.langchain.com/oss/python/langgraph/case-studies
+
+Some ideas:
+
+1. FAQ + Chat when unsure about the answer. Main idea: use RAG to answer questions, and use a chatbot to answer questions when the answer is not found in the RAG. use-case: https://laws.moj.gov.sa
+
+2. Automated selection of the best candidate for a job. Given a pool of candidates, when the Hiring Partner submits a job description, the system should be able to select the best candidate from the pool. Algorithm: use ELO scoring as in chess, and make a hierarchy to reduce complexity from O(n^2) to O(n log n). The system should be able to handle the case where the pool is large (e.g. 10000 candidates).
+
+3. Deep research: retrieve, rate and rank curriculums for a specific technical topic on many criteria:
+   - What ideas are commonly covered, and what ideas are unique to some courses over others.
+   - What pre-requisites are commonly mentioned for theses courses (and how much depth is required)
+   - Information density: depth, volume and timeline.
+   - Which takes a bottom-up vs a top-down approach
+   - What type of exercises are used.
+   - Instructors
+       - Which courses are co-authored vs single-authored
+       - Is the instructor an expert in the topic
+       - How many years of experience does the instructor have

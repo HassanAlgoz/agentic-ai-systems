@@ -24,15 +24,26 @@ execute:
 
 format:
   html:
-    theme:
-      light: flatly
-      dark: darkly
-    respect-user-color-scheme: true
     toc: true
     toc-depth: 3
     toc-title: "Contents"
     anchor-sections: true
     smooth-scroll: true
+    mermaid: 
+      theme: default
+    
+  revealjs:
+    slide-number: c/t
+    show-slide-number: all
+    transition: slide
+    background-transition: fade
+    chalkboard: true
+    progress: true
+    history: false
+    scrollable: true
+    width: 1600
+    height: 900
+    center: false
 
 number-depth: 1
 lightbox: auto
