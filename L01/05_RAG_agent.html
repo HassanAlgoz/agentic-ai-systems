@@ -1,0 +1,2190 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.8.26">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Build a RAG agent with LangChain – Building Agentic AI Systems</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-587c61ba64f3a5504c4d52d930310e48.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-7dc3907ddb6ec99bf1b87f80a83abe8b.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script src="../site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
+<link href="../site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
+<link href="../site_libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<style>html{ scroll-behavior: smooth; }</style>
+
+
+</head>
+
+<body class="nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">Building Agentic AI Systems</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../index.html"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Contents</h2>
+   
+  <ul>
+  <li><a href="#overview" id="toc-overview" class="nav-link active" data-scroll-target="#overview">Overview</a>
+  <ul class="collapse">
+  <li><a href="#concepts" id="toc-concepts" class="nav-link" data-scroll-target="#concepts">Concepts</a></li>
+  <li><a href="#preview" id="toc-preview" class="nav-link" data-scroll-target="#preview">Preview</a></li>
+  </ul></li>
+  <li><a href="#setup" id="toc-setup" class="nav-link" data-scroll-target="#setup">Setup</a>
+  <ul class="collapse">
+  <li><a href="#installation" id="toc-installation" class="nav-link" data-scroll-target="#installation">Installation</a></li>
+  <li><a href="#components" id="toc-components" class="nav-link" data-scroll-target="#components">Components</a></li>
+  </ul></li>
+  <li><a href="#indexing" id="toc-indexing" class="nav-link" data-scroll-target="#indexing">1. Indexing</a>
+  <ul class="collapse">
+  <li><a href="#loading-documents" id="toc-loading-documents" class="nav-link" data-scroll-target="#loading-documents">Loading documents</a></li>
+  <li><a href="#splitting-documents" id="toc-splitting-documents" class="nav-link" data-scroll-target="#splitting-documents">Splitting documents</a></li>
+  <li><a href="#storing-documents" id="toc-storing-documents" class="nav-link" data-scroll-target="#storing-documents">Storing documents</a></li>
+  </ul></li>
+  <li><a href="#retrieval-and-generation" id="toc-retrieval-and-generation" class="nav-link" data-scroll-target="#retrieval-and-generation">2. Retrieval and generation</a>
+  <ul class="collapse">
+  <li><a href="#rag-agents" id="toc-rag-agents" class="nav-link" data-scroll-target="#rag-agents">RAG agents</a></li>
+  </ul></li>
+  <li><a href="#build-a-rag-agent-with-langchain" id="toc-build-a-rag-agent-with-langchain" class="nav-link" data-scroll-target="#build-a-rag-agent-with-langchain">Build a RAG agent with LangChain</a>
+  <ul class="collapse">
+  <li><a href="#overview-1" id="toc-overview-1" class="nav-link" data-scroll-target="#overview-1">Overview</a>
+  <ul class="collapse">
+  <li><a href="#concepts-1" id="toc-concepts-1" class="nav-link" data-scroll-target="#concepts-1">Concepts</a></li>
+  <li><a href="#preview-1" id="toc-preview-1" class="nav-link" data-scroll-target="#preview-1">Preview</a></li>
+  </ul></li>
+  <li><a href="#setup-1" id="toc-setup-1" class="nav-link" data-scroll-target="#setup-1">Setup</a>
+  <ul class="collapse">
+  <li><a href="#installation-1" id="toc-installation-1" class="nav-link" data-scroll-target="#installation-1">Installation</a></li>
+  <li><a href="#langsmith" id="toc-langsmith" class="nav-link" data-scroll-target="#langsmith">LangSmith</a></li>
+  <li><a href="#storing-documents-1" id="toc-storing-documents-1" class="nav-link" data-scroll-target="#storing-documents-1">Storing documents</a></li>
+  </ul></li>
+  <li><a href="#retrieval-and-generation-1" id="toc-retrieval-and-generation-1" class="nav-link" data-scroll-target="#retrieval-and-generation-1">2. Retrieval and generation</a>
+  <ul class="collapse">
+  <li><a href="#rag-agents-1" id="toc-rag-agents-1" class="nav-link" data-scroll-target="#rag-agents-1">RAG agents</a></li>
+  <li><a href="#rag-chains" id="toc-rag-chains" class="nav-link" data-scroll-target="#rag-chains">RAG chains</a></li>
+  </ul></li>
+  <li><a href="#next-steps" id="toc-next-steps" class="nav-link" data-scroll-target="#next-steps">Next steps</a></li>
+  </ul></li>
+  </ul>
+<div class="quarto-alternate-formats"><h2>Other Formats</h2><ul><li><a href="05_RAG_agent.html"><i class="bi bi-file-slides"></i>RevealJS</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Build a RAG agent with LangChain</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="overview" class="level2">
+<h2 class="anchored" data-anchor-id="overview">Overview</h2>
+<p>One of the most powerful applications enabled by LLMs is sophisticated question-answering (Q&amp;A) chatbots. These are applications that can answer questions about specific source information. These applications use a technique known as Retrieval Augmented Generation, or <a href="https://docs.langchain.com/oss/python/langchain/retrieval/">RAG</a>.</p>
+<p>This tutorial will show how to build a simple Q&amp;A application over an unstructured text data source. We will demonstrate:</p>
+<ol type="1">
+<li>A RAG <a href="#rag-agents">agent</a> that executes searches with a simple tool. This is a good general-purpose implementation.</li>
+<li>A two-step RAG <a href="#rag-chains">chain</a> that uses just a single LLM call per query. This is a fast and effective method for simple queries.</li>
+</ol>
+<section id="concepts" class="level3">
+<h3 class="anchored" data-anchor-id="concepts">Concepts</h3>
+<p>We will cover the following concepts:</p>
+<ul>
+<li><p><strong>Indexing</strong>: a pipeline for ingesting data from a source and indexing it. <em>This usually happens in a separate process.</em></p></li>
+<li><p><strong>Retrieval and generation</strong>: the actual RAG process, which takes the user query at run time and retrieves the relevant data from the index, then passes that to the model.</p></li>
+</ul>
+<p>Once we’ve indexed our data, we will use an <a href="https://docs.langchain.com/oss/python/langchain/agents">agent</a> as our orchestration framework to implement the retrieval and generation steps.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The indexing portion of this tutorial will largely follow the <a href="https://docs.langchain.com/oss/python/langchain/knowledge-base">semantic search tutorial</a>.</p>
+<p>If your data is already available for search (i.e., you have a function to execute a search), or you’re comfortable with the content from that tutorial, feel free to skip to the section on <a href="#2-retrieval-and-generation">retrieval and generation</a></p>
+</div>
+</div>
+</section>
+<section id="preview" class="level3">
+<h3 class="anchored" data-anchor-id="preview">Preview</h3>
+<p>In this guide we’ll build an app that answers questions about the website’s content. The specific website we will use is the <a href="https://lilianweng.github.io/posts/2023-06-23-agent/">LLM Powered Autonomous Agents</a> blog post by Lilian Weng, which allows us to ask questions about the contents of the post.</p>
+<p>We can create a simple indexing pipeline and RAG chain to do this in ~40 lines of code. See below for the full code snippet:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> bs4</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> langchain.agents <span class="im">import</span> AgentState, create_agent</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> langchain_community.document_loaders <span class="im">import</span> WebBaseLoader</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> langchain.messages <span class="im">import</span> MessageLikeRepresentation</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> langchain_text_splitters <span class="im">import</span> RecursiveCharacterTextSplitter</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Load and chunk contents of the blog</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>loader <span class="op">=</span> WebBaseLoader(</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    web_paths<span class="op">=</span>(<span class="st">"https://lilianweng.github.io/posts/2023-06-23-agent/"</span>,),</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>    bs_kwargs<span class="op">=</span><span class="bu">dict</span>(</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>        parse_only<span class="op">=</span>bs4.SoupStrainer(</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>            class_<span class="op">=</span>(<span class="st">"post-content"</span>, <span class="st">"post-title"</span>, <span class="st">"post-header"</span>)</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>    ),</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>docs <span class="op">=</span> loader.load()</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>text_splitter <span class="op">=</span> RecursiveCharacterTextSplitter(chunk_size<span class="op">=</span><span class="dv">1000</span>, chunk_overlap<span class="op">=</span><span class="dv">200</span>)</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>all_splits <span class="op">=</span> text_splitter.split_documents(docs)</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a><span class="co"># Index chunks</span></span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>_ <span class="op">=</span> vector_store.add_documents(documents<span class="op">=</span>all_splits)</span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a><span class="co"># Construct a tool for retrieving context</span></span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a><span class="at">@tool</span>(response_format<span class="op">=</span><span class="st">"content_and_artifact"</span>)</span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> retrieve_context(query: <span class="bu">str</span>):</span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Retrieve information to help answer a query."""</span></span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>    retrieved_docs <span class="op">=</span> vector_store.similarity_search(query, k<span class="op">=</span><span class="dv">2</span>)</span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>    serialized <span class="op">=</span> <span class="st">"</span><span class="ch">\n\n</span><span class="st">"</span>.join(</span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a>        (<span class="ss">f"Source: </span><span class="sc">{</span>doc<span class="sc">.</span>metadata<span class="sc">}</span><span class="ch">\n</span><span class="ss">Content: </span><span class="sc">{</span>doc<span class="sc">.</span>page_content<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> doc <span class="kw">in</span> retrieved_docs</span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> serialized, retrieved_docs</span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a>tools <span class="op">=</span> [retrieve_context]</span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a><span class="co"># If desired, specify custom instructions</span></span>
+<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a>prompt <span class="op">=</span> (</span>
+<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a>    <span class="st">"You have access to a tool that retrieves context from a blog post. "</span></span>
+<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Use the tool to help answer user queries."</span></span>
+<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a>agent <span class="op">=</span> create_agent(model, tools, system_prompt<span class="op">=</span>prompt)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>query <span class="op">=</span> <span class="st">"What is task decomposition?"</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> step <span class="kw">in</span> agent.stream(</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    {<span class="st">"messages"</span>: [{<span class="st">"role"</span>: <span class="st">"user"</span>, <span class="st">"content"</span>: query}]},</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    stream_mode<span class="op">=</span><span class="st">"values"</span>,</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>):</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    step[<span class="st">"messages"</span>][<span class="op">-</span><span class="dv">1</span>].pretty_print()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Check out the <a href="https://smith.langchain.com/public/a117a1f8-c96c-4c16-a285-00b85646118e/r">LangSmith trace</a>.</p>
+</section>
+</section>
+<section id="setup" class="level2">
+<h2 class="anchored" data-anchor-id="setup">Setup</h2>
+<section id="installation" class="level3">
+<h3 class="anchored" data-anchor-id="installation">Installation</h3>
+<p>This tutorial requires these langchain dependencies:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">uv</span> add langchain langchain-text-splitters langchain-community bs4</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>For more details, see our <a href="https://docs.langchain.com/oss/python/langchain/install">Installation guide</a>.</p>
+</section>
+<section id="components" class="level3">
+<h3 class="anchored" data-anchor-id="components">Components</h3>
+<p>We will need to select <strong>three components</strong> from LangChain’s suite of integrations.</p>
+<section id="select-a-chat-model" class="level4">
+<h4 class="anchored" data-anchor-id="select-a-chat-model">1. Select a chat model</h4>
+<p>👉 Read the <a href="https://docs.langchain.com/oss/python/integrations/chat/openai/">OpenAI chat model integration docs</a></p>
+<pre class="shell"><code>uv add "langchain[openai]"</code></pre>
+<div id="3c98b6a6" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> dotenv <span class="im">import</span> load_dotenv</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>load_dotenv()</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="co"># We use OpenRouter for the agent — set OPENROUTER_API_KEY in .env</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Get your key at https://openrouter.ai/keys</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="kw">not</span> os.environ.get(<span class="st">"OPENROUTER_API_KEY"</span>):</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">raise</span> <span class="pp">RuntimeError</span>(</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>        <span class="st">"OPENROUTER_API_KEY is not set. Add it to your .env file, e.g.:</span><span class="ch">\n</span><span class="st">"</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>        <span class="st">"OPENROUTER_API_KEY=your-openrouter-api-key"</span></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>    )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div id="f902629e" class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> langchain.chat_models <span class="im">import</span> init_chat_model</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> init_chat_model(<span class="st">"gpt-5-nano"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>/home/halgoz/work/ai-agents/content/.venv/lib/python3.12/site-packages/tqdm/auto.py:21: TqdmWarning: IProgress not found. Please update jupyter and ipywidgets. See https://ipywidgets.readthedocs.io/en/stable/user_install.html
+  from .autonotebook import tqdm as notebook_tqdm</code></pre>
+</div>
+</div>
+</section>
+<section id="select-an-embeddings-model" class="level4">
+<h4 class="anchored" data-anchor-id="select-an-embeddings-model">2. Select an embeddings model</h4>
+<div id="46291912" class="cell" data-execution_count="3">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> langchain_openai <span class="im">import</span> OpenAIEmbeddings</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>embeddings <span class="op">=</span> OpenAIEmbeddings(model<span class="op">=</span><span class="st">"text-embedding-3-small"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="select-a-vector-store" class="level4">
+<h4 class="anchored" data-anchor-id="select-a-vector-store">3. Select a vector store</h4>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="ex">uv</span> add <span class="st">"langchain-core"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="8547b9ff" class="cell" data-execution_count="4">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> langchain_core.vectorstores <span class="im">import</span> InMemoryVectorStore</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>vector_store <span class="op">=</span> InMemoryVectorStore(embeddings)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+</section>
+</section>
+<section id="indexing" class="level2">
+<h2 class="anchored" data-anchor-id="indexing">1. Indexing</h2>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><strong>This section is an abbreviated version of the content in the <a href="https://docs.langchain.com/oss/python/langchain/knowledge-base">semantic search tutorial</a>.</strong></p>
+<p>If your data is already indexed and available for search (i.e., you have a function to execute a search), or if you’re comfortable with <a href="https://docs.langchain.com/oss/python/langchain/retrieval#document_loaders">document loaders</a>, <a href="https://docs.langchain.com/oss/python/langchain/retrieval#embedding_models">embeddings</a>, and <a href="https://docs.langchain.com/oss/python/langchain/retrieval#vectorstores">vector stores</a>, feel free to skip to the next section on <a href="https://docs.langchain.com/oss/python/langchain/rag#2-retrieval-and-generation">retrieval and generation</a>.</p>
+</div>
+</div>
+<p>Indexing commonly works as follows:</p>
+<ol type="1">
+<li><strong>Load</strong>: First we need to load our data. This is done with <a href="https://docs.langchain.com/oss/python/langchain/retrieval#document_loaders">Document Loaders</a>.</li>
+<li><strong>Split</strong>: <a href="https://docs.langchain.com/oss/python/langchain/retrieval#text_splitters">Text splitters</a> break large <code>Documents</code> into smaller chunks. This is useful both for indexing data and passing it into a model, as large chunks are harder to search over and won’t fit in a model’s finite context window.</li>
+<li><strong>Store</strong>: We need somewhere to store and index our splits, so that they can be searched over later. This is often done using a <a href="https://docs.langchain.com/oss/python/langchain/retrieval#vectorstores">VectorStore</a> and <a href="https://docs.langchain.com/oss/python/langchain/retrieval#embedding_models">Embeddings</a> model.</li>
+</ol>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><a href="https://mintcdn.com/langchain-5e9cc07a/I6RpA28iE233vhYX/images/rag_indexing.png?fit=max&amp;auto=format&amp;n=I6RpA28iE233vhYX&amp;q=85&amp;s=21403ce0d0c772da84dcc5b75cff4451" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="Index Diagram"><img src="https://mintcdn.com/langchain-5e9cc07a/I6RpA28iE233vhYX/images/rag_indexing.png?fit=max&amp;auto=format&amp;n=I6RpA28iE233vhYX&amp;q=85&amp;s=21403ce0d0c772da84dcc5b75cff4451" class="img-fluid figure-img" alt="Index Diagram"></a></p>
+<figcaption>Index Diagram</figcaption>
+</figure>
+</div>
+<section id="loading-documents" class="level3">
+<h3 class="anchored" data-anchor-id="loading-documents">Loading documents</h3>
+<p>We need to first load the blog post contents. We can use <a href="https://docs.langchain.com/oss/python/langchain/retrieval#document_loaders">DocumentLoaders</a> for this, which are objects that load in data from a source and return a list of <a href="https://reference.langchain.com/python/langchain_core/documents/#langchain_core.documents.base.Document">Document</a> objects.</p>
+<p>In this case we’ll use the <a href="https://docs.langchain.com/oss/python/integrations/document_loaders/web_base"><code>WebBaseLoader</code></a>, which uses <code>urllib</code> to load HTML from web URLs and <code>BeautifulSoup</code> to parse it to text. We can customize the HTML -&gt; text parsing by passing in parameters into the <code>BeautifulSoup</code> parser via <code>bs_kwargs</code> (see <a href="https://beautiful-soup-4.readthedocs.io/en/latest/#beautifulsoup">BeautifulSoup docs</a>). In this case only HTML tags with class “post-content”, “post-title”, or “post-header” are relevant, so we’ll remove all others.</p>
+<div id="db38a6df" class="cell" data-execution_count="5">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> bs4</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> langchain_community.document_loaders <span class="im">import</span> WebBaseLoader</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Only keep post title, headers, and content from the full HTML.</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>bs4_strainer <span class="op">=</span> bs4.SoupStrainer(class_<span class="op">=</span>(<span class="st">"post-title"</span>, <span class="st">"post-header"</span>, <span class="st">"post-content"</span>))</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>loader <span class="op">=</span> WebBaseLoader(</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>    web_paths<span class="op">=</span>(<span class="st">"https://lilianweng.github.io/posts/2023-06-23-agent/"</span>,),</span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>    bs_kwargs<span class="op">=</span>{<span class="st">"parse_only"</span>: bs4_strainer},</span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>docs <span class="op">=</span> loader.load()</span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">len</span>(docs) <span class="op">==</span> <span class="dv">1</span></span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Total characters: </span><span class="sc">{</span><span class="bu">len</span>(docs[<span class="dv">0</span>].page_content)<span class="sc">}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>USER_AGENT environment variable not set, consider setting it to identify your requests.</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Total characters: 43047</code></pre>
+</div>
+</div>
+<div id="e91386e8" class="cell" data-execution_count="6">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(docs[<span class="dv">0</span>].page_content[:<span class="dv">500</span>])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+
+      LLM Powered Autonomous Agents
+    
+Date: June 23, 2023  |  Estimated Reading Time: 31 min  |  Author: Lilian Weng
+
+
+Building agents with LLM (large language model) as its core controller is a cool concept. Several proof-of-concepts demos, such as AutoGPT, GPT-Engineer and BabyAGI, serve as inspiring examples. The potentiality of LLM extends beyond generating well-written copies, stories, essays and programs; it can be framed as a powerful general problem solver.
+Agent System Overview#
+In</code></pre>
+</div>
+</div>
+<p><strong>Go deeper</strong></p>
+<p><code>DocumentLoader</code>: Object that loads data from a source as list of <code>Documents</code>.</p>
+<ul>
+<li><a href="https://docs.langchain.com/oss/python/integrations/document_loaders/">Integrations</a>: 160+ integrations to choose from.</li>
+<li><a href="https://reference.langchain.com/python/langchain_core/document_loaders/#langchain_core.document_loaders.BaseLoader"><code>BaseLoader</code></a>: API reference for the base interface.</li>
+</ul>
+</section>
+<section id="splitting-documents" class="level3">
+<h3 class="anchored" data-anchor-id="splitting-documents">Splitting documents</h3>
+<p>Our loaded document is over 42k characters which is too long to fit into the context window of many models. Even for those models that could fit the full post in their context window, models can struggle to find information in very long inputs.</p>
+<p>To handle this we’ll split the <a href="https://reference.langchain.com/python/langchain_core/documents/#langchain_core.documents.base.Document"><code>Document</code></a> into chunks for embedding and vector storage. This should help us retrieve only the most relevant parts of the blog post at run time.</p>
+<p>As in the <a href="https://docs.langchain.com/oss/python/langchain/knowledge-base">semantic search tutorial</a>, we use a <code>RecursiveCharacterTextSplitter</code>, which will recursively split the document using common separators like new lines until each chunk is the appropriate size. This is the recommended text splitter for generic text use cases.</p>
+<div id="a4c7289f" class="cell" data-execution_count="7">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> langchain_text_splitters <span class="im">import</span> RecursiveCharacterTextSplitter</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>text_splitter <span class="op">=</span> RecursiveCharacterTextSplitter(</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>    chunk_size<span class="op">=</span><span class="dv">1000</span>,  <span class="co"># chunk size (characters)</span></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>    chunk_overlap<span class="op">=</span><span class="dv">200</span>,  <span class="co"># chunk overlap (characters)</span></span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>    add_start_index<span class="op">=</span><span class="va">True</span>,  <span class="co"># track index in original document</span></span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>all_splits <span class="op">=</span> text_splitter.split_documents(docs)</span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Split blog post into </span><span class="sc">{</span><span class="bu">len</span>(all_splits)<span class="sc">}</span><span class="ss"> sub-documents."</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Split blog post into 63 sub-documents.</code></pre>
+</div>
+</div>
+<p><strong>Go deeper</strong></p>
+<p><code>TextSplitter</code>: Object that splits a list of <a href="https://reference.langchain.com/python/langchain_core/documents/#langchain_core.documents.base.Document"><code>Document</code></a> objects into smaller chunks for storage and retrieval.</p>
+<ul>
+<li><a href="https://docs.langchain.com/oss/python/integrations/splitters/">Integrations</a></li>
+<li><a href="https://python.langchain.com/api_reference/text_splitters/base/langchain_text_splitters.base.TextSplitter.html">Interface</a>: API reference for the base interface.</li>
+</ul>
+</section>
+<section id="storing-documents" class="level3">
+<h3 class="anchored" data-anchor-id="storing-documents">Storing documents</h3>
+<p>Now we need to index our 66 text chunks so that we can search over them at runtime. Following the <a href="https://docs.langchain.com/oss/python/langchain/knowledge-base">semantic search tutorial</a>, our approach is to <a href="https://docs.langchain.com/oss/python/langchain/retrieval#embedding_models/">embed</a> the contents of each document split and insert these embeddings into a <a href="https://docs.langchain.com/oss/python/langchain/retrieval#vectorstores/">vector store</a>. Given an input query, we can then use vector search to retrieve relevant documents.</p>
+<p>We can embed and store all of our document splits in a single command using the vector store and embeddings model selected at the <a href="https://docs.langchain.com/oss/python/langchain/rag#components">start of the tutorial</a>.</p>
+<div id="d95b24b2" class="cell" data-execution_count="8">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>document_ids <span class="op">=</span> vector_store.add_documents(documents<span class="op">=</span>all_splits)</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(document_ids[:<span class="dv">3</span>])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>['7140256e-d3e0-4174-8abe-6941b0698ff3', 'b8079c9c-1552-4add-b4d0-c3bc454e258f', '5df27ff9-ff55-4f6c-8642-931608b5a21c']</code></pre>
+</div>
+</div>
+<p><strong>Go deeper</strong></p>
+<p><code>Embeddings</code>: Wrapper around a text embedding model, used for converting text to embeddings.</p>
+<ul>
+<li><a href="https://docs.langchain.com/oss/python/integrations/text_embedding/">Integrations</a>: 30+ integrations to choose from.</li>
+<li><a href="https://reference.langchain.com/python/langchain_core/embeddings/#langchain_core.embeddings.embeddings.Embeddings">Interface</a>: API reference for the base interface.</li>
+</ul>
+<p><code>VectorStore</code>: Wrapper around a vector database, used for storing and querying embeddings.</p>
+<ul>
+<li><a href="https://docs.langchain.com/oss/python/integrations/vectorstores/">Integrations</a>: 40+ integrations to choose from.</li>
+<li><a href="https://python.langchain.com/api_reference/core/vectorstores/langchain_core.vectorstores.base.VectorStore.html">Interface</a>: API reference for the base interface.</li>
+</ul>
+<p>This completes the <strong>Indexing</strong> portion of the pipeline. At this point we have a query-able vector store containing the chunked contents of our blog post. Given a user question, we should ideally be able to return the snippets of the blog post that answer the question.</p>
+</section>
+</section>
+<section id="retrieval-and-generation" class="level2">
+<h2 class="anchored" data-anchor-id="retrieval-and-generation">2. Retrieval and generation</h2>
+<p>RAG applications commonly work as follows:</p>
+<ol type="1">
+<li><strong>Retrieve</strong>: Given a user input, relevant splits are retrieved from storage using a <a href="https://docs.langchain.com/oss/python/langchain/retrieval#retrievers">Retriever</a>.</li>
+<li><strong>Generate</strong>: A <a href="https://docs.langchain.com/oss/python/langchain/models">model</a> produces an answer using a prompt that includes both the question with the retrieved data</li>
+</ol>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><a href="https://mintcdn.com/langchain-5e9cc07a/I6RpA28iE233vhYX/images/rag_retrieval_generation.png?fit=max&amp;auto=format&amp;n=I6RpA28iE233vhYX&amp;q=85&amp;s=994c3585cece93c80873d369960afd44" class="lightbox" data-gallery="quarto-lightbox-gallery-2" title="Retrieval Diagram"><img src="https://mintcdn.com/langchain-5e9cc07a/I6RpA28iE233vhYX/images/rag_retrieval_generation.png?fit=max&amp;auto=format&amp;n=I6RpA28iE233vhYX&amp;q=85&amp;s=994c3585cece93c80873d369960afd44" class="img-fluid figure-img" alt="Retrieval Diagram"></a></p>
+<figcaption>Retrieval Diagram</figcaption>
+</figure>
+</div>
+<p>Now let’s write the actual application logic. We want to create a simple application that takes a user question, searches for documents relevant to that question, passes the retrieved documents and initial question to a model, and returns an answer.</p>
+<p>We will demonstrate:</p>
+<ol type="1">
+<li>A RAG <a href="#rag-agents">agent</a> that executes searches with a simple tool. This is a good general-purpose implementation.</li>
+<li>A two-step RAG <a href="#rag-chains">chain</a> that uses just a single LLM call per query. This is a fast and effective method for simple queries.</li>
+</ol>
+<section id="rag-agents" class="level3">
+<h3 class="anchored" data-anchor-id="rag-agents">RAG agents</h3>
+<p>One formulation of a RAG application is as a simple <a href="https://docs.langchain.com/oss/python/langchain/agents">agent</a> with a tool that retrieves information. We can assemble a minimal RAG agent by implementing a <a href="https://docs.langchain.com/oss/python/langchain/tools">tool</a> that wraps our vector store:</p>
+<div id="46234bbf" class="cell" data-execution_count="9">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> langchain.tools <span class="im">import</span> tool</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="at">@tool</span>(response_format<span class="op">=</span><span class="st">"content_and_artifact"</span>)</span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> retrieve_context(query: <span class="bu">str</span>):</span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Retrieve information to help answer a query."""</span></span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>    retrieved_docs <span class="op">=</span> vector_store.similarity_search(query, k<span class="op">=</span><span class="dv">2</span>)</span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>    serialized <span class="op">=</span> <span class="st">"</span><span class="ch">\n\n</span><span class="st">"</span>.join(</span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>        (<span class="ss">f"Source: </span><span class="sc">{</span>doc<span class="sc">.</span>metadata<span class="sc">}</span><span class="ch">\n</span><span class="ss">Content: </span><span class="sc">{</span>doc<span class="sc">.</span>page_content<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> doc <span class="kw">in</span> retrieved_docs</span>
+<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> serialized, retrieved_docs</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Tip
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Here we use the <a href="https://reference.langchain.com/python/langchain/tools/#langchain.tools.tool">tool decorator</a> to configure the tool to attach raw documents as <a href="https://docs.langchain.com/oss/python/langchain/messages#param-artifact">artifacts</a> to each <a href="https://docs.langchain.com/oss/python/langchain/messages#tool-message">ToolMessage</a>. This will let us access document metadata in our application, separate from the stringified representation that is sent to the model.</p>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Tip
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Retrieval tools are not limited to a single string <code>query</code> argument, as in the above example. You can force the LLM to specify additional search parameters by adding arguments— for example, a category:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> typing <span class="im">import</span> Literal</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> retrieve_context(query: <span class="bu">str</span>, section: Literal[<span class="st">"beginning"</span>, <span class="st">"middle"</span>, <span class="st">"end"</span>]):</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</div>
+<p>Given our tool, we can construct the agent:</p>
+<div id="c6054557" class="cell" data-execution_count="11">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> langchain.agents <span class="im">import</span> create_agent</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>tools <span class="op">=</span> [retrieve_context]</span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a><span class="co"># If desired, specify custom instructions</span></span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>prompt <span class="op">=</span> (</span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">"You have access to a tool that retrieves context from a blog post. "</span></span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Use the tool to help answer user queries."</span></span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a>agent <span class="op">=</span> create_agent(model, tools, system_prompt<span class="op">=</span>prompt)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Let’s test this out. We construct a question that would typically require an iterative sequence of retrieval steps to answer:</p>
+<div id="7ea15f58" class="cell" data-execution_count="12">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>query <span class="op">=</span> (</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">"What is the standard method for Task Decomposition?</span><span class="ch">\n\n</span><span class="st">"</span></span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Once you get the answer, look up common extensions of that method."</span></span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> event <span class="kw">in</span> agent.stream(</span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>    {<span class="st">"messages"</span>: [{<span class="st">"role"</span>: <span class="st">"user"</span>, <span class="st">"content"</span>: query}]},</span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a>    stream_mode<span class="op">=</span><span class="st">"values"</span>,</span>
+<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a>):</span>
+<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a>    event[<span class="st">"messages"</span>][<span class="op">-</span><span class="dv">1</span>].pretty_print()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<div class="ansi-escaped-output">
+<pre>================================<span class="ansi-bold"> Human Message </span>=================================
+
+
+
+What is the standard method for Task Decomposition?
+
+
+
+Once you get the answer, look up common extensions of that method.
+
+==================================<span class="ansi-bold"> Ai Message </span>==================================
+
+Tool Calls:
+
+  retrieve_context (call_5ekkYX8vMgmb4Rzv4p2jFdAl)
+
+ Call ID: call_5ekkYX8vMgmb4Rzv4p2jFdAl
+
+  Args:
+
+    query: standard method for Task Decomposition
+
+=================================<span class="ansi-bold"> Tool Message </span>=================================
+
+Name: retrieve_context
+
+
+
+Source: {'source': 'https://lilianweng.github.io/posts/2023-06-23-agent/', 'start_index': 2578}
+
+Content: Task decomposition can be done (1) by LLM with simple prompting like "Steps for XYZ.\n1.", "What are the subgoals for achieving XYZ?", (2) by using task-specific instructions; e.g. "Write a story outline." for writing a novel, or (3) with human inputs.
+
+Another quite distinct approach, LLM+P (Liu et al. 2023), involves relying on an external classical planner to do long-horizon planning. This approach utilizes the Planning Domain Definition Language (PDDL) as an intermediate interface to describe the planning problem. In this process, LLM (1) translates the problem into “Problem PDDL”, then (2) requests a classical planner to generate a PDDL plan based on an existing “Domain PDDL”, and finally (3) translates the PDDL plan back into natural language. Essentially, the planning step is outsourced to an external tool, assuming the availability of domain-specific PDDL and a suitable planner which is common in certain robotic setups but not in many other domains.
+
+Self-Reflection#
+
+
+
+Source: {'source': 'https://lilianweng.github.io/posts/2023-06-23-agent/', 'start_index': 1638}
+
+Content: Component One: Planning#
+
+A complicated task usually involves many steps. An agent needs to know what they are and plan ahead.
+
+Task Decomposition#
+
+Chain of thought (CoT; Wei et al. 2022) has become a standard prompting technique for enhancing model performance on complex tasks. The model is instructed to “think step by step” to utilize more test-time computation to decompose hard tasks into smaller and simpler steps. CoT transforms big tasks into multiple manageable tasks and shed lights into an interpretation of the model’s thinking process.
+
+Tree of Thoughts (Yao et al. 2023) extends CoT by exploring multiple reasoning possibilities at each step. It first decomposes the problem into multiple thought steps and generates multiple thoughts per step, creating a tree structure. The search process can be BFS (breadth-first search) or DFS (depth-first search) with each state evaluated by a classifier (via a prompt) or majority vote.
+
+==================================<span class="ansi-bold"> Ai Message </span>==================================
+
+Tool Calls:
+
+  retrieve_context (call_p3OgKqTVTa0P51eT1Rlzy48U)
+
+ Call ID: call_p3OgKqTVTa0P51eT1Rlzy48U
+
+  Args:
+
+    query: extensions of standard task decomposition methods
+
+=================================<span class="ansi-bold"> Tool Message </span>=================================
+
+Name: retrieve_context
+
+
+
+Source: {'source': 'https://lilianweng.github.io/posts/2023-06-23-agent/', 'start_index': 2578}
+
+Content: Task decomposition can be done (1) by LLM with simple prompting like "Steps for XYZ.\n1.", "What are the subgoals for achieving XYZ?", (2) by using task-specific instructions; e.g. "Write a story outline." for writing a novel, or (3) with human inputs.
+
+Another quite distinct approach, LLM+P (Liu et al. 2023), involves relying on an external classical planner to do long-horizon planning. This approach utilizes the Planning Domain Definition Language (PDDL) as an intermediate interface to describe the planning problem. In this process, LLM (1) translates the problem into “Problem PDDL”, then (2) requests a classical planner to generate a PDDL plan based on an existing “Domain PDDL”, and finally (3) translates the PDDL plan back into natural language. Essentially, the planning step is outsourced to an external tool, assuming the availability of domain-specific PDDL and a suitable planner which is common in certain robotic setups but not in many other domains.
+
+Self-Reflection#
+
+
+
+Source: {'source': 'https://lilianweng.github.io/posts/2023-06-23-agent/', 'start_index': 1638}
+
+Content: Component One: Planning#
+
+A complicated task usually involves many steps. An agent needs to know what they are and plan ahead.
+
+Task Decomposition#
+
+Chain of thought (CoT; Wei et al. 2022) has become a standard prompting technique for enhancing model performance on complex tasks. The model is instructed to “think step by step” to utilize more test-time computation to decompose hard tasks into smaller and simpler steps. CoT transforms big tasks into multiple manageable tasks and shed lights into an interpretation of the model’s thinking process.
+
+Tree of Thoughts (Yao et al. 2023) extends CoT by exploring multiple reasoning possibilities at each step. It first decomposes the problem into multiple thought steps and generates multiple thoughts per step, creating a tree structure. The search process can be BFS (breadth-first search) or DFS (depth-first search) with each state evaluated by a classifier (via a prompt) or majority vote.
+
+==================================<span class="ansi-bold"> Ai Message </span>==================================
+
+
+
+The standard method for Task Decomposition is the Chain of Thought (CoT) prompting technique. In CoT, the model is instructed to “think step by step” to break down complex tasks into smaller and simpler steps, aiding both task execution and interpretability of the reasoning process.
+
+
+
+Common extensions of Chain of Thought include:
+
+
+
+1. Tree of Thoughts (ToT): This method extends CoT by exploring multiple reasoning possibilities at each step. The problem is decomposed into multiple “thought steps,” and several alternative thoughts are generated for each, forming a tree structure. Search strategies like breadth-first search (BFS) or depth-first search (DFS) are used, with states evaluated using classifiers or majority voting.
+
+
+
+2. LLM + Planner (LLM+P): In this extension, long-horizon planning is handled by an external classical planner. The LLM first generates a problem description in Planning Domain Definition Language (PDDL), which a planner uses to generate a solution plan, then translates the plan back into natural language. This approach leverages domain-specific planning outside of the LLM.
+
+
+
+These extensions allow for greater flexibility, systematic reasoning, and usage of external tools for sophisticated planning beyond the basic step-by-step CoT method.
+</pre>
+</div>
+</div>
+</div>
+<p>Note that the agent:</p>
+<ol type="1">
+<li>Generates a query to search for a standard method for task decomposition;</li>
+<li>Receiving the answer, generates a second query to search for common extensions of it;</li>
+<li>Having received all necessary context, answers the question.</li>
+</ol>
+<p>We can see the full sequence of steps, along with latency and other metadata, in the <a href="https://smith.langchain.com/public/7b42d478-33d2-4631-90a4-7cb731681e88/r">LangSmith trace</a>.</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Tip
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>You can add a deeper level of control and customization using the <a href="https://docs.langchain.com/oss/python/langgraph/overview">LangGraph</a> framework directly— for example, you can add steps to grade document relevance and rewrite search queries. Check out LangGraph’s <a href="https://docs.langchain.com/oss/python/langgraph/agentic-rag">Agentic RAG tutorial</a> for more advanced formulations.</p>
+</div>
+</div>
+</section>
+</section>
+<section id="build-a-rag-agent-with-langchain" class="level1">
+<h1>Build a RAG agent with LangChain</h1>
+<section id="overview-1" class="level2">
+<h2 class="anchored" data-anchor-id="overview-1">Overview</h2>
+<p>One of the most powerful applications enabled by LLMs is sophisticated question-answering (Q&amp;A) chatbots. These are applications that can answer questions about specific source information. These applications use a technique known as Retrieval Augmented Generation, or <a href="https://docs.langchain.com/oss/python/langchain/retrieval/">RAG</a>.</p>
+<p>This tutorial will show how to build a simple Q&amp;A application over an unstructured text data source. We will demonstrate:</p>
+<ol type="1">
+<li>A RAG <a href="#rag-agents">agent</a> that executes searches with a simple tool. This is a good general-purpose implementation.</li>
+<li>A two-step RAG <a href="#rag-chains">chain</a> that uses just a single LLM call per query. This is a fast and effective method for simple queries.</li>
+</ol>
+<section id="concepts-1" class="level3">
+<h3 class="anchored" data-anchor-id="concepts-1">Concepts</h3>
+<p>We will cover the following concepts:</p>
+<ul>
+<li><p><strong>Indexing</strong>: a pipeline for ingesting data from a source and indexing it. <em>This usually happens in a separate process.</em></p></li>
+<li><p><strong>Retrieval and generation</strong>: the actual RAG process, which takes the user query at run time and retrieves the relevant data from the index, then passes that to the model.</p></li>
+</ul>
+<p>Once we’ve indexed our data, we will use an <a href="https://docs.langchain.com/oss/python/langchain/agents">agent</a> as our orchestration framework to implement the retrieval and generation steps.</p>
+<note>
+<p>The indexing portion of this tutorial will largely follow the <a href="https://docs.langchain.com/oss/python/langchain/knowledge-base">semantic search tutorial</a>.</p>
+If your data is already available for search (i.e., you have a function to execute a search), or you’re comfortable with the content from that tutorial, feel free to skip to the section on <a href="#2-retrieval-and-generation">retrieval and generation</a>
+</note>
+</section>
+<section id="preview-1" class="level3">
+<h3 class="anchored" data-anchor-id="preview-1">Preview</h3>
+<p>In this guide we’ll build an app that answers questions about the website’s content. The specific website we will use is the <a href="https://lilianweng.github.io/posts/2023-06-23-agent/">LLM Powered Autonomous Agents</a> blog post by Lilian Weng, which allows us to ask questions about the contents of the post.</p>
+<p>We can create a simple indexing pipeline and RAG chain to do this in ~40 lines of code. See below for the full code snippet:</p>
+<p><accordion title="Expand for full code snippet"> ```python theme={null} import bs4 from langchain.agents import AgentState, create_agent from langchain_community.document_loaders import WebBaseLoader from langchain.messages import MessageLikeRepresentation from langchain_text_splitters import RecursiveCharacterTextSplitter</accordion></p>
+<p># Load and chunk contents of the blog loader = WebBaseLoader( web_paths=(“https://lilianweng.github.io/posts/2023-06-23-agent/”,), bs_kwargs=dict( parse_only=bs4.SoupStrainer( class_=(“post-content”, “post-title”, “post-header”) ) ), ) docs = loader.load()</p>
+<p>text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=200) all_splits = text_splitter.split_documents(docs)</p>
+<p># Index chunks _ = vector_store.add_documents(documents=all_splits)</p>
+<p># Construct a tool for retrieving context <span class="citation" data-cites="tool">@tool</span>(response_format=“content_and_artifact”) def retrieve_context(query: str): “““Retrieve information to help answer a query.”“” retrieved_docs = vector_store.similarity_search(query, k=2) serialized = “”.join( (f”Source: {doc.metadata}: {doc.page_content}“) for doc in retrieved_docs ) return serialized, retrieved_docs</p>
+<p>tools = [retrieve_context] # If desired, specify custom instructions prompt = ( “You have access to a tool that retrieves context from a blog post.” “Use the tool to help answer user queries.” ) agent = create_agent(model, tools, system_prompt=prompt) ```</p>
+<p><code>python  theme={null}   query = "What is task decomposition?"   for step in agent.stream(       {"messages": [{"role": "user", "content": query}]},       stream_mode="values",   ):       step["messages"][-1].pretty_print()</code></p>
+<pre><code>================================ Human Message =================================
+
+What is task decomposition?
+================================== Ai Message ==================================
+Tool Calls:
+  retrieve_context (call_xTkJr8njRY0geNz43ZvGkX0R)
+ Call ID: call_xTkJr8njRY0geNz43ZvGkX0R
+  Args:
+    query: task decomposition
+================================= Tool Message =================================
+Name: retrieve_context
+
+Source: {'source': 'https://lilianweng.github.io/posts/2023-06-23-agent/'}
+Content: Task decomposition can be done by...
+
+Source: {'source': 'https://lilianweng.github.io/posts/2023-06-23-agent/'}
+Content: Component One: Planning...
+================================== Ai Message ==================================
+
+Task decomposition refers to...</code></pre>
+<p>Check out the <a href="https://smith.langchain.com/public/a117a1f8-c96c-4c16-a285-00b85646118e/r">LangSmith trace</a>. </p>
+</section>
+</section>
+<section id="setup-1" class="level2">
+<h2 class="anchored" data-anchor-id="setup-1">Setup</h2>
+<section id="installation-1" class="level3">
+<h3 class="anchored" data-anchor-id="installation-1">Installation</h3>
+<p>This tutorial requires these langchain dependencies:</p>
+<p><codegroup> <code>bash pip theme={null}   pip install langchain langchain-text-splitters langchain-community bs4</code></codegroup></p>
+<p><code>bash uv theme={null}   uv add langchain langchain-text-splitters langchain-community bs4</code> </p>
+<p>For more details, see our <a href="https://docs.langchain.com/oss/python/langchain/install">Installation guide</a>.</p>
+</section>
+<section id="langsmith" class="level3">
+<h3 class="anchored" data-anchor-id="langsmith">LangSmith</h3>
+<p>Many of the applications you build with LangChain will contain multiple steps with multiple invocations of LLM calls. As these applications get more complex, it becomes crucial to be able to inspect what exactly is going on inside your chain or agent. The best way to do this is with <a href="https://smith.langchain.com">LangSmith</a>.</p>
+<p>After you sign up at the link above, make sure to set your environment variables to start logging traces:</p>
+<p><code>shell  theme={null} export LANGSMITH_TRACING="true" export LANGSMITH_API_KEY="..."</code></p>
+<p>Or, set them in Python:</p>
+<p>```python theme={null} import getpass import os</p>
+<p>os.environ[“LANGSMITH_TRACING”] = “true” os.environ[“LANGSMITH_API_KEY”] = getpass.getpass()</p>
+<pre><code>
+### Components
+
+We will need to select three components from LangChain's suite of integrations.
+
+Select a chat model:
+
+&lt;Tabs&gt;
+  &lt;Tab title="OpenAI"&gt;
+    👉 Read the [OpenAI chat model integration docs](https://docs.langchain.com/oss/python/integrations/chat/openai/)
+
+    ```shell  theme={null}
+    pip install -U "langchain[openai]"
+    ```
+
+    &lt;CodeGroup&gt;
+      ```python init_chat_model theme={null}
+      import os
+      from langchain.chat_models import init_chat_model
+
+      os.environ["OPENAI_API_KEY"] = "sk-..."
+
+      model = init_chat_model("gpt-4.1")
+      ```
+
+      ```python Model Class theme={null}
+      import os
+      from langchain_openai import ChatOpenAI
+
+      os.environ["OPENAI_API_KEY"] = "sk-..."
+
+      model = ChatOpenAI(model="gpt-4.1")
+      ```
+    &lt;/CodeGroup&gt;
+  &lt;/Tab&gt;
+
+  &lt;Tab title="Anthropic"&gt;
+    👉 Read the [Anthropic chat model integration docs](https://docs.langchain.com/oss/python/integrations/chat/anthropic/)
+
+    ```shell  theme={null}
+    pip install -U "langchain[anthropic]"
+    ```
+
+    &lt;CodeGroup&gt;
+      ```python init_chat_model theme={null}
+      import os
+      from langchain.chat_models import init_chat_model
+
+      os.environ["ANTHROPIC_API_KEY"] = "sk-..."
+
+      model = init_chat_model("claude-sonnet-4-5-20250929")
+      ```
+
+      ```python Model Class theme={null}
+      import os
+      from langchain_anthropic import ChatAnthropic
+
+      os.environ["ANTHROPIC_API_KEY"] = "sk-..."
+
+      model = ChatAnthropic(model="claude-sonnet-4-5-20250929")
+      ```
+    &lt;/CodeGroup&gt;
+  &lt;/Tab&gt;
+
+  &lt;Tab title="Azure"&gt;
+    👉 Read the [Azure chat model integration docs](https://docs.langchain.com/oss/python/integrations/chat/azure_chat_openai/)
+
+    ```shell  theme={null}
+    pip install -U "langchain[openai]"
+    ```
+
+    &lt;CodeGroup&gt;
+      ```python init_chat_model theme={null}
+      import os
+      from langchain.chat_models import init_chat_model
+
+      os.environ["AZURE_OPENAI_API_KEY"] = "..."
+      os.environ["AZURE_OPENAI_ENDPOINT"] = "..."
+      os.environ["OPENAI_API_VERSION"] = "2025-03-01-preview"
+
+      model = init_chat_model(
+          "azure_openai:gpt-4.1",
+          azure_deployment=os.environ["AZURE_OPENAI_DEPLOYMENT_NAME"],
+      )
+      ```
+
+      ```python Model Class theme={null}
+      import os
+      from langchain_openai import AzureChatOpenAI
+
+      os.environ["AZURE_OPENAI_API_KEY"] = "..."
+      os.environ["AZURE_OPENAI_ENDPOINT"] = "..."
+      os.environ["OPENAI_API_VERSION"] = "2025-03-01-preview"
+
+      model = AzureChatOpenAI(
+          model="gpt-4.1",
+          azure_deployment=os.environ["AZURE_OPENAI_DEPLOYMENT_NAME"]
+      )
+      ```
+    &lt;/CodeGroup&gt;
+  &lt;/Tab&gt;
+
+  &lt;Tab title="Google Gemini"&gt;
+    👉 Read the [Google GenAI chat model integration docs](https://docs.langchain.com/oss/python/integrations/chat/google_generative_ai/)
+
+    ```shell  theme={null}
+    pip install -U "langchain[google-genai]"
+    ```
+
+    &lt;CodeGroup&gt;
+      ```python init_chat_model theme={null}
+      import os
+      from langchain.chat_models import init_chat_model
+
+      os.environ["GOOGLE_API_KEY"] = "..."
+
+      model = init_chat_model("google_genai:gemini-2.5-flash-lite")
+      ```
+
+      ```python Model Class theme={null}
+      import os
+      from langchain_google_genai import ChatGoogleGenerativeAI
+
+      os.environ["GOOGLE_API_KEY"] = "..."
+
+      model = ChatGoogleGenerativeAI(model="gemini-2.5-flash-lite")
+      ```
+    &lt;/CodeGroup&gt;
+  &lt;/Tab&gt;
+
+  &lt;Tab title="AWS Bedrock"&gt;
+    👉 Read the [AWS Bedrock chat model integration docs](https://docs.langchain.com/oss/python/integrations/chat/bedrock/)
+
+    ```shell  theme={null}
+    pip install -U "langchain[aws]"
+    ```
+
+    &lt;CodeGroup&gt;
+      ```python init_chat_model theme={null}
+      from langchain.chat_models import init_chat_model
+
+      # Follow the steps here to configure your credentials:
+      # https://docs.aws.amazon.com/bedrock/latest/userguide/getting-started.html
+
+      model = init_chat_model(
+          "anthropic.claude-3-5-sonnet-20240620-v1:0",
+          model_provider="bedrock_converse",
+      )
+      ```
+
+      ```python Model Class theme={null}
+      from langchain_aws import ChatBedrock
+
+      model = ChatBedrock(model="anthropic.claude-3-5-sonnet-20240620-v1:0")
+      ```
+    &lt;/CodeGroup&gt;
+  &lt;/Tab&gt;
+
+  &lt;Tab title="HuggingFace"&gt;
+    👉 Read the [HuggingFace chat model integration docs](https://docs.langchain.com/oss/python/integrations/chat/huggingface/)
+
+    ```shell  theme={null}
+    pip install -U "langchain[huggingface]"
+    ```
+
+    &lt;CodeGroup&gt;
+      ```python init_chat_model theme={null}
+      import os
+      from langchain.chat_models import init_chat_model
+
+      os.environ["HUGGINGFACEHUB_API_TOKEN"] = "hf_..."
+
+      model = init_chat_model(
+          "microsoft/Phi-3-mini-4k-instruct",
+          model_provider="huggingface",
+          temperature=0.7,
+          max_tokens=1024,
+      )
+      ```
+
+      ```python Model Class theme={null}
+      import os
+      from langchain_huggingface import ChatHuggingFace, HuggingFaceEndpoint
+
+      os.environ["HUGGINGFACEHUB_API_TOKEN"] = "hf_..."
+
+      llm = HuggingFaceEndpoint(
+          repo_id="microsoft/Phi-3-mini-4k-instruct",
+          temperature=0.7,
+          max_length=1024,
+      )
+      model = ChatHuggingFace(llm=llm)
+      ```
+    &lt;/CodeGroup&gt;
+  &lt;/Tab&gt;
+&lt;/Tabs&gt;
+
+Select an embeddings model:
+
+&lt;Tabs&gt;
+  &lt;Tab title="OpenAI"&gt;
+    ```shell  theme={null}
+    pip install -U "langchain-openai"
+    ```
+
+    ```python  theme={null}
+    import getpass
+    import os
+
+    if not os.environ.get("OPENAI_API_KEY"):
+        os.environ["OPENAI_API_KEY"] = getpass.getpass("Enter API key for OpenAI: ")
+
+    from langchain_openai import OpenAIEmbeddings
+
+    embeddings = OpenAIEmbeddings(model="text-embedding-3-large")
+    ```
+  &lt;/Tab&gt;
+
+  &lt;Tab title="Azure"&gt;
+    ```shell  theme={null}
+    pip install -U "langchain-openai"
+    ```
+
+    ```python  theme={null}
+    import getpass
+    import os
+
+    if not os.environ.get("AZURE_OPENAI_API_KEY"):
+        os.environ["AZURE_OPENAI_API_KEY"] = getpass.getpass("Enter API key for Azure: ")
+
+    from langchain_openai import AzureOpenAIEmbeddings
+
+    embeddings = AzureOpenAIEmbeddings(
+        azure_endpoint=os.environ["AZURE_OPENAI_ENDPOINT"],
+        azure_deployment=os.environ["AZURE_OPENAI_DEPLOYMENT_NAME"],
+        openai_api_version=os.environ["AZURE_OPENAI_API_VERSION"],
+    )
+    ```
+  &lt;/Tab&gt;
+
+  &lt;Tab title="Google Gemini"&gt;
+    ```shell  theme={null}
+    pip install -qU langchain-google-genai
+    ```
+
+    ```python  theme={null}
+    import getpass
+    import os
+
+    if not os.environ.get("GOOGLE_API_KEY"):
+        os.environ["GOOGLE_API_KEY"] = getpass.getpass("Enter API key for Google Gemini: ")
+
+    from langchain_google_genai import GoogleGenerativeAIEmbeddings
+
+    embeddings = GoogleGenerativeAIEmbeddings(model="models/gemini-embedding-001")
+    ```
+  &lt;/Tab&gt;
+
+  &lt;Tab title="Google Vertex"&gt;
+    ```shell  theme={null}
+    pip install -qU langchain-google-vertexai
+    ```
+
+    ```python  theme={null}
+    from langchain_google_vertexai import VertexAIEmbeddings
+
+    embeddings = VertexAIEmbeddings(model="text-embedding-005")
+    ```
+  &lt;/Tab&gt;
+
+  &lt;Tab title="AWS"&gt;
+    ```shell  theme={null}
+    pip install -qU langchain-aws
+    ```
+
+    ```python  theme={null}
+    from langchain_aws import BedrockEmbeddings
+
+    embeddings = BedrockEmbeddings(model_id="amazon.titan-embed-text-v2:0")
+    ```
+  &lt;/Tab&gt;
+
+  &lt;Tab title="HuggingFace"&gt;
+    ```shell  theme={null}
+    pip install -qU langchain-huggingface
+    ```
+
+    ```python  theme={null}
+    from langchain_huggingface import HuggingFaceEmbeddings
+
+    embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/all-mpnet-base-v2")
+    ```
+  &lt;/Tab&gt;
+
+  &lt;Tab title="Ollama"&gt;
+    ```shell  theme={null}
+    pip install -qU langchain-ollama
+    ```
+
+    ```python  theme={null}
+    from langchain_ollama import OllamaEmbeddings
+
+    embeddings = OllamaEmbeddings(model="llama3")
+    ```
+  &lt;/Tab&gt;
+
+  &lt;Tab title="Cohere"&gt;
+    ```shell  theme={null}
+    pip install -qU langchain-cohere
+    ```
+
+    ```python  theme={null}
+    import getpass
+    import os
+
+    if not os.environ.get("COHERE_API_KEY"):
+        os.environ["COHERE_API_KEY"] = getpass.getpass("Enter API key for Cohere: ")
+
+    from langchain_cohere import CohereEmbeddings
+
+    embeddings = CohereEmbeddings(model="embed-english-v3.0")
+    ```
+  &lt;/Tab&gt;
+
+  &lt;Tab title="MistralAI"&gt;
+    ```shell  theme={null}
+    pip install -qU langchain-mistralai
+    ```
+
+    ```python  theme={null}
+    import getpass
+    import os
+
+    if not os.environ.get("MISTRALAI_API_KEY"):
+        os.environ["MISTRALAI_API_KEY"] = getpass.getpass("Enter API key for MistralAI: ")
+
+    from langchain_mistralai import MistralAIEmbeddings
+
+    embeddings = MistralAIEmbeddings(model="mistral-embed")
+    ```
+  &lt;/Tab&gt;
+
+  &lt;Tab title="Nomic"&gt;
+    ```shell  theme={null}
+    pip install -qU langchain-nomic
+    ```
+
+    ```python  theme={null}
+    import getpass
+    import os
+
+    if not os.environ.get("NOMIC_API_KEY"):
+        os.environ["NOMIC_API_KEY"] = getpass.getpass("Enter API key for Nomic: ")
+
+    from langchain_nomic import NomicEmbeddings
+
+    embeddings = NomicEmbeddings(model="nomic-embed-text-v1.5")
+    ```
+  &lt;/Tab&gt;
+
+  &lt;Tab title="NVIDIA"&gt;
+    ```shell  theme={null}
+    pip install -qU langchain-nvidia-ai-endpoints
+    ```
+
+    ```python  theme={null}
+    import getpass
+    import os
+
+    if not os.environ.get("NVIDIA_API_KEY"):
+        os.environ["NVIDIA_API_KEY"] = getpass.getpass("Enter API key for NVIDIA: ")
+
+    from langchain_nvidia_ai_endpoints import NVIDIAEmbeddings
+
+    embeddings = NVIDIAEmbeddings(model="NV-Embed-QA")
+    ```
+  &lt;/Tab&gt;
+
+  &lt;Tab title="Voyage AI"&gt;
+    ```shell  theme={null}
+    pip install -qU langchain-voyageai
+    ```
+
+    ```python  theme={null}
+    import getpass
+    import os
+
+    if not os.environ.get("VOYAGE_API_KEY"):
+        os.environ["VOYAGE_API_KEY"] = getpass.getpass("Enter API key for Voyage AI: ")
+
+    from langchain-voyageai import VoyageAIEmbeddings
+
+    embeddings = VoyageAIEmbeddings(model="voyage-3")
+    ```
+  &lt;/Tab&gt;
+
+  &lt;Tab title="IBM watsonx"&gt;
+    ```shell  theme={null}
+    pip install -qU langchain-ibm
+    ```
+
+    ```python  theme={null}
+    import getpass
+    import os
+
+    if not os.environ.get("WATSONX_APIKEY"):
+        os.environ["WATSONX_APIKEY"] = getpass.getpass("Enter API key for IBM watsonx: ")
+
+    from langchain_ibm import WatsonxEmbeddings
+
+    embeddings = WatsonxEmbeddings(
+        model_id="ibm/slate-125m-english-rtrvr",
+        url="https://us-south.ml.cloud.ibm.com",
+        project_id="&lt;WATSONX PROJECT_ID&gt;",
+    )
+    ```
+  &lt;/Tab&gt;
+
+  &lt;Tab title="Fake"&gt;
+    ```shell  theme={null}
+    pip install -qU langchain-core
+    ```
+
+    ```python  theme={null}
+    from langchain_core.embeddings import DeterministicFakeEmbedding
+
+    embeddings = DeterministicFakeEmbedding(size=4096)
+    ```
+  &lt;/Tab&gt;
+
+  &lt;Tab title="Isaacus"&gt;
+    ```shell  theme={null}
+    pip install -qU langchain-isaacus
+    ```
+
+    ```python  theme={null}
+    import getpass
+    import os
+
+    if not os.environ.get("ISAACUS_API_KEY"):
+    os.environ["ISAACUS_API_KEY"] = getpass.getpass("Enter API key for Isaacus: ")
+
+    from langchain_isaacus import IsaacusEmbeddings
+
+    embeddings = IsaacusEmbeddings(model="kanon-2-embedder")
+    ```
+  &lt;/Tab&gt;
+&lt;/Tabs&gt;
+
+Select a vector store:
+
+&lt;Tabs&gt;
+  &lt;Tab title="In-memory"&gt;
+    ```shell  theme={null}
+    pip install -U "langchain-core"
+    ```
+
+    ```python  theme={null}
+    from langchain_core.vectorstores import InMemoryVectorStore
+
+    vector_store = InMemoryVectorStore(embeddings)
+    ```
+  &lt;/Tab&gt;
+
+  &lt;Tab title="Amazon OpenSearch"&gt;
+    ```shell  theme={null}
+    pip install -qU  boto3
+    ```
+
+    ```python  theme={null}
+    from opensearchpy import RequestsHttpConnection
+
+    service = "es"  # must set the service as 'es'
+    region = "us-east-2"
+    credentials = boto3.Session(
+        aws_access_key_id="xxxxxx", aws_secret_access_key="xxxxx"
+    ).get_credentials()
+    awsauth = AWS4Auth("xxxxx", "xxxxxx", region, service, session_token=credentials.token)
+
+    vector_store = OpenSearchVectorSearch.from_documents(
+        docs,
+        embeddings,
+        opensearch_url="host url",
+        http_auth=awsauth,
+        timeout=300,
+        use_ssl=True,
+        verify_certs=True,
+        connection_class=RequestsHttpConnection,
+        index_name="test-index",
+    )
+    ```
+  &lt;/Tab&gt;
+
+  &lt;Tab title="AstraDB"&gt;
+    ```shell  theme={null}
+    pip install -U "langchain-astradb"
+    ```
+
+    ```python  theme={null}
+    from langchain_astradb import AstraDBVectorStore
+
+    vector_store = AstraDBVectorStore(
+        embedding=embeddings,
+        api_endpoint=ASTRA_DB_API_ENDPOINT,
+        collection_name="astra_vector_langchain",
+        token=ASTRA_DB_APPLICATION_TOKEN,
+        namespace=ASTRA_DB_NAMESPACE,
+    )
+    ```
+  &lt;/Tab&gt;
+
+  &lt;Tab title="Chroma"&gt;
+    ```shell  theme={null}
+    pip install -qU langchain-chroma
+    ```
+
+    ```python  theme={null}
+    from langchain_chroma import Chroma
+
+    vector_store = Chroma(
+        collection_name="example_collection",
+        embedding_function=embeddings,
+        persist_directory="./chroma_langchain_db",  # Where to save data locally, remove if not necessary
+    )
+    ```
+  &lt;/Tab&gt;
+
+  &lt;Tab title="FAISS"&gt;
+    ```shell  theme={null}
+    pip install -qU langchain-community faiss-cpu
+    ```
+
+    ```python  theme={null}
+    import faiss
+    from langchain_community.docstore.in_memory import InMemoryDocstore
+    from langchain_community.vectorstores import FAISS
+
+    embedding_dim = len(embeddings.embed_query("hello world"))
+    index = faiss.IndexFlatL2(embedding_dim)
+
+    vector_store = FAISS(
+        embedding_function=embeddings,
+        index=index,
+        docstore=InMemoryDocstore(),
+        index_to_docstore_id={},
+    )
+    ```
+  &lt;/Tab&gt;
+
+  &lt;Tab title="Milvus"&gt;
+    ```shell  theme={null}
+    pip install -qU langchain-milvus
+    ```
+
+    ```python  theme={null}
+    from langchain_milvus import Milvus
+
+    URI = "./milvus_example.db"
+
+    vector_store = Milvus(
+        embedding_function=embeddings,
+        connection_args={"uri": URI},
+        index_params={"index_type": "FLAT", "metric_type": "L2"},
+    )
+    ```
+  &lt;/Tab&gt;
+
+  &lt;Tab title="MongoDB"&gt;
+    ```shell  theme={null}
+    pip install -qU langchain-mongodb
+    ```
+
+    ```python  theme={null}
+    from langchain_mongodb import MongoDBAtlasVectorSearch
+
+    vector_store = MongoDBAtlasVectorSearch(
+        embedding=embeddings,
+        collection=MONGODB_COLLECTION,
+        index_name=ATLAS_VECTOR_SEARCH_INDEX_NAME,
+        relevance_score_fn="cosine",
+    )
+    ```
+  &lt;/Tab&gt;
+
+  &lt;Tab title="PGVector"&gt;
+    ```shell  theme={null}
+    pip install -qU langchain-postgres
+    ```
+
+    ```python  theme={null}
+    from langchain_postgres import PGVector
+
+    vector_store = PGVector(
+        embeddings=embeddings,
+        collection_name="my_docs",
+        connection="postgresql+psycopg://...",
+    )
+    ```
+  &lt;/Tab&gt;
+
+  &lt;Tab title="PGVectorStore"&gt;
+    ```shell  theme={null}
+    pip install -qU langchain-postgres
+    ```
+
+    ```python  theme={null}
+    from langchain_postgres import PGEngine, PGVectorStore
+
+    pg_engine = PGEngine.from_connection_string(
+        url="postgresql+psycopg://..."
+    )
+
+    vector_store = PGVectorStore.create_sync(
+        engine=pg_engine,
+        table_name='test_table',
+        embedding_service=embeddings
+    )
+    ```
+  &lt;/Tab&gt;
+
+  &lt;Tab title="Pinecone"&gt;
+    ```shell  theme={null}
+    pip install -qU langchain-pinecone
+    ```
+
+    ```python  theme={null}
+    from langchain_pinecone import PineconeVectorStore
+    from pinecone import Pinecone
+
+    pc = Pinecone(api_key=...)
+    index = pc.Index(index_name)
+
+    vector_store = PineconeVectorStore(embedding=embeddings, index=index)
+    ```
+  &lt;/Tab&gt;
+
+  &lt;Tab title="Qdrant"&gt;
+    ```shell  theme={null}
+    pip install -qU langchain-qdrant
+    ```
+
+    ```python  theme={null}
+    from qdrant_client.models import Distance, VectorParams
+    from langchain_qdrant import QdrantVectorStore
+    from qdrant_client import QdrantClient
+
+    client = QdrantClient(":memory:")
+
+    vector_size = len(embeddings.embed_query("sample text"))
+
+    if not client.collection_exists("test"):
+        client.create_collection(
+            collection_name="test",
+            vectors_config=VectorParams(size=vector_size, distance=Distance.COSINE)
+        )
+    vector_store = QdrantVectorStore(
+        client=client,
+        collection_name="test",
+        embedding=embeddings,
+    )
+    ```
+  &lt;/Tab&gt;
+&lt;/Tabs&gt;
+
+## 1. Indexing
+
+&lt;Note&gt;
+  **This section is an abbreviated version of the content in the [semantic search tutorial](https://docs.langchain.com/oss/python/langchain/knowledge-base).**
+
+  If your data is already indexed and available for search (i.e., you have a function to execute a search), or if you're comfortable with [document loaders](https://docs.langchain.com/oss/python/langchain/retrieval#document_loaders), [embeddings](https://docs.langchain.com/oss/python/langchain/retrieval#embedding_models), and [vector stores](https://docs.langchain.com/oss/python/langchain/retrieval#vectorstores), feel free to skip to the next section on [retrieval and generation](https://docs.langchain.com/oss/python/langchain/rag#2-retrieval-and-generation).
+&lt;/Note&gt;
+
+Indexing commonly works as follows:
+
+1. **Load**: First we need to load our data. This is done with [Document Loaders](https://docs.langchain.com/oss/python/langchain/retrieval#document_loaders).
+2. **Split**: [Text splitters](https://docs.langchain.com/oss/python/langchain/retrieval#text_splitters) break large `Documents` into smaller chunks. This is useful both for indexing data and passing it into a model, as large chunks are harder to search over and won't fit in a model's finite context window.
+3. **Store**: We need somewhere to store and index our splits, so that they can be searched over later. This is often done using a [VectorStore](https://docs.langchain.com/oss/python/langchain/retrieval#vectorstores) and [Embeddings](https://docs.langchain.com/oss/python/langchain/retrieval#embedding_models) model.
+
+&lt;img src="https://mintcdn.com/langchain-5e9cc07a/I6RpA28iE233vhYX/images/rag_indexing.png?fit=max&amp;auto=format&amp;n=I6RpA28iE233vhYX&amp;q=85&amp;s=21403ce0d0c772da84dcc5b75cff4451" alt="index_diagram" data-og-width="2583" width="2583" data-og-height="1299" height="1299" data-path="images/rag_indexing.png" data-optimize="true" data-opv="3" srcset="https://mintcdn.com/langchain-5e9cc07a/I6RpA28iE233vhYX/images/rag_indexing.png?w=280&amp;fit=max&amp;auto=format&amp;n=I6RpA28iE233vhYX&amp;q=85&amp;s=bf4eb8255b82a809dbbd2bc2a96d2ed7 280w, https://mintcdn.com/langchain-5e9cc07a/I6RpA28iE233vhYX/images/rag_indexing.png?w=560&amp;fit=max&amp;auto=format&amp;n=I6RpA28iE233vhYX&amp;q=85&amp;s=4ebc538b2c4765b609f416025e4dbbda 560w, https://mintcdn.com/langchain-5e9cc07a/I6RpA28iE233vhYX/images/rag_indexing.png?w=840&amp;fit=max&amp;auto=format&amp;n=I6RpA28iE233vhYX&amp;q=85&amp;s=1838328a870c7353c42bf1cc2290a779 840w, https://mintcdn.com/langchain-5e9cc07a/I6RpA28iE233vhYX/images/rag_indexing.png?w=1100&amp;fit=max&amp;auto=format&amp;n=I6RpA28iE233vhYX&amp;q=85&amp;s=675f55e100bab5e2904d27db01775ccc 1100w, https://mintcdn.com/langchain-5e9cc07a/I6RpA28iE233vhYX/images/rag_indexing.png?w=1650&amp;fit=max&amp;auto=format&amp;n=I6RpA28iE233vhYX&amp;q=85&amp;s=4b9e544a7a3ec168651558bce854eb60 1650w, https://mintcdn.com/langchain-5e9cc07a/I6RpA28iE233vhYX/images/rag_indexing.png?w=2500&amp;fit=max&amp;auto=format&amp;n=I6RpA28iE233vhYX&amp;q=85&amp;s=f5aeaaaea103128f374c03b05a317263 2500w" /&gt;
+
+### Loading documents
+
+We need to first load the blog post contents. We can use [DocumentLoaders](https://docs.langchain.com/oss/python/langchain/retrieval#document_loaders) for this, which are objects that load in data from a source and return a list of [Document](https://reference.langchain.com/python/langchain_core/documents/#langchain_core.documents.base.Document) objects.
+
+In this case we'll use the [`WebBaseLoader`](https://docs.langchain.com/oss/python/integrations/document_loaders/web_base), which uses `urllib` to load HTML from web URLs and `BeautifulSoup` to parse it to text. We can customize the HTML -&gt; text parsing by passing in parameters into the `BeautifulSoup` parser via `bs_kwargs` (see [BeautifulSoup docs](https://beautiful-soup-4.readthedocs.io/en/latest/#beautifulsoup)). In this case only HTML tags with class “post-content”, “post-title”, or “post-header” are relevant, so we'll remove all others.
+
+```python  theme={null}
+import bs4
+from langchain_community.document_loaders import WebBaseLoader
+
+# Only keep post title, headers, and content from the full HTML.
+bs4_strainer = bs4.SoupStrainer(class_=("post-title", "post-header", "post-content"))
+loader = WebBaseLoader(
+    web_paths=("https://lilianweng.github.io/posts/2023-06-23-agent/",),
+    bs_kwargs={"parse_only": bs4_strainer},
+)
+docs = loader.load()
+
+assert len(docs) == 1
+print(f"Total characters: {len(docs[0].page_content)}")</code></pre>
+<p><code>text  theme={null} Total characters: 43131</code></p>
+<p><code>python  theme={null} print(docs[0].page_content[:500])</code></p>
+<p>```text theme={null} LLM Powered Autonomous Agents</p>
+<p>Date: June 23, 2023 | Estimated Reading Time: 31 min | Author: Lilian Weng</p>
+<p>Building agents with LLM (large language model) as its core controller is a cool concept. Several proof-of-concepts demos, such as AutoGPT, GPT-Engineer and BabyAGI, serve as inspiring examples. The potentiality of LLM extends beyond generating well-written copies, stories, essays and programs; it can be framed as a powerful general problem solver. Agent System Overview# In</p>
+<pre><code>
+**Go deeper**
+
+`DocumentLoader`: Object that loads data from a source as list of `Documents`.
+
+* [Integrations](https://docs.langchain.com/oss/python/integrations/document_loaders/): 160+ integrations to choose from.
+* [`BaseLoader`](https://reference.langchain.com/python/langchain_core/document_loaders/#langchain_core.document_loaders.BaseLoader): API reference for the base interface.
+
+### Splitting documents
+
+Our loaded document is over 42k characters which is too long to fit into the context window of many models. Even for those models that could fit the full post in their context window, models can struggle to find information in very long inputs.
+
+To handle this we'll split the [`Document`](https://reference.langchain.com/python/langchain_core/documents/#langchain_core.documents.base.Document) into chunks for embedding and vector storage. This should help us retrieve only the most relevant parts of the blog post at run time.
+
+As in the [semantic search tutorial](https://docs.langchain.com/oss/python/langchain/knowledge-base), we use a `RecursiveCharacterTextSplitter`, which will recursively split the document using common separators like new lines until each chunk is the appropriate size. This is the recommended text splitter for generic text use cases.
+
+```python  theme={null}
+from langchain_text_splitters import RecursiveCharacterTextSplitter
+
+text_splitter = RecursiveCharacterTextSplitter(
+    chunk_size=1000,  # chunk size (characters)
+    chunk_overlap=200,  # chunk overlap (characters)
+    add_start_index=True,  # track index in original document
+)
+all_splits = text_splitter.split_documents(docs)
+
+print(f"Split blog post into {len(all_splits)} sub-documents.")</code></pre>
+<p><code>text  theme={null} Split blog post into 66 sub-documents.</code></p>
+<p><strong>Go deeper</strong></p>
+<p><code>TextSplitter</code>: Object that splits a list of <a href="https://reference.langchain.com/python/langchain_core/documents/#langchain_core.documents.base.Document"><code>Document</code></a> objects into smaller chunks for storage and retrieval.</p>
+<ul>
+<li><a href="https://docs.langchain.com/oss/python/integrations/splitters/">Integrations</a></li>
+<li><a href="https://python.langchain.com/api_reference/text_splitters/base/langchain_text_splitters.base.TextSplitter.html">Interface</a>: API reference for the base interface.</li>
+</ul>
+</section>
+<section id="storing-documents-1" class="level3">
+<h3 class="anchored" data-anchor-id="storing-documents-1">Storing documents</h3>
+<p>Now we need to index our 66 text chunks so that we can search over them at runtime. Following the <a href="https://docs.langchain.com/oss/python/langchain/knowledge-base">semantic search tutorial</a>, our approach is to <a href="https://docs.langchain.com/oss/python/langchain/retrieval#embedding_models/">embed</a> the contents of each document split and insert these embeddings into a <a href="https://docs.langchain.com/oss/python/langchain/retrieval#vectorstores/">vector store</a>. Given an input query, we can then use vector search to retrieve relevant documents.</p>
+<p>We can embed and store all of our document splits in a single command using the vector store and embeddings model selected at the <a href="https://docs.langchain.com/oss/python/langchain/rag#components">start of the tutorial</a>.</p>
+<p>```python theme={null} document_ids = vector_store.add_documents(documents=all_splits)</p>
+<p>print(document_ids[:3])</p>
+<pre><code>
+```python  theme={null}
+['07c18af6-ad58-479a-bfb1-d508033f9c64', '9000bf8e-1993-446f-8d4d-f4e507ba4b8f', 'ba3b5d14-bed9-4f5f-88be-44c88aedc2e6']</code></pre>
+<p><strong>Go deeper</strong></p>
+<p><code>Embeddings</code>: Wrapper around a text embedding model, used for converting text to embeddings.</p>
+<ul>
+<li><a href="https://docs.langchain.com/oss/python/integrations/text_embedding/">Integrations</a>: 30+ integrations to choose from.</li>
+<li><a href="https://reference.langchain.com/python/langchain_core/embeddings/#langchain_core.embeddings.embeddings.Embeddings">Interface</a>: API reference for the base interface.</li>
+</ul>
+<p><code>VectorStore</code>: Wrapper around a vector database, used for storing and querying embeddings.</p>
+<ul>
+<li><a href="https://docs.langchain.com/oss/python/integrations/vectorstores/">Integrations</a>: 40+ integrations to choose from.</li>
+<li><a href="https://python.langchain.com/api_reference/core/vectorstores/langchain_core.vectorstores.base.VectorStore.html">Interface</a>: API reference for the base interface.</li>
+</ul>
+<p>This completes the <strong>Indexing</strong> portion of the pipeline. At this point we have a query-able vector store containing the chunked contents of our blog post. Given a user question, we should ideally be able to return the snippets of the blog post that answer the question.</p>
+</section>
+</section>
+<section id="retrieval-and-generation-1" class="level2">
+<h2 class="anchored" data-anchor-id="retrieval-and-generation-1">2. Retrieval and generation</h2>
+<p>RAG applications commonly work as follows:</p>
+<ol type="1">
+<li><strong>Retrieve</strong>: Given a user input, relevant splits are retrieved from storage using a <a href="https://docs.langchain.com/oss/python/langchain/retrieval#retrievers">Retriever</a>.</li>
+<li><strong>Generate</strong>: A <a href="https://docs.langchain.com/oss/python/langchain/models">model</a> produces an answer using a prompt that includes both the question with the retrieved data</li>
+</ol>
+<p><img src="https://mintcdn.com/langchain-5e9cc07a/I6RpA28iE233vhYX/images/rag_retrieval_generation.png?fit=max&amp;auto=format&amp;n=I6RpA28iE233vhYX&amp;q=85&amp;s=994c3585cece93c80873d369960afd44" alt="retrieval_diagram" data-og-width="2532" width="2532" data-og-height="1299" height="1299" data-path="images/rag_retrieval_generation.png" data-optimize="true" data-opv="3" srcset="https://mintcdn.com/langchain-5e9cc07a/I6RpA28iE233vhYX/images/rag_retrieval_generation.png?w=280&amp;fit=max&amp;auto=format&amp;n=I6RpA28iE233vhYX&amp;q=85&amp;s=3bd28b3662e08c8364b60b74f510751e 280w, https://mintcdn.com/langchain-5e9cc07a/I6RpA28iE233vhYX/images/rag_retrieval_generation.png?w=560&amp;fit=max&amp;auto=format&amp;n=I6RpA28iE233vhYX&amp;q=85&amp;s=43484903ca631a47a54e86191eb5ba22 560w, https://mintcdn.com/langchain-5e9cc07a/I6RpA28iE233vhYX/images/rag_retrieval_generation.png?w=840&amp;fit=max&amp;auto=format&amp;n=I6RpA28iE233vhYX&amp;q=85&amp;s=67fe2302e241fc24238a5df1cf56573d 840w, https://mintcdn.com/langchain-5e9cc07a/I6RpA28iE233vhYX/images/rag_retrieval_generation.png?w=1100&amp;fit=max&amp;auto=format&amp;n=I6RpA28iE233vhYX&amp;q=85&amp;s=d390a6a758e688ec36352d30b22249b0 1100w, https://mintcdn.com/langchain-5e9cc07a/I6RpA28iE233vhYX/images/rag_retrieval_generation.png?w=1650&amp;fit=max&amp;auto=format&amp;n=I6RpA28iE233vhYX&amp;q=85&amp;s=59729377317a0631598b6a4a2a7d8c92 1650w, https://mintcdn.com/langchain-5e9cc07a/I6RpA28iE233vhYX/images/rag_retrieval_generation.png?w=2500&amp;fit=max&amp;auto=format&amp;n=I6RpA28iE233vhYX&amp;q=85&amp;s=c07711c71153c3b2dfd5b0104ad3e324 2500w"></p>
+<p>Now let’s write the actual application logic. We want to create a simple application that takes a user question, searches for documents relevant to that question, passes the retrieved documents and initial question to a model, and returns an answer.</p>
+<p>We will demonstrate:</p>
+<ol type="1">
+<li>A RAG <a href="#rag-agents">agent</a> that executes searches with a simple tool. This is a good general-purpose implementation.</li>
+<li>A two-step RAG <a href="#rag-chains">chain</a> that uses just a single LLM call per query. This is a fast and effective method for simple queries.</li>
+</ol>
+<section id="rag-agents-1" class="level3">
+<h3 class="anchored" data-anchor-id="rag-agents-1">RAG agents</h3>
+<p>One formulation of a RAG application is as a simple <a href="https://docs.langchain.com/oss/python/langchain/agents">agent</a> with a tool that retrieves information. We can assemble a minimal RAG agent by implementing a <a href="https://docs.langchain.com/oss/python/langchain/tools">tool</a> that wraps our vector store:</p>
+<p>```python theme={null} from langchain.tools import tool</p>
+<p><span class="citation" data-cites="tool">@tool</span>(response_format=“content_and_artifact”) def retrieve_context(query: str): “““Retrieve information to help answer a query.”“” retrieved_docs = vector_store.similarity_search(query, k=2) serialized = “”.join( (f”Source: {doc.metadata}: {doc.page_content}“) for doc in retrieved_docs ) return serialized, retrieved_docs</p>
+<pre><code>
+&lt;Tip&gt;
+  Here we use the [tool decorator](https://reference.langchain.com/python/langchain/tools/#langchain.tools.tool) to configure the tool to attach raw documents as [artifacts](https://docs.langchain.com/oss/python/langchain/messages#param-artifact) to each [ToolMessage](https://docs.langchain.com/oss/python/langchain/messages#tool-message). This will let us access document metadata in our application, separate from the stringified representation that is sent to the model.
+&lt;/Tip&gt;
+
+&lt;Tip&gt;
+  Retrieval tools are not limited to a single string `query` argument, as in the above example. You can
+  force the LLM to specify additional search parameters by adding arguments— for example, a category:
+
+  ```python  theme={null}
+  from typing import Literal
+
+  def retrieve_context(query: str, section: Literal["beginning", "middle", "end"]):</code></pre>
+
+<p>Given our tool, we can construct the agent:</p>
+<p>```python theme={null} from langchain.agents import create_agent</p>
+<p>tools = [retrieve_context] # If desired, specify custom instructions prompt = ( “You have access to a tool that retrieves context from a blog post.” “Use the tool to help answer user queries.” ) agent = create_agent(model, tools, system_prompt=prompt)</p>
+<pre><code>
+Let's test this out. We construct a question that would typically require an iterative sequence of retrieval steps to answer:
+
+```python  theme={null}
+query = (
+    "What is the standard method for Task Decomposition?\n\n"
+    "Once you get the answer, look up common extensions of that method."
+)
+
+for event in agent.stream(
+    {"messages": [{"role": "user", "content": query}]},
+    stream_mode="values",
+):
+    event["messages"][-1].pretty_print()</code></pre>
+<pre><code>================================ Human Message =================================
+
+What is the standard method for Task Decomposition?
+
+Once you get the answer, look up common extensions of that method.
+================================== Ai Message ==================================
+Tool Calls:
+  retrieve_context (call_d6AVxICMPQYwAKj9lgH4E337)
+ Call ID: call_d6AVxICMPQYwAKj9lgH4E337
+  Args:
+    query: standard method for Task Decomposition
+================================= Tool Message =================================
+Name: retrieve_context
+
+Source: {'source': 'https://lilianweng.github.io/posts/2023-06-23-agent/'}
+Content: Task decomposition can be done...
+
+Source: {'source': 'https://lilianweng.github.io/posts/2023-06-23-agent/'}
+Content: Component One: Planning...
+================================== Ai Message ==================================
+Tool Calls:
+  retrieve_context (call_0dbMOw7266jvETbXWn4JqWpR)
+ Call ID: call_0dbMOw7266jvETbXWn4JqWpR
+  Args:
+    query: common extensions of the standard method for Task Decomposition
+================================= Tool Message =================================
+Name: retrieve_context
+
+Source: {'source': 'https://lilianweng.github.io/posts/2023-06-23-agent/'}
+Content: Task decomposition can be done...
+
+Source: {'source': 'https://lilianweng.github.io/posts/2023-06-23-agent/'}
+Content: Component One: Planning...
+================================== Ai Message ==================================
+
+The standard method for Task Decomposition often used is the Chain of Thought (CoT)...</code></pre>
+<p>Note that the agent:</p>
+<ol type="1">
+<li>Generates a query to search for a standard method for task decomposition;</li>
+<li>Receiving the answer, generates a second query to search for common extensions of it;</li>
+<li>Having received all necessary context, answers the question.</li>
+</ol>
+<p>We can see the full sequence of steps, along with latency and other metadata, in the <a href="https://smith.langchain.com/public/7b42d478-33d2-4631-90a4-7cb731681e88/r">LangSmith trace</a>.</p>
+<tip>
+You can add a deeper level of control and customization using the <a href="https://docs.langchain.com/oss/python/langgraph/overview">LangGraph</a> framework directly— for example, you can add steps to grade document relevance and rewrite search queries. Check out LangGraph’s <a href="https://docs.langchain.com/oss/python/langgraph/agentic-rag">Agentic RAG tutorial</a> for more advanced formulations.
+</tip>
+</section>
+<section id="rag-chains" class="level3">
+<h3 class="anchored" data-anchor-id="rag-chains">RAG chains</h3>
+<p>In the above <a href="#rag-agents">agentic RAG</a> formulation we allow the LLM to use its discretion in generating a <a href="https://docs.langchain.com/oss/python/langchain/models#tool-calling">tool call</a> to help answer user queries. This is a good general-purpose solution, but comes with some trade-offs:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 52%">
+<col style="width: 47%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>✅ Benefits</th>
+<th>⚠️ Drawbacks</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Search only when needed</strong> – The LLM can handle greetings, follow-ups, and simple queries without triggering unnecessary searches.</td>
+<td><strong>Two inference calls</strong> – When a search is performed, it requires one call to generate the query and another to produce the final response.</td>
+</tr>
+<tr class="even">
+<td><strong>Contextual search queries</strong> – By treating search as a tool with a <code>query</code> input, the LLM crafts its own queries that incorporate conversational context.</td>
+<td><strong>Reduced control</strong> – The LLM may skip searches when they are actually needed, or issue extra searches when unnecessary.</td>
+</tr>
+<tr class="odd">
+<td><strong>Multiple searches allowed</strong> – The LLM can execute several searches in support of a single user query.</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>Another common approach is a two-step chain, in which we always run a search (potentially using the raw user query) and incorporate the result as context for a single LLM query. This results in a single inference call per query, buying reduced latency at the expense of flexibility.</p>
+<p>In this approach we no longer call the model in a loop, but instead make a single pass.</p>
+<p>We can implement this chain by removing tools from the agent and instead incorporating the retrieval step into a custom prompt:</p>
+<p>```python theme={null} from langchain.agents.middleware import dynamic_prompt, ModelRequest</p>
+<p><span class="citation" data-cites="dynamic_prompt">@dynamic_prompt</span> def prompt_with_context(request: ModelRequest) -&gt; str: “““Inject context into state messages.”“” last_query = request.state[“messages”][-1].text retrieved_docs = vector_store.similarity_search(last_query)</p>
+<pre><code>docs_content = "\n\n".join(doc.page_content for doc in retrieved_docs)
+
+system_message = (
+    "You are a helpful assistant. Use the following context in your response:"
+    f"\n\n{docs_content}"
+)
+
+return system_message</code></pre>
+<p>agent = create_agent(model, tools=[], middleware=[prompt_with_context])</p>
+<pre><code>
+Let's try this out:
+
+```python  theme={null}
+query = "What is task decomposition?"
+for step in agent.stream(
+    {"messages": [{"role": "user", "content": query}]},
+    stream_mode="values",
+):
+    step["messages"][-1].pretty_print()</code></pre>
+<pre><code>================================ Human Message =================================
+
+What is task decomposition?
+================================== Ai Message ==================================
+
+Task decomposition is...</code></pre>
+<p>In the <a href="https://smith.langchain.com/public/0322904b-bc4c-4433-a568-54c6b31bbef4/r/9ef1c23e-380e-46bf-94b3-d8bb33df440c">LangSmith trace</a> we can see the retrieved context incorporated into the model prompt.</p>
+<p>This is a fast and effective method for simple queries in constrained settings, when we typically do want to run user queries through semantic search to pull additional context.</p>
+<p><accordion title="Returning source documents"> The above <a href="#rag-chains">RAG chain</a> incorporates retrieved context into a single system message for that run.</accordion></p>
+<p>As in the <a href="#rag-agents">agentic RAG</a> formulation, we sometimes want to include raw source documents in the application state to have access to document metadata. We can do this for the two-step chain case by:</p>
+<ol type="1">
+<li>Adding a key to the state to store the retrieved documents</li>
+<li>Adding a new node via a <a href="https://docs.langchain.com/oss/python/langchain/agents#pre-model-hook">pre-model hook</a> to populate that key (as well as inject the context).</li>
+</ol>
+<p>```python theme={null} from typing import Any from langchain_core.documents import Document from langchain.agents.middleware import AgentMiddleware, AgentState</p>
+<p>class State(AgentState): context: list[Document]</p>
+<p>class RetrieveDocumentsMiddleware(AgentMiddleware[State]): state_schema = State</p>
+<pre><code>  def before_model(self, state: AgentState) -&gt; dict[str, Any] | None:
+      last_message = state["messages"][-1]
+      retrieved_docs = vector_store.similarity_search(last_message.text)
+
+      docs_content = "\n\n".join(doc.page_content for doc in retrieved_docs)
+
+      augmented_message_content = (
+          f"{last_message.text}\n\n"
+          "Use the following context to answer the query:\n"
+          f"{docs_content}"
+      )
+      return {
+          "messages": [last_message.model_copy(update={"content": augmented_message_content})],
+          "context": retrieved_docs,
+      }</code></pre>
+<p>agent = create_agent( model, tools=[], middleware=[RetrieveDocumentsMiddleware()], ) ``` </p>
+</section>
+</section>
+<section id="next-steps" class="level2">
+<h2 class="anchored" data-anchor-id="next-steps">Next steps</h2>
+<p>Now that we’ve implemented a simple RAG application via <a href="https://reference.langchain.com/python/langchain/agents/#langchain.agents.create_agent"><code>create_agent</code></a>, we can easily incorporate new features and go deeper:</p>
+<ul>
+<li><a href="https://docs.langchain.com/oss/python/langchain/streaming">Stream</a> tokens and other information for responsive user experiences</li>
+<li>Add <a href="https://docs.langchain.com/oss/python/langchain/short-term-memory">conversational memory</a> to support multi-turn interactions</li>
+<li>Add <a href="https://docs.langchain.com/oss/python/langchain/long-term-memory">long-term memory</a> to support memory across conversational threads</li>
+<li>Add <a href="https://docs.langchain.com/oss/python/langchain/structured-output">structured responses</a></li>
+<li>Deploy your application with <a href="../langsmith/deployments">LangSmith Deployment</a></li>
+</ul>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+<script>var lightboxQuarto = GLightbox({"closeEffect":"zoom","descPosition":"bottom","loop":false,"openEffect":"zoom","selector":".lightbox"});
+(function() {
+  let previousOnload = window.onload;
+  window.onload = () => {
+    if (previousOnload) {
+      previousOnload();
+    }
+    lightboxQuarto.on('slide_before_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      const href = trigger.getAttribute('href');
+      if (href !== null) {
+        const imgEl = window.document.querySelector(`a[href="${href}"] img`);
+        if (imgEl !== null) {
+          const srcAttr = imgEl.getAttribute("src");
+          if (srcAttr && srcAttr.startsWith("data:")) {
+            slideConfig.href = srcAttr;
+          }
+        }
+      } 
+    });
+  
+    lightboxQuarto.on('slide_after_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(slideNode);
+      }
+    });
+  
+  };
+  
+})();
+          </script>
+
+
+
+
+<script src="../site_libs/quarto-html/zenscroll-min.js"></script>
+</body></html>
