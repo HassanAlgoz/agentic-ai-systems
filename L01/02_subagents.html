@@ -168,6 +168,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#example-2-complex-multi-domain-request" id="toc-example-2-complex-multi-domain-request" class="nav-link" data-scroll-target="#example-2-complex-multi-domain-request">Example 2: Complex multi-domain request</a></li>
   </ul></li>
   <li><a href="#key-takeaways" id="toc-key-takeaways" class="nav-link" data-scroll-target="#key-takeaways">Key takeaways</a></li>
+  <li><a href="#activity" id="toc-activity" class="nav-link" data-scroll-target="#activity">Activity</a></li>
   </ul>
 <div class="quarto-alternate-formats"><h2>Other Formats</h2><ul><li><a href="02_subagents.html"><i class="bi bi-file-slides"></i>RevealJS</a></li></ul></div></nav>
     </div>
@@ -248,7 +249,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="define-tools" class="level2">
 <h2 class="anchored" data-anchor-id="define-tools">1. Define tools</h2>
-<p>Start by defining the tools that require structured inputs. In real applications, these would call actual APIs (Google Calendar, SendGrid, etc.). For this tutorial, you’ll use stubs to demonstrate the pattern.</p>
+<ul>
+<li>Start by defining the tools that require structured inputs.</li>
+<li>In real applications, these would call actual APIs (Google Calendar, SendGrid, etc.).</li>
+<li>For this tutorial, you’ll use stubs to demonstrate the pattern.</li>
+</ul>
 <div id="3117e5bc" class="cell" data-execution_count="6">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> langchain.tools <span class="im">import</span> tool</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
@@ -294,7 +299,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Next, we’ll create specialized sub-agents that handle each domain.</p>
 <section id="create-a-calendar-agent" class="level3">
 <h3 class="anchored" data-anchor-id="create-a-calendar-agent">Create a calendar agent</h3>
-<p>The calendar agent understands natural language scheduling requests and translates them into precise API calls. It handles date parsing, availability checking, and event creation.</p>
+<ul>
+<li>The calendar agent understands natural language scheduling requests and translates them into precise API calls.</li>
+<li>It handles date parsing, availability checking, and event creation.</li>
+</ul>
 <div id="2838b78c" class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> langchain.agents <span class="im">import</span> create_agent</span>
@@ -373,7 +381,10 @@ Would you like me to add attendees and/or a location (or conferencing details) a
 </section>
 <section id="create-an-email-agent" class="level3">
 <h3 class="anchored" data-anchor-id="create-an-email-agent">Create an email agent</h3>
-<p>The email agent handles message composition and sending. It focuses on extracting recipient information, crafting appropriate subject lines and body text, and managing email communication.</p>
+<ul>
+<li>The email agent handles message composition and sending.</li>
+<li>It focuses on extracting recipient information, crafting appropriate subject lines and body text, and managing email communication.</li>
+</ul>
 <div id="bd2e18c2" class="cell" data-execution_count="12">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>EMAIL_AGENT_PROMPT <span class="op">=</span> (</span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">"You are an email assistant. "</span></span>
@@ -445,12 +456,19 @@ Would you like me to send this now as-is, or would you like me to replace the pl
 </div>
 </div>
 </div>
-<p>The agent infers the recipient from the informal request, crafts a professional subject line and body, calls <code>send_email</code>, and returns a confirmation. Each sub-agent has a narrow focus with domain-specific tools and prompts, allowing it to excel at its specific task.</p>
+<ul>
+<li>The agent infers the recipient from the informal request, crafts a professional subject line and body, calls <code>send_email</code>, and returns a confirmation.</li>
+<li>Each sub-agent has a narrow focus with domain-specific tools and prompts, allowing it to excel at its specific task.</li>
+</ul>
 </section>
 </section>
 <section id="wrap-sub-agents-as-tools" class="level2">
 <h2 class="anchored" data-anchor-id="wrap-sub-agents-as-tools">3. Wrap sub-agents as tools</h2>
-<p>Now wrap each sub-agent as a tool that the supervisor can invoke. This is the key architectural step that creates the layered system. The supervisor will see high-level tools like “schedule_event”, not low-level tools like “create_calendar_event”.</p>
+<ul>
+<li>Now wrap each sub-agent as a tool that the supervisor can invoke.</li>
+<li>This is the key architectural step that creates the layered system.</li>
+<li>The supervisor will see high-level tools like <code>"schedule_event"</code>, not low-level tools like <code>"create_calendar_event"</code>.</li>
+</ul>
 <div id="4e9146b5" class="cell" data-execution_count="14">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="at">@tool</span></span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> schedule_event(request: <span class="bu">str</span>) <span class="op">-&gt;</span> <span class="bu">str</span>:</span>
@@ -484,11 +502,17 @@ Would you like me to send this now as-is, or would you like me to replace the pl
 <span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>    })</span>
 <span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> result[<span class="st">"messages"</span>][<span class="op">-</span><span class="dv">1</span>].text</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<p>The tool descriptions help the supervisor decide when to use each tool, so make them clear and specific. We return only the sub-agent’s final response, as the supervisor doesn’t need to see intermediate reasoning or tool calls.</p>
+<ul>
+<li>The <strong>tool descriptions (docstring)</strong> help the supervisor decide when to use each tool, so make them clear and specific.</li>
+<li>We return only the sub-agent’s final response, as the supervisor doesn’t need to see intermediate reasoning or tool calls.</li>
+</ul>
 </section>
 <section id="create-the-supervisor-agent" class="level2">
 <h2 class="anchored" data-anchor-id="create-the-supervisor-agent">4. Create the supervisor agent</h2>
-<p>Now create the supervisor that orchestrates the sub-agents. The supervisor only sees high-level tools and makes routing decisions at the domain level, not the individual API level.</p>
+<ul>
+<li>Now create the supervisor that orchestrates the sub-agents.</li>
+<li>The supervisor only sees high-level tools and makes routing decisions at the domain level, not the individual API level.</li>
+</ul>
 <div id="f4c1f5a2" class="cell" data-execution_count="17">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>SUPERVISOR_PROMPT <span class="op">=</span> (</span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">"You are a helpful personal assistant. "</span></span>
@@ -612,7 +636,10 @@ Tip
 <span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> message <span class="kw">in</span> update.get(<span class="st">"messages"</span>, []):</span>
 <span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>            message.pretty_print()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<p>The supervisor recognizes this requires both calendar and email actions, calls <code>schedule_event</code> for the meeting, then calls <code>manage_email</code> for the reminder. Each sub-agent completes its task, and the supervisor synthesizes both results into a coherent response.</p>
+<ul>
+<li>The supervisor recognizes this requires both calendar and email actions, calls <code>schedule_event</code> for the meeting, then calls <code>manage_email</code> for the reminder.</li>
+<li>Each sub-agent completes its task, and the supervisor synthesizes both results into a coherent response.</li>
+</ul>
 <div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -630,22 +657,17 @@ Tip
 </section>
 <section id="key-takeaways" class="level2">
 <h2 class="anchored" data-anchor-id="key-takeaways">Key takeaways</h2>
-<p>The supervisor pattern creates layers of abstraction where each layer has a clear responsibility. When designing a supervisor system, start with clear domain boundaries and give each sub-agent focused tools and prompts. Write clear tool descriptions for the supervisor, test each layer independently before integration, and control information flow based on your specific needs.</p>
-<div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Tip
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p><strong>When to use the supervisor pattern</strong></p>
+<ul>
+<li>The supervisor pattern creates layers of abstraction where each layer has a clear responsibility.</li>
+<li>When designing a supervisor system, start with clear domain boundaries and give each sub-agent focused tools and prompts.</li>
+<li>Write clear tool descriptions for the supervisor, test each layer independently before integration, and control information flow based on your specific needs.</li>
+</ul>
 <p>Use the supervisor pattern when you have multiple distinct domains (calendar, email, CRM, database), each domain has multiple tools or complex logic, you want centralized workflow control, and sub-agents don’t need to converse directly with users.</p>
 <p>For simpler cases with just a few tools, use a single agent. When agents need to have conversations with users, use <a href="https://docs.langchain.com/oss/python/langchain/multi-agent/handoffs">handoffs</a> instead. For peer-to-peer collaboration between agents, consider other multi-agent patterns.</p>
-</div>
-</div>
+</section>
+<section id="activity" class="level2">
+<h2 class="anchored" data-anchor-id="activity">Activity</h2>
+<p><strong>Over to you:</strong> recreate the supervisor pattern on a different problem domain (other than calendar &amp; emails). You may stub API calls or, better yet, use actual ones!</p>
 
 
 </section>

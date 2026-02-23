@@ -110,9 +110,11 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">Contents</h2>
    
   <ul>
-  <li><a href="#agent-framework" id="toc-agent-framework" class="nav-link active" data-scroll-target="#agent-framework">Agent Framework</a></li>
+  <li><a href="#case-studies" id="toc-case-studies" class="nav-link active" data-scroll-target="#case-studies">Case Studies</a></li>
+  <li><a href="#agent-framework" id="toc-agent-framework" class="nav-link" data-scroll-target="#agent-framework">Agent Framework</a></li>
   <li><a href="#agent-runtime" id="toc-agent-runtime" class="nav-link" data-scroll-target="#agent-runtime">Agent Runtime</a></li>
   <li><a href="#agent-platform" id="toc-agent-platform" class="nav-link" data-scroll-target="#agent-platform">Agent Platform</a></li>
+  <li><a href="#key-takeways" id="toc-key-takeways" class="nav-link" data-scroll-target="#key-takeways">Key Takeways</a></li>
   </ul>
 </nav>
     </div>
@@ -138,12 +140,17 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<p><a href="https://docs.langchain.com/oss/python/langgraph/case-studies">Case Studies</a></p>
+<p><strong>Artificial Intelligence</strong> is a field of Computer Science, studying how to automate decision making.</p>
+<p><strong>Agentic AI</strong> is where autonomy of the system is at the level of dealing not just with structured tabular data, but with unstructured data such as natural language, speech, visual to inform their decision, in a growingly less supervised manner; and hence, autonomous.</p>
+<p>Specifically, today’s Agentic AI systems are driven by <strong>Large Language Models (LLMs)</strong>.</p>
+<section id="case-studies" class="level2">
+<h2 class="anchored" data-anchor-id="case-studies">Case Studies</h2>
+<p><strong>Homework</strong>: read 3 <a href="https://docs.langchain.com/oss/python/langgraph/case-studies">Case Studies</a> and make a presentation about one.</p>
+</section>
 <section id="agent-framework" class="level2">
 <h2 class="anchored" data-anchor-id="agent-framework">Agent Framework</h2>
-<p>Frameworks standardize how a team builds via:</p>
-<ul>
-<li><a href="https://docs.langchain.com/oss/python/langchain/philosophy"><strong>Abstractions</strong></a>:
+<p>In programming, frameworks are a way of thinking about a logical system. In two-folds:</p>
+<p>Firslty, <a href="https://docs.langchain.com/oss/python/langchain/philosophy"><strong>Abstractions</strong></a>: which are the conceptual objects that are defined with specific properties and rules of interaction with other objects. Langchain has:</p>
 <ul>
 <li>Agents</li>
 <li>Models</li>
@@ -152,8 +159,8 @@ ul.task-list li input[type="checkbox"] {
 <li>Short-term memory</li>
 <li>Streaming</li>
 <li>Structured output</li>
-</ul></li>
-<li><a href="https://docs.langchain.com/oss/python/integrations/providers/overview"><strong>Integrations</strong></a>
+</ul>
+<p>Secondly, <a href="https://docs.langchain.com/oss/python/integrations/providers/overview"><strong>Integrations</strong></a>: which are “external” objects that interact with our internal framework of objects. Langchain has:</p>
 <ul>
 <li>Chat models</li>
 <li>Tools and toolkits</li>
@@ -164,9 +171,8 @@ ul.task-list li input[type="checkbox"] {
 <li>Vector stores</li>
 <li>Document loaders</li>
 <li>Key-value stores</li>
-</ul></li>
 </ul>
-<p>Examples:</p>
+<p>Examples of Agentic frameworks are:</p>
 <ul>
 <li><a href="https://docs.langchain.com/oss/python/langchain/overview">LangChain</a></li>
 <li>Vercel’s AI SDK</li>
@@ -178,8 +184,9 @@ ul.task-list li input[type="checkbox"] {
 </section>
 <section id="agent-runtime" class="level2">
 <h2 class="anchored" data-anchor-id="agent-runtime">Agent Runtime</h2>
-<p>Orchestration frameworks and runtimes for building, managing, and deploying long-running, stateful agents. Concretely:</p>
+<p>Runtimes manage state, and state transitions (orchestration). In other words, building, managing, and deploying long-running, stateful agents. Concretely, things like:</p>
 <ul>
+<li><strong>Control-flow</strong>: Step by step instructions, conditional execution, and loops.</li>
 <li><strong>Persistence</strong>: Thread-level and cross-thread persistence for state management.</li>
 <li><strong>Durable execution</strong>: Agents persist through failures and can run for extended periods, resuming from where they left off.</li>
 <li><strong>Streaming</strong>: Support for streaming workflows and responses.</li>
@@ -191,15 +198,23 @@ ul.task-list li input[type="checkbox"] {
 <li>Temporal</li>
 <li>Inngest</li>
 </ul>
-<p>Note: for the best DX, use the <strong>Functional API</strong>.</p>
+<p>Note: for the best DX (Developer Experience), we will be using the <strong>Functional API</strong>.</p>
 </section>
 <section id="agent-platform" class="level2">
 <h2 class="anchored" data-anchor-id="agent-platform">Agent Platform</h2>
-<p><a href="https://www.youtube.com/watch?v=kYtnLaJeia8&amp;list=PLfaIDFEXuae2CjNiTeqXG5r8n9rld9qQu&amp;index=9">What Is <strong>LangSmith</strong>? Explained in 5 Minutes</a>.</p>
+<p><strong>LangSmith</strong>:</p>
 <ul>
-<li>Observability</li>
-<li>Evaluation</li>
-<li>Deployment</li>
+<li><strong>Deployment</strong>: <code>localhost</code> -&gt; production server</li>
+<li><strong>Observability</strong>: tracing, real-time monitoring, alerting and usage.</li>
+<li><strong>Evaluation</strong>: testing versions and providing feedback on traces.</li>
+</ul>
+</section>
+<section id="key-takeways" class="level2">
+<h2 class="anchored" data-anchor-id="key-takeways">Key Takeways</h2>
+<ul>
+<li>LangChain is the framework.</li>
+<li>LangGraph is the runtime.</li>
+<li>LangSmith is the platform.</li>
 </ul>
 <hr>
 <ul>

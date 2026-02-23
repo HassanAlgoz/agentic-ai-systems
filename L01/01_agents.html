@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Agents overview – Building Agentic AI Systems</title>
+<title>Agents in LangChain – Building Agentic AI Systems</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -148,7 +148,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">Contents</h2>
    
   <ul>
-  <li><a href="#core-concepts" id="toc-core-concepts" class="nav-link active" data-scroll-target="#core-concepts">Core Concepts</a></li>
+  <li><a href="#questions" id="toc-questions" class="nav-link active" data-scroll-target="#questions">Questions</a></li>
   <li><a href="#setup-virtual-environment" id="toc-setup-virtual-environment" class="nav-link" data-scroll-target="#setup-virtual-environment">Setup Virtual Environment</a>
   <ul class="collapse">
   <li><a href="#activate-the-virtual-environment" id="toc-activate-the-virtual-environment" class="nav-link" data-scroll-target="#activate-the-virtual-environment">Activate the virtual environment</a></li>
@@ -162,13 +162,18 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#set-up-tavily-api-for-web-search-free" id="toc-set-up-tavily-api-for-web-search-free" class="nav-link" data-scroll-target="#set-up-tavily-api-for-web-search-free">Set up Tavily API for web search (Free)</a></li>
   <li><a href="#install-dependencies" id="toc-install-dependencies" class="nav-link" data-scroll-target="#install-dependencies">Install dependencies</a></li>
   </ul></li>
-  <li><a href="#chat-models" id="toc-chat-models" class="nav-link" data-scroll-target="#chat-models">Chat models</a>
+  <li><a href="#models" id="toc-models" class="nav-link" data-scroll-target="#models">Models</a>
   <ul class="collapse">
-  <li><a href="#invoke" id="toc-invoke" class="nav-link" data-scroll-target="#invoke">Invoke</a></li>
-  <li><a href="#stream" id="toc-stream" class="nav-link" data-scroll-target="#stream">Stream</a></li>
-  <li><a href="#batch" id="toc-batch" class="nav-link" data-scroll-target="#batch">Batch</a></li>
   <li><a href="#choosing-between-models" id="toc-choosing-between-models" class="nav-link" data-scroll-target="#choosing-between-models">Choosing between models</a></li>
-  <li><a href="#local-models" id="toc-local-models" class="nav-link" data-scroll-target="#local-models">Local models</a></li>
+  <li><a href="#basic-usage" id="toc-basic-usage" class="nav-link" data-scroll-target="#basic-usage">Basic usage</a>
+  <ul class="collapse">
+  <li><a href="#running-a-model-locally" id="toc-running-a-model-locally" class="nav-link" data-scroll-target="#running-a-model-locally">Running a model locally</a></li>
+  </ul></li>
+  <li><a href="#key-methods" id="toc-key-methods" class="nav-link" data-scroll-target="#key-methods">Key Methods</a>
+  <ul class="collapse">
+  <li><a href="#invoke" id="toc-invoke" class="nav-link" data-scroll-target="#invoke">1. Invoke</a></li>
+  <li><a href="#stream" id="toc-stream" class="nav-link" data-scroll-target="#stream">2. Stream</a></li>
+  <li><a href="#batch" id="toc-batch" class="nav-link" data-scroll-target="#batch">3. Batch</a></li>
   </ul></li>
   <li><a href="#structured-output" id="toc-structured-output" class="nav-link" data-scroll-target="#structured-output">Structured output</a></li>
   <li><a href="#tool-calling" id="toc-tool-calling" class="nav-link" data-scroll-target="#tool-calling">Tool calling</a>
@@ -180,6 +185,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <ul class="collapse">
   <li><a href="#invoke-1" id="toc-invoke-1" class="nav-link" data-scroll-target="#invoke-1">Invoke</a></li>
   </ul></li>
+  <li><a href="#key-takeaways" id="toc-key-takeaways" class="nav-link" data-scroll-target="#key-takeaways">Key Takeaways</a></li>
+  <li><a href="#activity" id="toc-activity" class="nav-link" data-scroll-target="#activity">Activity</a></li>
+  </ul></li>
   </ul>
 <div class="quarto-alternate-formats"><h2>Other Formats</h2><ul><li><a href="01_agents.html"><i class="bi bi-file-slides"></i>RevealJS</a></li></ul></div></nav>
     </div>
@@ -188,7 +196,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Agents overview</h1>
+<h1 class="title">Agents in LangChain</h1>
 </div>
 
 
@@ -205,16 +213,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<blockquote class="blockquote">
-<p>Build agents that can plan, use subagents, and leverage file systems for complex tasks</p>
-</blockquote>
-<p>This guide walks you through creating your first deep agent with planning, file system tools, and subagent capabilities. You’ll build a research agent that can conduct research and write reports.</p>
-<section id="core-concepts" class="level2">
-<h2 class="anchored" data-anchor-id="core-concepts">Core Concepts</h2>
+<p>This quickstart takes you from a simple setup to a fully functional AI agent in just a few minutes.</p>
+<section id="questions" class="level2">
+<h2 class="anchored" data-anchor-id="questions">Questions</h2>
 <ul>
-<li><a href="https://docs.langchain.com/oss/python/langchain/models">Models</a></li>
-<li><a href="https://docs.langchain.com/oss/python/langchain/agents">Agents</a></li>
-<li><a href="https://docs.langchain.com/oss/python/langchain/tools">Tools</a></li>
+<li>What is an Agent in LangChain and how to make one?</li>
+<li>What’s the relationship between an LLM and an Agent?</li>
+<li>What can agents do?</li>
+<li>Can I run an agent locally without a provider?</li>
 </ul>
 </section>
 <section id="setup-virtual-environment" class="level2">
@@ -297,7 +303,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="install-dependencies" class="level3">
 <h3 class="anchored" data-anchor-id="install-dependencies">Install dependencies</h3>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="ex">uv</span> add deepagents tavily-python langchain_openai langchain_core angchain_community</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="ex">uv</span> add langchain tavily-python langchain_openai langchain_community </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div id="f56162cc" class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> dotenv <span class="im">import</span> load_dotenv</span>
@@ -314,10 +320,32 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </section>
 </section>
-<section id="chat-models" class="level2">
-<h2 class="anchored" data-anchor-id="chat-models">Chat models</h2>
-<p>In this course, we’ll use Chat Models, which take a sequence of messages as input and return messages as output. LangChain supports many models via <a href="https://docs.langchain.com/oss/python/integrations/chat">third-party integrations</a>. By default, the course will use <a href="https://docs.langchain.com/oss/python/integrations/chat/openai">ChatOpenAI</a> because it is both popular and performant.</p>
-<p>Note: <strong>Deep Agents</strong> require <a href="https://openrouter.ai/models?fmt=cards&amp;supported_parameters=tools"><strong>a model that supports tool calling</strong></a>.</p>
+<section id="models" class="level1">
+<h1>Models</h1>
+<p><a href="https://docs.langchain.com/oss/python/langchain/models">LLMs</a> are powerful AI tools that can interpret and generate text like humans. They’re versatile enough to write content, translate languages, summarize, and answer questions without needing specialized training for each task.</p>
+<p>The quality and capabilities of the model you choose directly impact your agent’s baseline reliability and performance. Different models excel at different tasks - some are better at following complex instructions, others at structured reasoning, and some support larger context windows for handling more information.</p>
+<section id="choosing-between-models" class="level3">
+<h3 class="anchored" data-anchor-id="choosing-between-models">Choosing between models</h3>
+<ul>
+<li><a href="https://openrouter.ai/models">Models | OpenRouter.ai</a></li>
+<li><a href="https://llm-stats.com/">LLM Stats</a></li>
+<li><a href="https://artificialanalysis.ai/models/recommend">Model Recommendation | Artficial Analysis</a>
+<ul>
+<li><a href="https://artificialanalysis.ai/text-to-speech/leaderboard">TTS | Artficial Analysis</a></li>
+</ul></li>
+<li><a href="https://arena.ai/leaderboard/text-to-image">Arena.ai</a></li>
+<li><a href="https://huggingface.co/spaces/mteb/leaderboard">MTEB: Embedding Leaderboard</a></li>
+<li><a href="https://huggingface.co/spaces/hf-audio/open_asr_leaderboard">Open ASR</a></li>
+</ul>
+<p>Note: <strong>Agents</strong> require <a href="https://openrouter.ai/models?fmt=cards&amp;supported_parameters=tools"><strong>a model that supports tool calling</strong></a>.</p>
+</section>
+<section id="basic-usage" class="level2">
+<h2 class="anchored" data-anchor-id="basic-usage">Basic usage</h2>
+<p>Models can be utilized in two ways:</p>
+<ol type="1">
+<li><strong>With agents</strong> - Models can be dynamically specified when creating an <a href="../oss/python/langchain/agents#model">agent</a>.</li>
+<li><strong>Standalone</strong> - Models can be called directly (outside of the agent loop) for tasks like text generation, classification, or extraction without the need for an agent framework.</li>
+</ol>
 <p><a href="https://docs.langchain.com/oss/python/langchain/models">Here</a> is a useful how-to for all the things that you can do with chat models, but we’ll show a few highlights below.</p>
 <p>There are <a href="https://docs.langchain.com/oss/python/langchain/models#parameters">a few standard parameters</a> that we can set with chat models. Two of the most common are:</p>
 <ul>
@@ -330,7 +358,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li><strong>Low temperature</strong> (close to 0) is more deterministic and focused outputs. This is good for tasks requiring accuracy or factual responses.</li>
 <li><strong>High temperature</strong> (close to 1) is good for creative tasks or generating varied responses.</li>
 </ul>
-<div id="44cc8280" class="cell" data-execution_count="3">
+<p><code>max_tokens</code> limits the total number of tokens in the response, effectively controlling how long the output can be.</p>
+<p>LangChain supports many models via <a href="https://docs.langchain.com/oss/python/integrations/chat">third-party integrations</a>. By default, the course will use <a href="https://docs.langchain.com/oss/python/integrations/chat/openai">ChatOpenAI</a> because it is both popular and performant.</p>
+<div id="44cc8280" class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> langchain_openai <span class="im">import</span> ChatOpenAI</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="co"># https://openrouter.ai/openai/gpt-5-nano</span></span>
@@ -353,28 +383,35 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   from .autonotebook import tqdm as notebook_tqdm</code></pre>
 </div>
 </div>
-<div id="e4955afa" class="cell" data-execution_count="21">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>model_nemotron3_nano.profile</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-display" data-execution_count="21">
-<pre><code>{}</code></pre>
-</div>
-</div>
+<section id="running-a-model-locally" class="level3">
+<h3 class="anchored" data-anchor-id="running-a-model-locally">Running a model locally</h3>
+<p>LangChain supports running models locally on your own hardware. This is useful for scenarios where either data privacy is critical, you want to invoke a custom model, or when you want to avoid the costs incurred when using a cloud-based model.</p>
+<p><a href="https://docs.langchain.com/oss/python/integrations/chat/ollama">Ollama</a> is one of the easiest ways to run chat and embedding models locally.</p>
+</section>
+</section>
+<section id="key-methods" class="level2">
+<h2 class="anchored" data-anchor-id="key-methods">Key Methods</h2>
+<ol type="1">
+<li>Invoke</li>
+<li>Stream</li>
+<li>Batch</li>
+</ol>
 <section id="invoke" class="level3">
-<h3 class="anchored" data-anchor-id="invoke">Invoke</h3>
+<h3 class="anchored" data-anchor-id="invoke">1. Invoke</h3>
 <p>The most straightforward way to call a model is to use <code>invoke()</code> with a single message or a list of messages:</p>
 <div id="3b52c4ad" class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>message <span class="op">=</span> model_nemotron3_nano.invoke(<span class="st">"why do parrots talk?"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>message <span class="op">=</span> model_nemotron3_nano.invoke(<span class="st">"why do parrots talk?"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>.. this returns an <code>AIMessage</code> object:</p>
 <div id="b3b68f58" class="cell" data-execution_count="5">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>message</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>message</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="5">
 <pre><code>AIMessage(content='Parrots “talk” because they’re one of the few animals that can **learn and reproduce complex vocalizations**—a skill called vocal learning. Here’s a quick rundown of why and how they do it:\n\n| Reason | What it means for parrots |\n|--------|--------------------------|\n| **Social bonding** | In the wild, parrots use calls to stay in contact with flock members, coordinate movement, and reinforce pair bonds. Mimicking the sounds of their companions (including human speech) helps them stay socially connected. |\n| **Territory &amp; status** | Some species use distinctive vocalizations to claim space or signal dominance. A parrot that can produce a clear, attention‑grabbing “speech” may gain more social leverage. |\n| **Mental stimulation** | Parrots are highly intelligent; they need cognitive challenges. Learning new sounds is a form of problem‑solving that keeps their brains active and reduces boredom‑related behaviors (like feather‑plucking). |\n| **Mimicry as a survival tool** | In the wild, many parrots imitate the calls of other species (e.g., hawks, other birds) to deter predators or to blend into mixed‑species flocks. This ability extends to human speech when they live with people. |\n| **Neural specialization** | Parrots possess a brain region called the **song system** that is analogous to the vocal‑learning circuits of songbirds and humans. This system allows them to store, modify, and reproduce complex sound patterns with high fidelity. |\n\n### How they actually “talk”\n\n1. **Listening &amp; Encoding** – A parrot constantly hears sounds in its environment and stores a mental “template” of each one.\n2. **Practice &amp; Refinement** – Using its syrinx (the bird equivalent of vocal cords), it tries out different variations, gradually shaping the output to match the stored template.\n3. **Feedback Loop** – The bird hears its own attempt, compares it to the template, and tweaks pitch, rhythm, or timing until it’s close enough.\n4. **Reinforcement** – Positive attention from humans (treats, praise, interaction) reinforces the behavior, encouraging the parrot to repeat the sound.\n\n### Why some parrots sound more “human‑like”\n\n- **Species differences** – African Grey, Amazon, and some Cockatoos have especially flexible vocal repertoires.\n- **Individual exposure** – The more varied and frequent the human speech they hear, the richer their mimicry can become.\n- **Training &amp; interaction** – Repetition, consistent cues, and reward-based training help solidify specific words or phrases.\n\n### Bottom line\n\nParrots “talk” not because they understand language the way we do, but because they’re **social, intelligent mimics** equipped with a unique vocal‑learning brain circuit. By copying the sounds that matter most to them—whether it’s a flock mate’s call, a predator’s alarm, or a human’s voice—they enhance their social world and keep their minds sharp. \n\nIf you’re curious about getting a talking parrot, remember that the ability to mimic speech varies widely among individuals and species, and it thrives best with plenty of social interaction, mental enrichment, and consistent, positive training.', additional_kwargs={'refusal': None}, response_metadata={'token_usage': {'completion_tokens': 731, 'prompt_tokens': 22, 'total_tokens': 753, 'completion_tokens_details': {'accepted_prediction_tokens': None, 'audio_tokens': 0, 'reasoning_tokens': 58, 'rejected_prediction_tokens': None}, 'prompt_tokens_details': {'audio_tokens': 0, 'cached_tokens': 0}, 'cost': 0, 'is_byok': False, 'cost_details': {'upstream_inference_cost': 0, 'upstream_inference_prompt_cost': 0, 'upstream_inference_completions_cost': 0}}, 'model_provider': 'openai', 'model_name': 'nvidia/nemotron-3-nano-30b-a3b:free', 'system_fingerprint': None, 'id': 'gen-1771586508-ixswTWdhOMhqmt9bxk5a', 'finish_reason': 'stop', 'logprobs': None}, id='lc_run--019c7ac8-d0ab-75d1-aeeb-5bcfce7f31bb-0', tool_calls=[], invalid_tool_calls=[], usage_metadata={'input_tokens': 22, 'output_tokens': 731, 'total_tokens': 753, 'input_token_details': {'audio': 0, 'cache_read': 0}, 'output_token_details': {'audio': 0, 'reasoning': 58}})</code></pre>
 </div>
 </div>
 <p>.. which has a <code>content</code> property, which includes the generated response text:</p>
 <div id="4efc494d" class="cell" data-execution_count="7">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(message.content)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(message.content)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Parrots “talk” because they’re one of the few animals that can **learn and reproduce complex vocalizations**—a skill called vocal learning. Here’s a quick rundown of why and how they do it:
 
@@ -408,29 +445,29 @@ If you’re curious about getting a talking parrot, remember that the ability to
 </div>
 <p>A list of messages can be provided to a chat model to represent conversation history. Each message has a role that models use to indicate who sent the message in the conversation.</p>
 <div id="39f4c8fc" class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> langchain.messages <span class="im">import</span> SystemMessage, HumanMessage, AIMessage</span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>conversation <span class="op">=</span> [    </span>
-<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>    SystemMessage(content<span class="op">=</span><span class="st">"You are a helpful assistant that translates English to Arabic."</span>),</span>
-<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>    HumanMessage(content<span class="op">=</span><span class="st">"Translate: I love programming."</span>),</span>
-<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>    AIMessage(content<span class="op">=</span><span class="st">"أحب البرمجة."</span>),</span>
-<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>    HumanMessage(content<span class="op">=</span><span class="st">"I love building applications."</span>)</span>
-<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>]</span>
-<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>message <span class="op">=</span> model_nemotron3_nano.invoke(conversation)</span>
-<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(message.content)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> langchain.messages <span class="im">import</span> SystemMessage, HumanMessage, AIMessage</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>conversation <span class="op">=</span> [    </span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>    SystemMessage(content<span class="op">=</span><span class="st">"You are a helpful assistant that translates English to Arabic."</span>),</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>    HumanMessage(content<span class="op">=</span><span class="st">"Translate: I love programming."</span>),</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>    AIMessage(content<span class="op">=</span><span class="st">"أحب البرمجة."</span>),</span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>    HumanMessage(content<span class="op">=</span><span class="st">"I love building applications."</span>)</span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>]</span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>message <span class="op">=</span> model_nemotron3_nano.invoke(conversation)</span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(message.content)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>أحب تطوير التطبيقات.</code></pre>
 </div>
 </div>
 </section>
 <section id="stream" class="level3">
-<h3 class="anchored" data-anchor-id="stream">Stream</h3>
+<h3 class="anchored" data-anchor-id="stream">2. Stream</h3>
 <p>Most models can stream their output content while it is being generated. By displaying output progressively, streaming significantly improves user experience, particularly for longer responses.</p>
 <p>Calling <code>stream()</code> returns an iterator that yields output chunks as they are produced. You can use a loop to process each chunk in real-time:</p>
 <div id="3c795917" class="cell" data-execution_count="9">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> chunk <span class="kw">in</span> model_nemotron3_nano.stream(<span class="st">"Why do parrots have colorful feathers?"</span>):</span>
-<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(chunk.text, end<span class="op">=</span><span class="st">"|"</span>, flush<span class="op">=</span><span class="va">True</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> chunk <span class="kw">in</span> model_nemotron3_nano.stream(<span class="st">"Why do parrots have colorful feathers?"</span>):</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(chunk.text, end<span class="op">=</span><span class="st">"|"</span>, flush<span class="op">=</span><span class="va">True</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||Par|ro|ts| are| famous| for| their| vivid| plum|age|,| and| that| color|ation| isn|’t| just| for| show| —| it| serves| several| important| functions| that| have| been| shaped| by| evolution|.| Here|’s| a| quick| rund|own| of| the| main| reasons|:
 
@@ -453,17 +490,17 @@ If you’re curious about getting a talking parrot, remember that the ability to
 </div>
 </section>
 <section id="batch" class="level3">
-<h3 class="anchored" data-anchor-id="batch">Batch</h3>
+<h3 class="anchored" data-anchor-id="batch">3. Batch</h3>
 <p>Batching a collection of independent requests to a model can significantly improve performance and reduce costs, as the processing can be done in parallel:</p>
 <div id="b1cd4f85" class="cell" data-execution_count="15">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>responses <span class="op">=</span> model_nemotron3_nano.batch([</span>
-<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">"What is the capital of Saudi Arabia?"</span>,</span>
-<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">"What is 2 + 8"</span>,</span>
-<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Is the sky blue or is it our perception? give a short and concise answer"</span></span>
-<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>])</span>
-<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> response <span class="kw">in</span> responses:</span>
-<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(response)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>responses <span class="op">=</span> model_nemotron3_nano.batch([</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">"What is the capital of Saudi Arabia?"</span>,</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">"What is 2 + 8"</span>,</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Is the sky blue or is it our perception? give a short and concise answer"</span></span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>])</span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> response <span class="kw">in</span> responses:</span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(response)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>content='The capital of Saudi Arabia is **Riyadh**.' additional_kwargs={'refusal': None} response_metadata={'token_usage': {'completion_tokens': 38, 'prompt_tokens': 24, 'total_tokens': 62, 'completion_tokens_details': {'accepted_prediction_tokens': None, 'audio_tokens': 0, 'reasoning_tokens': 26, 'rejected_prediction_tokens': None}, 'prompt_tokens_details': {'audio_tokens': 0, 'cached_tokens': 0}, 'cost': 0, 'is_byok': False, 'cost_details': {'upstream_inference_cost': 0, 'upstream_inference_prompt_cost': 0, 'upstream_inference_completions_cost': 0}}, 'model_provider': 'openai', 'model_name': 'nvidia/nemotron-3-nano-30b-a3b:free', 'system_fingerprint': None, 'id': 'gen-1771587230-rws1sKd4yd2Ir45jBE92', 'finish_reason': 'stop', 'logprobs': None} id='lc_run--019c7ad3-dab8-7670-aebf-be1a19d73902-0' tool_calls=[] invalid_tool_calls=[] usage_metadata={'input_tokens': 24, 'output_tokens': 38, 'total_tokens': 62, 'input_token_details': {'audio': 0, 'cache_read': 0}, 'output_token_details': {'audio': 0, 'reasoning': 26}}
 content='2\u202f+\u202f8\u202f=\u202f10.' additional_kwargs={'refusal': None} response_metadata={'token_usage': {'completion_tokens': 40, 'prompt_tokens': 23, 'total_tokens': 63, 'completion_tokens_details': {'accepted_prediction_tokens': None, 'audio_tokens': 0, 'reasoning_tokens': 22, 'rejected_prediction_tokens': None}, 'prompt_tokens_details': {'audio_tokens': 0, 'cached_tokens': 0}, 'cost': 0, 'is_byok': False, 'cost_details': {'upstream_inference_cost': 0, 'upstream_inference_prompt_cost': 0, 'upstream_inference_completions_cost': 0}}, 'model_provider': 'openai', 'model_name': 'nvidia/nemotron-3-nano-30b-a3b:free', 'system_fingerprint': None, 'id': 'gen-1771587230-FEcwZ8VMp5p1Qgvgnrqr', 'finish_reason': 'stop', 'logprobs': None} id='lc_run--019c7ad3-daba-76d3-856b-d4204b17db9a-0' tool_calls=[] invalid_tool_calls=[] usage_metadata={'input_tokens': 23, 'output_tokens': 40, 'total_tokens': 63, 'input_token_details': {'audio': 0, 'cache_read': 0}, 'output_token_details': {'audio': 0, 'reasoning': 22}}
@@ -471,9 +508,9 @@ content='The sky appears blue because molecules in the atmosphere scatter short�
 </div>
 </div>
 <div id="2264be1a" class="cell" data-execution_count="16">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i, response <span class="kw">in</span> <span class="bu">enumerate</span>(responses):</span>
-<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(response.content)</span>
-<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"="</span><span class="op">*</span><span class="dv">100</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i, response <span class="kw">in</span> <span class="bu">enumerate</span>(responses):</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(response.content)</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"="</span><span class="op">*</span><span class="dv">100</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>The capital of Saudi Arabia is **Riyadh**.
 ====================================================================================================
@@ -484,39 +521,20 @@ The sky appears blue because molecules in the atmosphere scatter short‑wavelen
 </div>
 </div>
 </section>
-<section id="choosing-between-models" class="level3">
-<h3 class="anchored" data-anchor-id="choosing-between-models">Choosing between models</h3>
-<ul>
-<li><a href="https://openrouter.ai/models">Models | OpenRouter.ai</a></li>
-<li><a href="https://llm-stats.com/">LLM Stats</a></li>
-<li><a href="https://artificialanalysis.ai/models/recommend">Model Recommendation | Artficial Analysis</a>
-<ul>
-<li><a href="https://artificialanalysis.ai/text-to-speech/leaderboard">TTS | Artficial Analysis</a></li>
-</ul></li>
-<li><a href="https://arena.ai/leaderboard/text-to-image">Arena.ai</a></li>
-<li><a href="https://huggingface.co/spaces/mteb/leaderboard">MTEB: Embedding Leaderboard</a></li>
-<li><a href="https://huggingface.co/spaces/hf-audio/open_asr_leaderboard">Open ASR</a></li>
-</ul>
-</section>
-<section id="local-models" class="level3">
-<h3 class="anchored" data-anchor-id="local-models">Local models</h3>
-<p>LangChain supports running models locally on your own hardware. This is useful for scenarios where either data privacy is critical, you want to invoke a custom model, or when you want to avoid the costs incurred when using a cloud-based model.</p>
-<p><a href="https://docs.langchain.com/oss/python/integrations/chat/ollama">Ollama</a> is one of the easiest ways to run chat and embedding models locally.</p>
-</section>
 </section>
 <section id="structured-output" class="level2">
 <h2 class="anchored" data-anchor-id="structured-output">Structured output</h2>
 <p>Models can be requested to provide their response in a format matching a given schema. This is useful for ensuring the output can be easily parsed and used in subsequent processing. LangChain supports multiple schema types and methods for enforcing structured output.</p>
 <p><a href="https://docs.pydantic.dev/latest/concepts/models/#basic-model-usage">Pydantic models</a> provide the richest feature set with field validation, descriptions, and nested structures.</p>
 <div id="4765e1b9" class="cell" data-execution_count="18">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pydantic <span class="im">import</span> BaseModel, Field</span>
-<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> Movie(BaseModel):</span>
-<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""A movie with details."""</span></span>
-<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>    title: <span class="bu">str</span> <span class="op">=</span> Field(..., description<span class="op">=</span><span class="st">"The title of the movie"</span>)</span>
-<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>    year: <span class="bu">int</span> <span class="op">=</span> Field(..., description<span class="op">=</span><span class="st">"The year the movie was released"</span>)</span>
-<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>    director: <span class="bu">str</span> <span class="op">=</span> Field(..., description<span class="op">=</span><span class="st">"The director of the movie"</span>)</span>
-<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a>    rating: <span class="bu">float</span> <span class="op">=</span> Field(..., description<span class="op">=</span><span class="st">"The movie's rating out of 10"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pydantic <span class="im">import</span> BaseModel, Field</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> Movie(BaseModel):</span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""A movie with details."""</span></span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>    title: <span class="bu">str</span> <span class="op">=</span> Field(..., description<span class="op">=</span><span class="st">"The title of the movie"</span>)</span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>    year: <span class="bu">int</span> <span class="op">=</span> Field(..., description<span class="op">=</span><span class="st">"The year the movie was released"</span>)</span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>    director: <span class="bu">str</span> <span class="op">=</span> Field(..., description<span class="op">=</span><span class="st">"The director of the movie"</span>)</span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a>    rating: <span class="bu">float</span> <span class="op">=</span> Field(..., description<span class="op">=</span><span class="st">"The movie's rating out of 10"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>title='Inception' year=2010 director='Christopher Nolan' rating=8.8</code></pre>
 </div>
@@ -527,14 +545,14 @@ The sky appears blue because molecules in the atmosphere scatter short‑wavelen
 </div>
 </div>
 <div id="49f79423" class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>model_with_structure <span class="op">=</span> model_nemotron3_nano.with_structured_output(Movie)</span>
-<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>response <span class="op">=</span> model_with_structure.invoke(<span class="st">"Provide details about the movie Inception"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>model_with_structure <span class="op">=</span> model_nemotron3_nano.with_structured_output(Movie)</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>response <span class="op">=</span> model_with_structure.invoke(<span class="st">"Provide details about the movie Inception"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div id="634b07db" class="cell" data-execution_count="19">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Title:"</span>, response.title)</span>
-<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Year:"</span>, response.year)</span>
-<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Director:"</span>, response.director)</span>
-<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Rating:"</span>, response.rating)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Title:"</span>, response.title)</span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Year:"</span>, response.year)</span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Director:"</span>, response.director)</span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Rating:"</span>, response.rating)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Title: Inception
 Year: 2010
@@ -552,21 +570,21 @@ Rating: 8.8</code></pre>
 </ol>
 <p>Note: A <em>coroutine</em> is a method that can suspend execution and resume at a later time</p>
 <div id="d5d53c5b" class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb31"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> langchain.tools <span class="im">import</span> tool</span>
-<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a><span class="at">@tool</span></span>
-<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> get_weather(location: <span class="bu">str</span>) <span class="op">-&gt;</span> <span class="bu">str</span>:</span>
-<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Get the weather at a location."""</span></span>
-<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="ss">f"It's always sunny in </span><span class="sc">{</span>location<span class="sc">}</span><span class="ss">."</span></span>
-<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-8"><a href="#cb31-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-9"><a href="#cb31-9" aria-hidden="true" tabindex="-1"></a>model_with_tools <span class="op">=</span> model_nemotron3_nano.bind_tools([get_weather])</span>
-<span id="cb31-10"><a href="#cb31-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-11"><a href="#cb31-11" aria-hidden="true" tabindex="-1"></a>response <span class="op">=</span> model_with_tools.invoke(<span class="st">"What's the weather like in the Moon?"</span>)</span>
-<span id="cb31-12"><a href="#cb31-12" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> tool_call <span class="kw">in</span> response.tool_calls:</span>
-<span id="cb31-13"><a href="#cb31-13" aria-hidden="true" tabindex="-1"></a>    <span class="co"># View tool calls made by the model</span></span>
-<span id="cb31-14"><a href="#cb31-14" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"Tool: </span><span class="sc">{</span>tool_call[<span class="st">'name'</span>]<span class="sc">}</span><span class="ss">"</span>)</span>
-<span id="cb31-15"><a href="#cb31-15" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"Args: </span><span class="sc">{</span>tool_call[<span class="st">'args'</span>]<span class="sc">}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> langchain.tools <span class="im">import</span> tool</span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a><span class="at">@tool</span></span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> get_weather(location: <span class="bu">str</span>) <span class="op">-&gt;</span> <span class="bu">str</span>:</span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Get the weather at a location."""</span></span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="ss">f"It's always sunny in </span><span class="sc">{</span>location<span class="sc">}</span><span class="ss">."</span></span>
+<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a>model_with_tools <span class="op">=</span> model_nemotron3_nano.bind_tools([get_weather])</span>
+<span id="cb29-10"><a href="#cb29-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-11"><a href="#cb29-11" aria-hidden="true" tabindex="-1"></a>response <span class="op">=</span> model_with_tools.invoke(<span class="st">"What's the weather like in the Moon?"</span>)</span>
+<span id="cb29-12"><a href="#cb29-12" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> tool_call <span class="kw">in</span> response.tool_calls:</span>
+<span id="cb29-13"><a href="#cb29-13" aria-hidden="true" tabindex="-1"></a>    <span class="co"># View tool calls made by the model</span></span>
+<span id="cb29-14"><a href="#cb29-14" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"Tool: </span><span class="sc">{</span>tool_call[<span class="st">'name'</span>]<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb29-15"><a href="#cb29-15" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"Args: </span><span class="sc">{</span>tool_call[<span class="st">'args'</span>]<span class="sc">}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Tool: get_weather
 Args: {'location': 'Boston'}</code></pre>
@@ -576,42 +594,42 @@ Args: {'location': 'Boston'}</code></pre>
 <h3 class="anchored" data-anchor-id="tool-input-schemas">Tool Input Schemas</h3>
 <p>Define complex inputs with Pydantic models or JSON schemas:</p>
 <div id="530c429c" class="cell" data-execution_count="23">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb33"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pydantic <span class="im">import</span> BaseModel, Field</span>
-<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> typing <span class="im">import</span> Literal</span>
-<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> WeatherInput(BaseModel):</span>
-<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Input for weather queries."""</span></span>
-<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a>    location: <span class="bu">str</span> <span class="op">=</span> Field(description<span class="op">=</span><span class="st">"City name or coordinates"</span>)</span>
-<span id="cb33-7"><a href="#cb33-7" aria-hidden="true" tabindex="-1"></a>    units: Literal[<span class="st">"celsius"</span>, <span class="st">"fahrenheit"</span>] <span class="op">=</span> Field(</span>
-<span id="cb33-8"><a href="#cb33-8" aria-hidden="true" tabindex="-1"></a>        default<span class="op">=</span><span class="st">"celsius"</span>,</span>
-<span id="cb33-9"><a href="#cb33-9" aria-hidden="true" tabindex="-1"></a>        description<span class="op">=</span><span class="st">"Temperature unit preference"</span></span>
-<span id="cb33-10"><a href="#cb33-10" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb33-11"><a href="#cb33-11" aria-hidden="true" tabindex="-1"></a>    include_forecast: <span class="bu">bool</span> <span class="op">=</span> Field(</span>
-<span id="cb33-12"><a href="#cb33-12" aria-hidden="true" tabindex="-1"></a>        default<span class="op">=</span><span class="va">False</span>,</span>
-<span id="cb33-13"><a href="#cb33-13" aria-hidden="true" tabindex="-1"></a>        description<span class="op">=</span><span class="st">"Include 5-day forecast"</span></span>
-<span id="cb33-14"><a href="#cb33-14" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb33-15"><a href="#cb33-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb33-16"><a href="#cb33-16" aria-hidden="true" tabindex="-1"></a><span class="at">@tool</span>(args_schema<span class="op">=</span>WeatherInput)</span>
-<span id="cb33-17"><a href="#cb33-17" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> get_weather(location: <span class="bu">str</span>, units: <span class="bu">str</span> <span class="op">=</span> <span class="st">"celsius"</span>, include_forecast: <span class="bu">bool</span> <span class="op">=</span> <span class="va">False</span>) <span class="op">-&gt;</span> <span class="bu">str</span>:</span>
-<span id="cb33-18"><a href="#cb33-18" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Get current weather and optional forecast."""</span></span>
-<span id="cb33-19"><a href="#cb33-19" aria-hidden="true" tabindex="-1"></a>    temp <span class="op">=</span> <span class="dv">22</span> <span class="cf">if</span> units <span class="op">==</span> <span class="st">"celsius"</span> <span class="cf">else</span> <span class="dv">72</span></span>
-<span id="cb33-20"><a href="#cb33-20" aria-hidden="true" tabindex="-1"></a>    result <span class="op">=</span> <span class="ss">f"Current weather in </span><span class="sc">{</span>location<span class="sc">}</span><span class="ss">: </span><span class="sc">{</span>temp<span class="sc">}</span><span class="ss"> degrees </span><span class="sc">{</span>units[<span class="dv">0</span>]<span class="sc">.</span>upper()<span class="sc">}</span><span class="ss">"</span></span>
-<span id="cb33-21"><a href="#cb33-21" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> include_forecast:</span>
-<span id="cb33-22"><a href="#cb33-22" aria-hidden="true" tabindex="-1"></a>        result <span class="op">+=</span> <span class="st">"</span><span class="ch">\n</span><span class="st">Next 5 days: Sunny"</span></span>
-<span id="cb33-23"><a href="#cb33-23" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> result</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb31"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pydantic <span class="im">import</span> BaseModel, Field</span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> typing <span class="im">import</span> Literal</span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> WeatherInput(BaseModel):</span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Input for weather queries."""</span></span>
+<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a>    location: <span class="bu">str</span> <span class="op">=</span> Field(description<span class="op">=</span><span class="st">"City name or coordinates"</span>)</span>
+<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a>    units: Literal[<span class="st">"celsius"</span>, <span class="st">"fahrenheit"</span>] <span class="op">=</span> Field(</span>
+<span id="cb31-8"><a href="#cb31-8" aria-hidden="true" tabindex="-1"></a>        default<span class="op">=</span><span class="st">"celsius"</span>,</span>
+<span id="cb31-9"><a href="#cb31-9" aria-hidden="true" tabindex="-1"></a>        description<span class="op">=</span><span class="st">"Temperature unit preference"</span></span>
+<span id="cb31-10"><a href="#cb31-10" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb31-11"><a href="#cb31-11" aria-hidden="true" tabindex="-1"></a>    include_forecast: <span class="bu">bool</span> <span class="op">=</span> Field(</span>
+<span id="cb31-12"><a href="#cb31-12" aria-hidden="true" tabindex="-1"></a>        default<span class="op">=</span><span class="va">False</span>,</span>
+<span id="cb31-13"><a href="#cb31-13" aria-hidden="true" tabindex="-1"></a>        description<span class="op">=</span><span class="st">"Include 5-day forecast"</span></span>
+<span id="cb31-14"><a href="#cb31-14" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb31-15"><a href="#cb31-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-16"><a href="#cb31-16" aria-hidden="true" tabindex="-1"></a><span class="at">@tool</span>(args_schema<span class="op">=</span>WeatherInput)</span>
+<span id="cb31-17"><a href="#cb31-17" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> get_weather(location: <span class="bu">str</span>, units: <span class="bu">str</span> <span class="op">=</span> <span class="st">"celsius"</span>, include_forecast: <span class="bu">bool</span> <span class="op">=</span> <span class="va">False</span>) <span class="op">-&gt;</span> <span class="bu">str</span>:</span>
+<span id="cb31-18"><a href="#cb31-18" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Get current weather and optional forecast."""</span></span>
+<span id="cb31-19"><a href="#cb31-19" aria-hidden="true" tabindex="-1"></a>    temp <span class="op">=</span> <span class="dv">22</span> <span class="cf">if</span> units <span class="op">==</span> <span class="st">"celsius"</span> <span class="cf">else</span> <span class="dv">72</span></span>
+<span id="cb31-20"><a href="#cb31-20" aria-hidden="true" tabindex="-1"></a>    result <span class="op">=</span> <span class="ss">f"Current weather in </span><span class="sc">{</span>location<span class="sc">}</span><span class="ss">: </span><span class="sc">{</span>temp<span class="sc">}</span><span class="ss"> degrees </span><span class="sc">{</span>units[<span class="dv">0</span>]<span class="sc">.</span>upper()<span class="sc">}</span><span class="ss">"</span></span>
+<span id="cb31-21"><a href="#cb31-21" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> include_forecast:</span>
+<span id="cb31-22"><a href="#cb31-22" aria-hidden="true" tabindex="-1"></a>        result <span class="op">+=</span> <span class="st">"</span><span class="ch">\n</span><span class="st">Next 5 days: Sunny"</span></span>
+<span id="cb31-23"><a href="#cb31-23" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> result</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div id="9ec84860" class="cell" data-execution_count="24">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb34"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>model_with_tools <span class="op">=</span> model_nemotron3_nano.bind_tools([get_weather])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>model_with_tools <span class="op">=</span> model_nemotron3_nano.bind_tools([get_weather])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div id="afe66a0d" class="cell" data-execution_count="25">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb35"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>response <span class="op">=</span> model_with_tools.invoke(</span>
-<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">"What's the weather like in the Moon? "</span></span>
-<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">"in fahrenheit and include the forecast please."</span></span>
-<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> tool_call <span class="kw">in</span> response.tool_calls:</span>
-<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a>    <span class="co"># View tool calls made by the model</span></span>
-<span id="cb35-7"><a href="#cb35-7" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"Tool: </span><span class="sc">{</span>tool_call[<span class="st">'name'</span>]<span class="sc">}</span><span class="ss">"</span>)</span>
-<span id="cb35-8"><a href="#cb35-8" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"Args: </span><span class="sc">{</span>tool_call[<span class="st">'args'</span>]<span class="sc">}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb33"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>response <span class="op">=</span> model_with_tools.invoke(</span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">"What's the weather like in the Moon? "</span></span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">"in fahrenheit and include the forecast please."</span></span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> tool_call <span class="kw">in</span> response.tool_calls:</span>
+<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a>    <span class="co"># View tool calls made by the model</span></span>
+<span id="cb33-7"><a href="#cb33-7" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"Tool: </span><span class="sc">{</span>tool_call[<span class="st">'name'</span>]<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb33-8"><a href="#cb33-8" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"Args: </span><span class="sc">{</span>tool_call[<span class="st">'args'</span>]<span class="sc">}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Tool: get_weather
 Args: {'location': 'the Moon', 'units': 'fahrenheit', 'include_forecast': True}</code></pre>
@@ -623,28 +641,28 @@ Args: {'location': 'the Moon', 'units': 'fahrenheit', 'include_forecast': True}<
 <h2 class="anchored" data-anchor-id="search-tools">Search Tools</h2>
 <p>Tavily is a search engine optimized for LLMs and RAG, aimed at efficient, quick, and persistent search results. As mentioned, it’s easy to sign up and offers a generous free tier.</p>
 <div id="3fcc980e" class="cell" data-execution_count="26">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb37"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> tavily <span class="im">import</span> TavilyClient</span>
-<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>tavily_client <span class="op">=</span> TavilyClient(api_key<span class="op">=</span>os.environ[<span class="st">"TAVILY_API_KEY"</span>])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb35"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> tavily <span class="im">import</span> TavilyClient</span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>tavily_client <span class="op">=</span> TavilyClient(api_key<span class="op">=</span>os.environ[<span class="st">"TAVILY_API_KEY"</span>])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div id="539beacd" class="cell" data-execution_count="34">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb38"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> internet_search(</span>
-<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>    query: <span class="bu">str</span>,</span>
-<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a>    max_results: <span class="bu">int</span> <span class="op">=</span> <span class="dv">5</span>,</span>
-<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a>    topic: Literal[<span class="st">"general"</span>, <span class="st">"news"</span>, <span class="st">"finance"</span>] <span class="op">=</span> <span class="st">"general"</span>,</span>
-<span id="cb38-5"><a href="#cb38-5" aria-hidden="true" tabindex="-1"></a>    include_raw_content: <span class="bu">bool</span> <span class="op">=</span> <span class="va">False</span>,</span>
-<span id="cb38-6"><a href="#cb38-6" aria-hidden="true" tabindex="-1"></a>):</span>
-<span id="cb38-7"><a href="#cb38-7" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Run a web search"""</span></span>
-<span id="cb38-8"><a href="#cb38-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> tavily_client.search(</span>
-<span id="cb38-9"><a href="#cb38-9" aria-hidden="true" tabindex="-1"></a>        query,</span>
-<span id="cb38-10"><a href="#cb38-10" aria-hidden="true" tabindex="-1"></a>        max_results<span class="op">=</span>max_results,</span>
-<span id="cb38-11"><a href="#cb38-11" aria-hidden="true" tabindex="-1"></a>        include_raw_content<span class="op">=</span>include_raw_content,</span>
-<span id="cb38-12"><a href="#cb38-12" aria-hidden="true" tabindex="-1"></a>        topic<span class="op">=</span>topic,</span>
-<span id="cb38-13"><a href="#cb38-13" aria-hidden="true" tabindex="-1"></a>    )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb36"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> internet_search(</span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>    query: <span class="bu">str</span>,</span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>    max_results: <span class="bu">int</span> <span class="op">=</span> <span class="dv">5</span>,</span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a>    topic: Literal[<span class="st">"general"</span>, <span class="st">"news"</span>, <span class="st">"finance"</span>] <span class="op">=</span> <span class="st">"general"</span>,</span>
+<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a>    include_raw_content: <span class="bu">bool</span> <span class="op">=</span> <span class="va">False</span>,</span>
+<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a>):</span>
+<span id="cb36-7"><a href="#cb36-7" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Run a web search"""</span></span>
+<span id="cb36-8"><a href="#cb36-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> tavily_client.search(</span>
+<span id="cb36-9"><a href="#cb36-9" aria-hidden="true" tabindex="-1"></a>        query,</span>
+<span id="cb36-10"><a href="#cb36-10" aria-hidden="true" tabindex="-1"></a>        max_results<span class="op">=</span>max_results,</span>
+<span id="cb36-11"><a href="#cb36-11" aria-hidden="true" tabindex="-1"></a>        include_raw_content<span class="op">=</span>include_raw_content,</span>
+<span id="cb36-12"><a href="#cb36-12" aria-hidden="true" tabindex="-1"></a>        topic<span class="op">=</span>topic,</span>
+<span id="cb36-13"><a href="#cb36-13" aria-hidden="true" tabindex="-1"></a>    )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div id="45c13907" class="cell" data-execution_count="35">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb39"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>result <span class="op">=</span> internet_search(<span class="st">"What is LangGraph?"</span>, max_results<span class="op">=</span><span class="dv">3</span>)</span>
-<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>result</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb37"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>result <span class="op">=</span> internet_search(<span class="st">"What is LangGraph?"</span>, max_results<span class="op">=</span><span class="dv">3</span>)</span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>result</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="35">
 <pre><code>{'query': 'What is LangGraph?',
  'response_time': 0.61,
@@ -682,33 +700,33 @@ Args: {'location': 'the Moon', 'units': 'fahrenheit', 'include_forecast': True}<
 </div>
 <p><code>create_agent</code> provides a production-ready agent implementation.</p>
 <div id="065e6367" class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb41"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> langchain.agents <span class="im">import</span> create_agent</span>
-<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a><span class="co"># System prompt to steer the agent to be an expert researcher</span></span>
-<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a>AGENT_PROMPT <span class="op">=</span> <span class="st">"""You are an expert researcher. Your job is to conduct thorough research and then write a polished report.</span></span>
-<span id="cb41-5"><a href="#cb41-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb41-6"><a href="#cb41-6" aria-hidden="true" tabindex="-1"></a><span class="st">You have access to an internet search tool as your primary means of gathering information.</span></span>
-<span id="cb41-7"><a href="#cb41-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb41-8"><a href="#cb41-8" aria-hidden="true" tabindex="-1"></a><span class="st">Keep it short and concise.</span></span>
-<span id="cb41-9"><a href="#cb41-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb41-10"><a href="#cb41-10" aria-hidden="true" tabindex="-1"></a><span class="st">## `internet_search`</span></span>
-<span id="cb41-11"><a href="#cb41-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb41-12"><a href="#cb41-12" aria-hidden="true" tabindex="-1"></a><span class="st">Use this to run an internet search for a given query. You can specify the max number of results to return, the topic, and whether raw content should be included.</span></span>
-<span id="cb41-13"><a href="#cb41-13" aria-hidden="true" tabindex="-1"></a><span class="st">"""</span></span>
-<span id="cb41-14"><a href="#cb41-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb41-15"><a href="#cb41-15" aria-hidden="true" tabindex="-1"></a>agent <span class="op">=</span> create_agent(</span>
-<span id="cb41-16"><a href="#cb41-16" aria-hidden="true" tabindex="-1"></a>    model<span class="op">=</span>model_nemotron3_nano,</span>
-<span id="cb41-17"><a href="#cb41-17" aria-hidden="true" tabindex="-1"></a>    tools<span class="op">=</span>[internet_search],</span>
-<span id="cb41-18"><a href="#cb41-18" aria-hidden="true" tabindex="-1"></a>    system_prompt<span class="op">=</span>AGENT_PROMPT</span>
-<span id="cb41-19"><a href="#cb41-19" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb39"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> langchain.agents <span class="im">import</span> create_agent</span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a><span class="co"># System prompt to steer the agent to be an expert researcher</span></span>
+<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a>AGENT_PROMPT <span class="op">=</span> <span class="st">"""You are an expert researcher. Your job is to conduct thorough research and then write a polished report.</span></span>
+<span id="cb39-5"><a href="#cb39-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-6"><a href="#cb39-6" aria-hidden="true" tabindex="-1"></a><span class="st">You have access to an internet search tool as your primary means of gathering information.</span></span>
+<span id="cb39-7"><a href="#cb39-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-8"><a href="#cb39-8" aria-hidden="true" tabindex="-1"></a><span class="st">Keep it short and concise.</span></span>
+<span id="cb39-9"><a href="#cb39-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-10"><a href="#cb39-10" aria-hidden="true" tabindex="-1"></a><span class="st">## `internet_search`</span></span>
+<span id="cb39-11"><a href="#cb39-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-12"><a href="#cb39-12" aria-hidden="true" tabindex="-1"></a><span class="st">Use this to run an internet search for a given query. You can specify the max number of results to return, the topic, and whether raw content should be included.</span></span>
+<span id="cb39-13"><a href="#cb39-13" aria-hidden="true" tabindex="-1"></a><span class="st">"""</span></span>
+<span id="cb39-14"><a href="#cb39-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-15"><a href="#cb39-15" aria-hidden="true" tabindex="-1"></a>agent <span class="op">=</span> create_agent(</span>
+<span id="cb39-16"><a href="#cb39-16" aria-hidden="true" tabindex="-1"></a>    model<span class="op">=</span>model_nemotron3_nano,</span>
+<span id="cb39-17"><a href="#cb39-17" aria-hidden="true" tabindex="-1"></a>    tools<span class="op">=</span>[internet_search],</span>
+<span id="cb39-18"><a href="#cb39-18" aria-hidden="true" tabindex="-1"></a>    system_prompt<span class="op">=</span>AGENT_PROMPT</span>
+<span id="cb39-19"><a href="#cb39-19" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <section id="invoke-1" class="level3">
 <h3 class="anchored" data-anchor-id="invoke-1">Invoke</h3>
 <div id="e633e4c7" class="cell" data-execution_count="37">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb42"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>result <span class="op">=</span> agent.invoke({<span class="st">"messages"</span>: [{<span class="st">"role"</span>: <span class="st">"user"</span>, <span class="st">"content"</span>: <span class="st">"What is langgraph?"</span>}]})</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb40"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>result <span class="op">=</span> agent.invoke({<span class="st">"messages"</span>: [{<span class="st">"role"</span>: <span class="st">"user"</span>, <span class="st">"content"</span>: <span class="st">"What is langgraph?"</span>}]})</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div id="be1de6bd" class="cell" data-execution_count="38">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb43"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>result</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb41"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>result</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="38">
 <pre><code>{'messages': [HumanMessage(content='What is langgraph?', additional_kwargs={}, response_metadata={}, id='29083314-fa84-4871-ba0d-f594b69ce1fe'),
   AIMessage(content='', additional_kwargs={'refusal': None}, response_metadata={'token_usage': {'completion_tokens': 327, 'prompt_tokens': 447, 'total_tokens': 774, 'completion_tokens_details': {'accepted_prediction_tokens': None, 'audio_tokens': 0, 'reasoning_tokens': 292, 'rejected_prediction_tokens': None}, 'prompt_tokens_details': {'audio_tokens': 0, 'cached_tokens': 0}, 'cost': 0, 'is_byok': False, 'cost_details': {'upstream_inference_cost': 0, 'upstream_inference_prompt_cost': 0, 'upstream_inference_completions_cost': 0}}, 'model_provider': 'openai', 'model_name': 'nvidia/nemotron-3-nano-30b-a3b:free', 'system_fingerprint': None, 'id': 'gen-1771589000-vrLW5z3J6cADEb7ZfFeY', 'finish_reason': 'tool_calls', 'logprobs': None}, id='lc_run--019c7aee-db92-70c2-9d0e-ef86169a1ec1-0', tool_calls=[{'name': 'internet_search', 'args': {'max_results': 5, 'topic': 'general', 'query': 'LangGraph', 'include_raw_content': True}, 'id': 'call_89580e7dd35048f5a3921112', 'type': 'tool_call'}], invalid_tool_calls=[], usage_metadata={'input_tokens': 447, 'output_tokens': 327, 'total_tokens': 774, 'input_token_details': {'audio': 0, 'cache_read': 0}, 'output_token_details': {'audio': 0, 'reasoning': 292}}),
@@ -717,8 +735,8 @@ Args: {'location': 'the Moon', 'units': 'fahrenheit', 'include_forecast': True}<
 </div>
 </div>
 <div id="eff95675" class="cell" data-execution_count="39">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb45"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Print the agent's response</span></span>
-<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(result[<span class="st">"messages"</span>][<span class="op">-</span><span class="dv">1</span>].content)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb43"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Print the agent's response</span></span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(result[<span class="st">"messages"</span>][<span class="op">-</span><span class="dv">1</span>].content)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>**LangGraph – A Polished Overview**
 
@@ -862,6 +880,21 @@ LangGraph is an **open‑source orchestration framework** that lets developers b
 *Prepared as a concise, structured briefing for anyone seeking a clear understanding of what LangGraph is, how it works, and why it matters in the modern AI‑agent landscape.*</code></pre>
 </div>
 </div>
+</section>
+</section>
+<section id="key-takeaways" class="level2">
+<h2 class="anchored" data-anchor-id="key-takeaways">Key Takeaways</h2>
+<ul>
+<li>Three key methods for models: invoke, stream, and batch.</li>
+<li>LLMs can be configured to responsd in a structured format</li>
+<li>Agent = Model + Tools</li>
+<li>Models (LLMs) are the brain-power of agents</li>
+<li>Tools are simply names and agruments of defined Python functions</li>
+</ul>
+</section>
+<section id="activity" class="level2">
+<h2 class="anchored" data-anchor-id="activity">Activity</h2>
+<p><strong>Over to you:</strong> create an Agent that is able to answer questions, with an added internet search capability.</p>
 
 
 </section>
