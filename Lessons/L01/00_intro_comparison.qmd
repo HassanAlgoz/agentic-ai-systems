@@ -3,32 +3,43 @@ title: "Introduction: What is Agentic AI?"
 format: html
 ---
 
-[Case Studies](https://docs.langchain.com/oss/python/langgraph/case-studies)
+**Artificial Intelligence** is a field of Computer Science, studying how to automate decision making.
+
+**Agentic AI** is where autonomy of the system is at the level of dealing not just with structured tabular data, but with unstructured data such as natural language, speech, visual to inform their decision, in a growingly less supervised manner; and hence, autonomous.
+
+Specifically, today's Agentic AI systems are driven by **Large Language Models (LLMs)**.
+
+## Case Studies
+
+**Homework**: read 3 [Case Studies](https://docs.langchain.com/oss/python/langgraph/case-studies) and make a presentation about one.
 
 ## Agent Framework
 
-Frameworks standardize how a team builds via:
+In programming, frameworks are a way of thinking about a logical system. In two-folds:
 
-- [**Abstractions**](https://docs.langchain.com/oss/python/langchain/philosophy):
-    - Agents
-    - Models
-    - Messages
-    - Tools
-    - Short-term memory
-    - Streaming
-    - Structured output
-- [**Integrations**](https://docs.langchain.com/oss/python/integrations/providers/overview)
-  - Chat models
-  - Tools and toolkits
-  - Middleware
-  - Retrievers
-  - Text splitters
-  - Embedding models
-  - Vector stores
-  - Document loaders
-  - Key-value stores
+Firslty, [**Abstractions**](https://docs.langchain.com/oss/python/langchain/philosophy): which are the conceptual objects that are defined with specific properties and rules of interaction with other objects. Langchain has:
 
-Examples:
+- Agents
+- Models
+- Messages
+- Tools
+- Short-term memory
+- Streaming
+- Structured output
+
+Secondly, [**Integrations**](https://docs.langchain.com/oss/python/integrations/providers/overview): which are "external" objects that interact with our internal framework of objects. Langchain has:
+
+- Chat models
+- Tools and toolkits
+- Middleware
+- Retrievers
+- Text splitters
+- Embedding models
+- Vector stores
+- Document loaders
+- Key-value stores
+
+Examples of Agentic frameworks are:
 
 - [LangChain](https://docs.langchain.com/oss/python/langchain/overview)
 - Vercel’s AI SDK
@@ -39,8 +50,9 @@ Examples:
 
 ## Agent Runtime
 
-Orchestration frameworks and runtimes for building, managing, and deploying long-running, stateful agents. Concretely:
+Runtimes manage state, and state transitions (orchestration). In other words, building, managing, and deploying long-running, stateful agents. Concretely, things like:
 
+* **Control-flow**: Step by step instructions, conditional execution, and loops.
 * **Persistence**: Thread-level and cross-thread persistence for state management.
 * **Durable execution**: Agents persist through failures and can run for extended periods, resuming from where they left off.
 * **Streaming**: Support for streaming workflows and responses.
@@ -52,15 +64,21 @@ Examples:
 - Temporal
 - Inngest
 
-Note: for the best DX, use the **Functional API**.
+Note: for the best DX (Developer Experience), we will be using the **Functional API**.
 
 ## Agent Platform
 
-[What Is **LangSmith**? Explained in 5 Minutes](https://www.youtube.com/watch?v=kYtnLaJeia8&list=PLfaIDFEXuae2CjNiTeqXG5r8n9rld9qQu&index=9).
+**LangSmith**:
 
-- Observability
-- Evaluation
-- Deployment
+* **Deployment**: `localhost` -> production server
+* **Observability**: tracing, real-time monitoring, alerting and usage.
+* **Evaluation**: testing versions and providing feedback on traces.
+
+## Key Takeways
+
+- LangChain is the framework.
+- LangGraph is the runtime.
+- LangSmith is the platform.
 
 ---
 

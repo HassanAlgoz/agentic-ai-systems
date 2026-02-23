@@ -13,7 +13,8 @@ format: "html"
 |  5  | **Retrieval Augmented Generation (RAG)**<br/>Answer questions about specific source of information. | [[notebook](./L01/05_RAG_agent.ipynb)] |
 |  6  | **Components**<br/> Agentic systems components and common patterns. | [[lesson](./L01/06_components.qmd)] |
 |  7  | **Workflows**<br/> | [[notebook](./L01/07_workflows.ipynb)] |
-|  8  | **Workflow and Agent Patterns**<br/> . | [[notebook](./L01/08_patterns.ipynb)] |
-|  9  | **Project**<br/> | [[lesson]()] |
+|  8  | **Workflow and Agent Patterns**<br/> | [[notebook](./L01/08_patterns.ipynb)] |
+|  9  | **LangSmith**<br/> | [[notebook](./L01/09_langsmith.qmd)] |
+|  10  | **Project**<br/> | [[lesson](./L01/10_projects.qmd)] |
 
 - [Help: Chat with docs](https://chat.langchain.com/)

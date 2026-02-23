@@ -11,6 +11,7 @@ Outline:
 7. Components
 8. Workflows
 9. Workflow and Agent Patterns
-10. Project
+10. LangSmith
+11. Projects
 
 [Click here to access the material](https://hassanalgoz.github.io/agentic-ai-systems/).

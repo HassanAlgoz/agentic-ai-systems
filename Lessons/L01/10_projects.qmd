@@ -21,3 +21,7 @@ Some ideas:
        - Which courses are co-authored vs single-authored
        - Is the instructor an expert in the topic
        - How many years of experience does the instructor have
+
+4. Automated Customer Service (Voice).
+
+5. A chatbot that answers questions based on data scraped from `laws.moj.gov.sa` (or similar)

@@ -1,0 +1,6 @@
+---
+title: "What is LangSmith?"
+format: html
+---
+
+[What Is **LangSmith**? Explained in 5 Minutes](https://www.youtube.com/watch?v=kYtnLaJeia8&list=PLfaIDFEXuae2CjNiTeqXG5r8n9rld9qQu&index=9).
