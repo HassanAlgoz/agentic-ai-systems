@@ -4,3 +4,10 @@ format: html
 ---
 
 [What Is **LangSmith**? Explained in 5 Minutes](https://www.youtube.com/watch?v=kYtnLaJeia8&list=PLfaIDFEXuae2CjNiTeqXG5r8n9rld9qQu&index=9).
+
+### Sign up and Set LangSmith API (Free)
+
+* Cost: 
+* Sign up for LangSmith [here](https://docs.langchain.com/langsmith/create-account-api-key#create-an-account-and-api-key), find out more about LangSmith and how to use it within your workflow [here](https://www.langchain.com/langsmith). 
+*  Set `LANGSMITH_API_KEY`, `LANGSMITH_TRACING_V2="true"` `LANGSMITH_PROJECT="langchain-academy"`in your environment 
+*  If you are on the EU instance also set `LANGSMITH_ENDPOINT`="https://eu.api.smith.langchain.com" as well.

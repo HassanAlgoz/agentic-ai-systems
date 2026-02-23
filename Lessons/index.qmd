@@ -5,16 +5,15 @@ format: "html"
 
 | Lesson | Description | Materials |
 | --- | ----------- | --------- |
-|  0  | **Introduction: What is Agentic AI?**<br/> Agents' Use Cases, Frameworks, Runtimes, and Platforms. | [[lesson](./L01/00_intro_comparison.qmd)] |
-|  1  | **Agents**<br/>Model, Tools, System Prompt, Search and Structured Output. | [[notebook](./L01/01_agents.ipynb)] |
+|  0  | **Introduction: What is Agentic AI?**<br/> Applications, Frameworks, Runtimes, and Platforms. | [[lesson](./L01/00_intro_comparison.qmd)] |
+|  1  | **Agents**<br/>Models, Messages, Prompts, Structured Output, Tools, and Internet Search. | [[notebook](./L01/01_agents.ipynb)] |
 |  2  | **Sub Agents**<br/> Build a personal assistant with agents as tools. | [[notebook](./L01/02_subagents.ipynb)] |
-|  3  | **LLM Augmentations**<br/>How Agents Work? - breakdown the agent loop that enables LLMs to "call" tools. | [[notebook](./L01/03_how_agents_work.ipynb)] |
-|  4  | **Semantic Search**<br/>Load, Embed, Store, Retrieve text based on meaning. | [[notebook](./L01/04_semantic-search.ipynb)] |
-|  5  | **Retrieval Augmented Generation (RAG)**<br/>Answer questions about specific source of information. | [[notebook](./L01/05_RAG_agent.ipynb)] |
-|  6  | **Components**<br/> Agentic systems components and common patterns. | [[lesson](./L01/06_components.qmd)] |
-|  7  | **Workflows**<br/> | [[notebook](./L01/07_workflows.ipynb)] |
-|  8  | **Workflow and Agent Patterns**<br/> | [[notebook](./L01/08_patterns.ipynb)] |
-|  9  | **LangSmith**<br/> | [[notebook](./L01/09_langsmith.qmd)] |
-|  10  | **Project**<br/> | [[lesson](./L01/10_projects.qmd)] |
+|  3  | **Semantic Search**<br/>Load, Embed, Store, Retrieve text based on meaning. | [[notebook](./L01/04_semantic-search.ipynb)] |
+|  4  | **Retrieval Augmented Generation (RAG)**<br/>Answer questions about specific source of information. | [[notebook](./L01/05_RAG_agent.ipynb)] |
+|  5  | **Components**<br/> Agentic systems components and common patterns. | [[lesson](./L01/06_components.qmd)] |
+|  6  | **Workflows**<br/> | [[notebook](./L01/07_workflows.ipynb)] |
+|  7  | **Workflow and Agent Patterns**<br/> | [[notebook](./L01/08_patterns.ipynb)] |
+|  8  | **LangSmith**<br/> | [[notebook](./L01/09_langsmith.qmd)] |
+|  9  | **Project**<br/> | [[lesson](./L01/10_projects.qmd)] |
 
 - [Help: Chat with docs](https://chat.langchain.com/)

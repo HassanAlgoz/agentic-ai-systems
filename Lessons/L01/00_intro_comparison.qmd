@@ -9,9 +9,48 @@ format: html
 
 Specifically, today's Agentic AI systems are driven by **Large Language Models (LLMs)**.
 
-## Case Studies
+## The Evolution of Agents from LLMs
 
-**Homework**: read 3 [Case Studies](https://docs.langchain.com/oss/python/langgraph/case-studies) and make a presentation about one.
+**Large Language Models (LLMs)** are deep neural networks trained to model the most likely token given previous tokens.
+
+First application was: **Translation**. Given an English sentence, the task is to generate the most likely Arabic equivalent. This is done word-by-word, by repeatedly predicting the next Arabic word, the original sentence plus all predicted words thus far.
+
+This technique was able to scale thanks to the **Transformers** architecture which is based on the concept of **Attention**, which learns the influence each previous token has in generating the next token, in the translation.
+
+Same concept applied more simply in **Paraphrasing**, **Summarization**, and even **Question-Answering**.
+
+Trained on back-and-forth **Chat Conversations**, models were able to mimic chat-like interactions.
+
+A hypothesis was proven at the time that **Multi-task Model** performs better than a single-task model. A more general idea is to train models to **"Follow Instructions"**. In which the user **Prompts** it to do any of the previously mentioned tasks, on-demand. Of course this needed lots of special *Data Curation*.
+
+One task was especially important: **JSON mode**: in which models produced their output in json format, such that it can be parsed easily by programs.
+
+Following that, an especially key development was the task of **Tool Calling**: in which a model is required to select from a set of Python funcition signatures (parameters, types, and docstrings) upon instruction. This is where **Agents** were born.
+
+An **Agent** is based on an LLM in the following sequence:
+
+- program takes input from user
+- program feeds this input into the LLM
+- **LLM generates** text parsable as a tool call
+- program parses the tool call
+- program executes the tool (function)
+- program feeds the output to the LLM
+- **LLM generates** output
+- program prints this output to the user
+
+### Choosing between models
+
+Quality of models vary.
+
+- Humans vote fairly for the best model on websites like [Arena.ai](https://arena.ai/).
+- You can also compare pricing, providers, and usage tends on [OpenRouter.ai](https://openrouter.ai/models)
+- An automatic short list models based on your priorities: [Model Recommendation | Artficial Analysis](https://artificialanalysis.ai/models/recommend)
+
+## Applications of Agentic AI
+
+What can Agentic AI do in the real-world? This question is best answered by looking at [Case Studies](https://docs.langchain.com/oss/python/langgraph/case-studies).
+
+Also, reading the [State of Agent Engineering 2026](https://www.langchain.com/state-of-agent-engineering), a survey of 1,300 professionals — from engineers and product managers to business leaders and executives — to uncover the state of AI agents.
 
 ## Agent Framework
 
