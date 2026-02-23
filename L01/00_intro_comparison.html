@@ -110,7 +110,11 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">Contents</h2>
    
   <ul>
-  <li><a href="#case-studies" id="toc-case-studies" class="nav-link active" data-scroll-target="#case-studies">Case Studies</a></li>
+  <li><a href="#the-evolution-of-agents-from-llms" id="toc-the-evolution-of-agents-from-llms" class="nav-link active" data-scroll-target="#the-evolution-of-agents-from-llms">The Evolution of Agents from LLMs</a>
+  <ul class="collapse">
+  <li><a href="#choosing-between-models" id="toc-choosing-between-models" class="nav-link" data-scroll-target="#choosing-between-models">Choosing between models</a></li>
+  </ul></li>
+  <li><a href="#applications-of-agentic-ai" id="toc-applications-of-agentic-ai" class="nav-link" data-scroll-target="#applications-of-agentic-ai">Applications of Agentic AI</a></li>
   <li><a href="#agent-framework" id="toc-agent-framework" class="nav-link" data-scroll-target="#agent-framework">Agent Framework</a></li>
   <li><a href="#agent-runtime" id="toc-agent-runtime" class="nav-link" data-scroll-target="#agent-runtime">Agent Runtime</a></li>
   <li><a href="#agent-platform" id="toc-agent-platform" class="nav-link" data-scroll-target="#agent-platform">Agent Platform</a></li>
@@ -143,9 +147,41 @@ ul.task-list li input[type="checkbox"] {
 <p><strong>Artificial Intelligence</strong> is a field of Computer Science, studying how to automate decision making.</p>
 <p><strong>Agentic AI</strong> is where autonomy of the system is at the level of dealing not just with structured tabular data, but with unstructured data such as natural language, speech, visual to inform their decision, in a growingly less supervised manner; and hence, autonomous.</p>
 <p>Specifically, today’s Agentic AI systems are driven by <strong>Large Language Models (LLMs)</strong>.</p>
-<section id="case-studies" class="level2">
-<h2 class="anchored" data-anchor-id="case-studies">Case Studies</h2>
-<p><strong>Homework</strong>: read 3 <a href="https://docs.langchain.com/oss/python/langgraph/case-studies">Case Studies</a> and make a presentation about one.</p>
+<section id="the-evolution-of-agents-from-llms" class="level2">
+<h2 class="anchored" data-anchor-id="the-evolution-of-agents-from-llms">The Evolution of Agents from LLMs</h2>
+<p><strong>Large Language Models (LLMs)</strong> are deep neural networks trained to model the most likely token given previous tokens.</p>
+<p>First application was: <strong>Translation</strong>. Given an English sentence, the task is to generate the most likely Arabic equivalent. This is done word-by-word, by repeatedly predicting the next Arabic word, the original sentence plus all predicted words thus far.</p>
+<p>This technique was able to scale thanks to the <strong>Transformers</strong> architecture which is based on the concept of <strong>Attention</strong>, which learns the influence each previous token has in generating the next token, in the translation.</p>
+<p>Same concept applied more simply in <strong>Paraphrasing</strong>, <strong>Summarization</strong>, and even <strong>Question-Answering</strong>.</p>
+<p>Trained on back-and-forth <strong>Chat Conversations</strong>, models were able to mimic chat-like interactions.</p>
+<p>A hypothesis was proven at the time that <strong>Multi-task Model</strong> performs better than a single-task model. A more general idea is to train models to <strong>“Follow Instructions”</strong>. In which the user <strong>Prompts</strong> it to do any of the previously mentioned tasks, on-demand. Of course this needed lots of special <em>Data Curation</em>.</p>
+<p>One task was especially important: <strong>JSON mode</strong>: in which models produced their output in json format, such that it can be parsed easily by programs.</p>
+<p>Following that, an especially key development was the task of <strong>Tool Calling</strong>: in which a model is required to select from a set of Python funcition signatures (parameters, types, and docstrings) upon instruction. This is where <strong>Agents</strong> were born.</p>
+<p>An <strong>Agent</strong> is based on an LLM in the following sequence:</p>
+<ul>
+<li>program takes input from user</li>
+<li>program feeds this input into the LLM</li>
+<li><strong>LLM generates</strong> text parsable as a tool call</li>
+<li>program parses the tool call</li>
+<li>program executes the tool (function)</li>
+<li>program feeds the output to the LLM</li>
+<li><strong>LLM generates</strong> output</li>
+<li>program prints this output to the user</li>
+</ul>
+<section id="choosing-between-models" class="level3">
+<h3 class="anchored" data-anchor-id="choosing-between-models">Choosing between models</h3>
+<p>Quality of models vary.</p>
+<ul>
+<li>Humans vote fairly for the best model on websites like <a href="https://arena.ai/">Arena.ai</a>.</li>
+<li>You can also compare pricing, providers, and usage tends on <a href="https://openrouter.ai/models">OpenRouter.ai</a></li>
+<li>An automatic short list models based on your priorities: <a href="https://artificialanalysis.ai/models/recommend">Model Recommendation | Artficial Analysis</a></li>
+</ul>
+</section>
+</section>
+<section id="applications-of-agentic-ai" class="level2">
+<h2 class="anchored" data-anchor-id="applications-of-agentic-ai">Applications of Agentic AI</h2>
+<p>What can Agentic AI do in the real-world? This question is best answered by looking at <a href="https://docs.langchain.com/oss/python/langgraph/case-studies">Case Studies</a>.</p>
+<p>Also, reading the <a href="https://www.langchain.com/state-of-agent-engineering">State of Agent Engineering 2026</a>, a survey of 1,300 professionals — from engineers and product managers to business leaders and executives — to uncover the state of AI agents.</p>
 </section>
 <section id="agent-framework" class="level2">
 <h2 class="anchored" data-anchor-id="agent-framework">Agent Framework</h2>
