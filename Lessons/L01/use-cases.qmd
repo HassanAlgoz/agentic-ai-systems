@@ -1,0 +1,15 @@
+---
+title: "Use Cases"
+format: html
+---
+
+Reference of Use Cases:
+
+- [Build a **personal assistant** with subagents](https://docs.langchain.com/oss/python/langchain/multi-agent/subagents-personal-assistant)
+- [Build **customer support** with handoffs](https://docs.langchain.com/oss/python/langchain/multi-agent/handoffs-customer-support)
+- [Build a **multi-source knowledge base** with routing](https://docs.langchain.com/oss/python/langchain/multi-agent/router-knowledge-base)
+- [Build a **SQL assistant** with on-demand skills](https://docs.langchain.com/oss/python/langchain/multi-agent/skills-sql-assistant)
+
+## Patterns
+
+- [Agentic RAG](https://docs.langchain.com/oss/python/langgraph/agentic-rag)

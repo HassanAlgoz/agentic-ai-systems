@@ -1,0 +1,44 @@
+---
+title: "LangChain Case Studies"
+format: html
+---
+
+To strip away the marketing fluff, "**Agentic AI**" is essentially an architectural pattern where an **LLM is used as a dynamic control-flow engine rather than just a text generator.** In traditional software, execution paths are deterministic, dictated by rigid `if/else/switch` statements or static state machines. In agentic software, the LLM acts as an orchestrator inside a loop (often modeled as a directed graph, like in LangGraph). It evaluates the current state, decides which pre-defined functions (tools/APIs) to invoke, parses the output, and decides the next step until a termination condition is met.
+
+Looking strictly at the [real-world case studies](https://docs.langchain.com/oss/python/langgraph/case-studies) from LangGraph's repository (used by companies like Uber, GitLab, Klarna, and Cisco), here is exactly what engineers are building with this pattern:
+
+### 1. Autonomous Code Generation & Developer Productivity
+
+**Who is doing it:** Uber, GitLab, Replit, LinkedIn.
+
+**What it does:** Instead of just auto-completing a line of code, the software acts as a background worker. It reads a Jira ticket or GitHub issue, uses tools to `grep` or search the repository for relevant files, generates a proposed fix, and runs unit tests. If the compiler or tests throw an error, the agent feeds the stack trace back into its own context window, attempts a fix, and iterates until the tests pass before opening a Pull Request.
+
+### 2. Complex API Orchestration ("Domain-Specific Copilots")
+
+**Who is doing it:** J.P. Morgan, BlackRock, Klarna, AppFolio.
+
+**What it does:** These companies have thousands of internal APIs. Instead of building hundreds of custom UI forms for business users to interact with those systems, engineers expose the APIs to the agent as callable tools. A user types, "Pull the Q3 risk report for Client X, check if they meet compliance rule Y, and email the summary to the legal team." The agent dynamically chains together the CRM lookup API, the compliance engine API, and the SMTP server payload, passing the JSON outputs of one into the inputs of the next.
+
+### 3. Deep Research & Multi-Hop RAG
+
+**Who is doing it:** Morningstar, Athena Intelligence.
+
+**What it does:** Basic Retrieval-Augmented Generation (RAG) is just vector search + summarization. Agentic research tools perform *multi-hop* retrieval. The agent writes a SQL query, realizes the returned database table is missing a specific metric, writes a web search query to find that missing metric, scrapes the resulting URL, and merges the data sources into a final, highly structured financial or intelligence report.
+
+### 4. Stateful Customer Support & Triage
+
+**Who is doing it:** Cisco TAC, Prosper, Minimal.
+
+**What it does:** Moving past stateless "chatbots" that just regurgitate FAQ documents. These agents have read/write access to internal systems. When a user submits a support ticket, the agent checks the user's subscription tier, queries server telemetry logs for recent errors associated with their account, executes safe diagnostic commands, and either resolves the issue autonomously or drafts a highly detailed hand-off summary for a human Tier-2 engineer.
+
+### 5. Messy Data Extraction & Browser Automation
+
+**Who is doing it:** AirTop, Captide, WebToon.
+
+**What it does:** Converting the chaotic, unstructured web into strictly typed JSON or SQL. These agents navigate messy internal portals or scrape complex sites, visually parsing the DOM or dealing with PDFs. Because websites change constantly, brittle traditional scrapers break. The agentic approach uses the LLM to dynamically find the correct data fields on the page, handle pagination or login states, and map the extracted text to a strict schema (like a Pydantic model).
+
+### The TL;DR for Software Engineers:
+
+Agentic AI is not magic; it is **non-deterministic orchestration**.
+
+Your job as an engineer building these systems isn't writing the AI itself. Your job shifts to defining strict API contracts (tools) for the LLM to call, managing context-window state, handling retry logic when the LLM hallucinates a bad JSON payload, and defining graph boundaries (edges and conditional nodes) to ensure the LLM stays on the rails and doesn't get stuck in an infinite loop.

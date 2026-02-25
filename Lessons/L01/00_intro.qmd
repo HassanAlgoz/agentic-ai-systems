@@ -30,7 +30,7 @@ Following that, an especially key development was the task of **Tool Calling**: 
 An **Agent** is based on an LLM in the following sequence:
 
 - program takes input from user
-- program feeds this input into the LLM
+- program feeds this input + available tools, into the LLM 
 - **LLM generates** text parsable as a tool call
 - program parses the tool call
 - program executes the tool (function)
@@ -54,33 +54,20 @@ Also, reading the [State of Agent Engineering 2026](https://www.langchain.com/st
 
 ## Agent Framework
 
-In programming, frameworks are a way of thinking about a logical system. In two-folds:
+[LangChain](https://docs.langchain.com/oss/python/langchain/overview) organizes components into these main categories:
 
-Firslty, [**Abstractions**](https://docs.langchain.com/oss/python/langchain/philosophy): which are the conceptual objects that are defined with specific properties and rules of interaction with other objects. Langchain has:
+| Category                                                             | Purpose                     | Key Components                      | Use Cases                                          |
+| -------------------------------------------------------------------- | --------------------------- | ----------------------------------- | -------------------------------------------------- |
+| **[Models](https://docs.langchain.com/oss/python/langchain/models)**                           | AI reasoning and generation | Chat models, LLMs, Embedding models | Text generation, reasoning, semantic understanding |
+| **[Tools](https://docs.langchain.com/oss/python/langchain/tools)**                             | External capabilities       | APIs, databases, etc.               | Web search, data access, computations              |
+| **[Agents](https://docs.langchain.com/oss/python/langchain/agents)**                           | Orchestration and reasoning | ReAct agents, tool calling agents   | Nondeterministic workflows, decision making        |
+| **[Memory](https://docs.langchain.com/oss/python/langchain/short-term-memory)**                | Context preservation        | Message history, custom state       | Conversations, stateful interactions               |
+| **[Retrievers](https://docs.langchain.com/oss/python/integrations/retrievers)**                | Information access          | Vector retrievers, web retrievers   | RAG, knowledge base search                         |
+| **[Document processing](https://docs.langchain.com/oss/python/integrations/document_loaders)** | Data ingestion              | Loaders, splitters, transformers    | PDF processing, web scraping                       |
+| **[Vector Stores](https://docs.langchain.com/oss/python/integrations/vectorstores)**           | Semantic search             | Chroma, Pinecone, FAISS             | Similarity search, embeddings storage              |
 
-- Agents
-- Models
-- Messages
-- Tools
-- Short-term memory
-- Streaming
-- Structured output
+Examples of other frameworks are:
 
-Secondly, [**Integrations**](https://docs.langchain.com/oss/python/integrations/providers/overview): which are "external" objects that interact with our internal framework of objects. Langchain has:
-
-- Chat models
-- Tools and toolkits
-- Middleware
-- Retrievers
-- Text splitters
-- Embedding models
-- Vector stores
-- Document loaders
-- Key-value stores
-
-Examples of Agentic frameworks are:
-
-- [LangChain](https://docs.langchain.com/oss/python/langchain/overview)
 - Vercel’s AI SDK
 - CrewAI
 - OpenAI Agents SDK
@@ -97,9 +84,46 @@ Runtimes manage state, and state transitions (orchestration). In other words, bu
 * **Streaming**: Support for streaming workflows and responses.
 * **Human-in-the-loop**: Incorporate human oversight by inspecting and modifying agent state.
 
-Examples:
+[LangGraph](https://docs.langchain.com/oss/python/langgraph/overview) builds and runs the flowchart..
 
-- [LangGraph](https://docs.langchain.com/oss/python/langgraph/overview)
+### RAG (Retrieval-Augmented generation)
+
+```{mermaid}
+graph LR
+    A[User question] --> B[Retriever]
+    B --> C[Relevant docs]
+    C --> D[Chat model]
+    A --> D
+    D --> E[Informed response]
+```
+
+### Agent with tools
+
+```{mermaid}
+graph LR
+    A[User request] --> B[Agent]
+    B --> C{Need tool?}
+    C -->|Yes| D[Call tool]
+    D --> E[Tool result]
+    E --> B
+    C -->|No| F[Final answer]
+```
+
+### Multi-agent system
+
+```{mermaid}
+graph LR
+    A[Complex Task] --> B[Supervisor agent]
+    B --> C[Specialist agent 1]
+    B --> D[Specialist agent 2]
+    C --> E[Results]
+    D --> E
+    E --> B
+    B --> F[Coordinated response]
+```
+
+Other runtimes:
+
 - Temporal
 - Inngest
 

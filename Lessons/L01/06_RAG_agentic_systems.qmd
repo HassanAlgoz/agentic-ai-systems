@@ -1,0 +1,61 @@
+---
+title: "RAG in Agentic Systems"
+format: html
+---
+
+[Source](https://docs.langchain.com/oss/python/langchain/component-architecture).
+
+LangChain's power comes from how its components work together to create sophisticated AI applications. This page provides diagrams showcasing the relationships between different components.
+
+The diagram below shows how LangChain's major components connect to form complete AI applications:
+
+```{mermaid}
+graph TD
+    %% Input processing
+    subgraph "📥 Input processing"
+        A[Text input] --> B[Document loaders]
+        B --> C[Text splitters]
+        C --> D[Documents]
+    end
+
+    %% Embedding & storage
+    subgraph "🔢 Embedding & storage"
+        D --> E[Embedding models]
+        E --> F[Vectors]
+        F --> G[(Vector stores)]
+    end
+
+    %% Retrieval
+    subgraph "🔍 Retrieval"
+        H[User Query] --> I[Embedding models]
+        I --> J[Query vector]
+        J --> K[Retrievers]
+        K --> G
+        G --> L[Relevant context]
+    end
+
+    %% Generation
+    subgraph "🤖 Generation"
+        M[Chat models] --> N[Tools]
+        N --> O[Tool results]
+        O --> M
+        L --> M
+        M --> P[AI response]
+    end
+
+    %% Orchestration
+    subgraph "🎯 Orchestration"
+        Q[Agents] --> M
+        Q --> N
+        Q --> K
+        Q --> R[Memory]
+    end
+```
+
+Each component layer builds on the previous ones:
+
+1. **Input processing** – Transform raw data into structured documents
+2. **Embedding & storage** – Convert text into searchable vector representations
+3. **Retrieval** – Find relevant information based on user queries
+4. **Generation** – Use AI models to create responses, optionally with tools
+5. **Orchestration** – Coordinate everything through agents and memory systems

@@ -1,0 +1,13 @@
+---
+title: "Memory"
+format: html
+---
+
+Focus on reading the following section for getting to know how you can **read/write memory in tools**:
+
+- [Access context](https://docs.langchain.com/oss/python/langchain/tools#access-context)
+  - [Short-term memory (State)](https://docs.langchain.com/oss/python/langchain/tools#short-term-memory-state)
+  - [Context (Immutable Configuration)](https://docs.langchain.com/oss/python/langchain/tools#context)
+  - [Long-term memory (Store)](https://docs.langchain.com/oss/python/langchain/tools#long-term-memory-store)
+
+---

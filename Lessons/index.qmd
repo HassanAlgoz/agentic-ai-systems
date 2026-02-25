@@ -3,17 +3,24 @@ title: "Index"
 format: "html"
 ---
 
+## Pre-requisites
+
+- Python Basics. To prepare or refresh: [المقدمة البايثونية للبرمجة باللغة العربية | حسان القوز](https://halgoz.quarto.pub/pythonia/)
+
+## Schedule
+
 | Lesson | Description | Materials |
 | --- | ----------- | --------- |
-|  0  | **Introduction: What is Agentic AI?**<br/> Applications, Frameworks, Runtimes, and Platforms. | [[lesson](./L01/00_intro_comparison.qmd)] |
+|     | **Case Studies**<br/> | [[summary](./L01/case-studies.qmd)] |
+|     | **Overview**<br/> LangChain, LangGraph, LangSmith. | [[lesson](./L01/00_intro.qmd)] |
+|     | **Use Cases**</br/> | [[lesson](./L01/use-cases.qmd)] |
 |  1  | **Agents**<br/>Models, Messages, Prompts, Structured Output, Tools, and Internet Search. | [[notebook](./L01/01_agents.ipynb)] |
 |  2  | **Sub Agents**<br/> Build a personal assistant with agents as tools. | [[notebook](./L01/02_subagents.ipynb)] |
 |  3  | **Semantic Search**<br/>Load, Embed, Store, Retrieve text based on meaning. | [[notebook](./L01/04_semantic-search.ipynb)] |
 |  4  | **Retrieval Augmented Generation (RAG)**<br/>Answer questions about specific source of information. | [[notebook](./L01/05_RAG_agent.ipynb)] |
-|  5  | **Components**<br/> Agentic systems components and common patterns. | [[lesson](./L01/06_components.qmd)] |
-|  6  | **Workflows**<br/> | [[notebook](./L01/07_workflows.ipynb)] |
-|  7  | **Workflow and Agent Patterns**<br/> | [[notebook](./L01/08_patterns.ipynb)] |
-|  8  | **LangSmith**<br/> | [[notebook](./L01/09_langsmith.qmd)] |
-|  9  | **Project**<br/> | [[lesson](./L01/10_projects.qmd)] |
+|  5  | **RAG in Agentic Systems**<br/> Ingestion Pipeline, Retrieval, Orchestration, and Generation. | [[lesson](./L01/06_RAG_agentic_systems.qmd)] |
+|  6  | **LangGraph Workflow Patterns**<br/> | [[notebook](./L01/08_workflow_patterns.ipynb)] |
+|  7  | **Memory**<br/> Short-term, Long-term memories, and Immutable context. | [[notebook](./L01/09_memory.qmd)] |
+|  8  | **LangSmith**<br/> | [[notebook](./L01/10_langsmith.qmd)] |
 
-- [Help: Chat with docs](https://chat.langchain.com/)
+> [Get Help](https://docs.langchain.com/oss/python/langchain/get-help) or [Ask the docs anything about LangChain, powered by real-time docs](https://chat.langchain.com/).
