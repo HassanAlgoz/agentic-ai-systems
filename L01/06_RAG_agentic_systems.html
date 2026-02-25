@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Projects – Building Agentic AI Systems</title>
+<title>RAG in Agentic Systems – Building Agentic AI Systems</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -69,6 +69,10 @@ ul.task-list li input[type="checkbox"] {
   }
 }</script>
 <style>html{ scroll-behavior: smooth; }</style>
+<meta name="mermaid-theme" content="default">
+<script src="../site_libs/quarto-diagram/mermaid.min.js"></script>
+<script src="../site_libs/quarto-diagram/mermaid-init.js"></script>
+<link href="../site_libs/quarto-diagram/mermaid.css" rel="stylesheet">
 
 
 </head>
@@ -113,7 +117,7 @@ ul.task-list li input[type="checkbox"] {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Projects</h1>
+<h1 class="title">RAG in Agentic Systems</h1>
 </div>
 
 
@@ -130,27 +134,67 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<p>See real Use Cases to get ideas: https://docs.langchain.com/oss/python/langgraph/case-studies</p>
-<p>Some ideas:</p>
+<p><a href="https://docs.langchain.com/oss/python/langchain/component-architecture">Source</a>.</p>
+<p>LangChain’s power comes from how its components work together to create sophisticated AI applications. This page provides diagrams showcasing the relationships between different components.</p>
+<p>The diagram below shows how LangChain’s major components connect to form complete AI applications:</p>
+<div class="cell" data-layout-align="default">
+<div class="cell-output-display">
+<div>
+<p></p><figure class="figure"><p></p>
+<div>
+<pre class="mermaid mermaid-js">graph TD
+    %% Input processing
+    subgraph "📥 Input processing"
+        A[Text input] --&gt; B[Document loaders]
+        B --&gt; C[Text splitters]
+        C --&gt; D[Documents]
+    end
+
+    %% Embedding &amp; storage
+    subgraph "🔢 Embedding &amp; storage"
+        D --&gt; E[Embedding models]
+        E --&gt; F[Vectors]
+        F --&gt; G[(Vector stores)]
+    end
+
+    %% Retrieval
+    subgraph "🔍 Retrieval"
+        H[User Query] --&gt; I[Embedding models]
+        I --&gt; J[Query vector]
+        J --&gt; K[Retrievers]
+        K --&gt; G
+        G --&gt; L[Relevant context]
+    end
+
+    %% Generation
+    subgraph "🤖 Generation"
+        M[Chat models] --&gt; N[Tools]
+        N --&gt; O[Tool results]
+        O --&gt; M
+        L --&gt; M
+        M --&gt; P[AI response]
+    end
+
+    %% Orchestration
+    subgraph "🎯 Orchestration"
+        Q[Agents] --&gt; M
+        Q --&gt; N
+        Q --&gt; K
+        Q --&gt; R[Memory]
+    end
+</pre>
+</div>
+<p></p></figure><p></p>
+</div>
+</div>
+</div>
+<p>Each component layer builds on the previous ones:</p>
 <ol type="1">
-<li><p>FAQ + Chat when unsure about the answer. Main idea: use RAG to answer questions, and use a chatbot to answer questions when the answer is not found in the RAG. use-case: https://laws.moj.gov.sa</p></li>
-<li><p>Automated selection of the best candidate for a job. Given a pool of candidates, when the Hiring Partner submits a job description, the system should be able to select the best candidate from the pool. Algorithm: use ELO scoring as in chess, and make a hierarchy to reduce complexity from O(n^2) to O(n log n). The system should be able to handle the case where the pool is large (e.g.&nbsp;10000 candidates).</p></li>
-<li><p>Deep research: retrieve, rate and rank curriculums for a specific technical topic on many criteria:</p>
-<ul>
-<li>What ideas are commonly covered, and what ideas are unique to some courses over others.</li>
-<li>What pre-requisites are commonly mentioned for theses courses (and how much depth is required)</li>
-<li>Information density: depth, volume and timeline.</li>
-<li>Which takes a bottom-up vs a top-down approach</li>
-<li>What type of exercises are used.</li>
-<li>Instructors
-<ul>
-<li>Which courses are co-authored vs single-authored</li>
-<li>Is the instructor an expert in the topic</li>
-<li>How many years of experience does the instructor have</li>
-</ul></li>
-</ul></li>
-<li><p>Automated Customer Service (Voice).</p></li>
-<li><p>A chatbot that answers questions based on data scraped from <code>laws.moj.gov.sa</code> (or similar)</p></li>
+<li><strong>Input processing</strong> – Transform raw data into structured documents</li>
+<li><strong>Embedding &amp; storage</strong> – Convert text into searchable vector representations</li>
+<li><strong>Retrieval</strong> – Find relevant information based on user queries</li>
+<li><strong>Generation</strong> – Use AI models to create responses, optionally with tools</li>
+<li><strong>Orchestration</strong> – Coordinate everything through agents and memory systems</li>
 </ol>
 
 

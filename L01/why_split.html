@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Introduction: What is Agentic AI? – Building Agentic AI Systems</title>
+<title>why_split – Building Agentic AI Systems</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -106,156 +106,42 @@ ul.task-list li input[type="checkbox"] {
 <!-- sidebar -->
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc" class="toc-active">
-    <h2 id="toc-title">Contents</h2>
-   
-  <ul>
-  <li><a href="#the-evolution-of-agents-from-llms" id="toc-the-evolution-of-agents-from-llms" class="nav-link active" data-scroll-target="#the-evolution-of-agents-from-llms">The Evolution of Agents from LLMs</a>
-  <ul class="collapse">
-  <li><a href="#choosing-between-models" id="toc-choosing-between-models" class="nav-link" data-scroll-target="#choosing-between-models">Choosing between models</a></li>
-  </ul></li>
-  <li><a href="#applications-of-agentic-ai" id="toc-applications-of-agentic-ai" class="nav-link" data-scroll-target="#applications-of-agentic-ai">Applications of Agentic AI</a></li>
-  <li><a href="#agent-framework" id="toc-agent-framework" class="nav-link" data-scroll-target="#agent-framework">Agent Framework</a></li>
-  <li><a href="#agent-runtime" id="toc-agent-runtime" class="nav-link" data-scroll-target="#agent-runtime">Agent Runtime</a></li>
-  <li><a href="#agent-platform" id="toc-agent-platform" class="nav-link" data-scroll-target="#agent-platform">Agent Platform</a></li>
-  <li><a href="#key-takeways" id="toc-key-takeways" class="nav-link" data-scroll-target="#key-takeways">Key Takeways</a></li>
-  </ul>
-</nav>
-    </div>
+        
+    <div class="quarto-alternate-formats"><h2>Other Formats</h2><ul><li><a href="why_split.html"><i class="bi bi-file-slides"></i>RevealJS</a></li></ul></div></div>
 <!-- main -->
-<main class="content" id="quarto-document-content">
-
-<header id="title-block-header" class="quarto-title-block default">
-<div class="quarto-title">
-<h1 class="title">Introduction: What is Agentic AI?</h1>
-</div>
+<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block"></header>
 
 
 
-<div class="quarto-title-meta">
 
-    
-  
-    
-  </div>
-  
-
-
-</header>
-
-
-<p><strong>Artificial Intelligence</strong> is a field of Computer Science, studying how to automate decision making.</p>
-<p><strong>Agentic AI</strong> is where autonomy of the system is at the level of dealing not just with structured tabular data, but with unstructured data such as natural language, speech, visual to inform their decision, in a growingly less supervised manner; and hence, autonomous.</p>
-<p>Specifically, today’s Agentic AI systems are driven by <strong>Large Language Models (LLMs)</strong>.</p>
-<section id="the-evolution-of-agents-from-llms" class="level2">
-<h2 class="anchored" data-anchor-id="the-evolution-of-agents-from-llms">The Evolution of Agents from LLMs</h2>
-<p><strong>Large Language Models (LLMs)</strong> are deep neural networks trained to model the most likely token given previous tokens.</p>
-<p>First application was: <strong>Translation</strong>. Given an English sentence, the task is to generate the most likely Arabic equivalent. This is done word-by-word, by repeatedly predicting the next Arabic word, the original sentence plus all predicted words thus far.</p>
-<p>This technique was able to scale thanks to the <strong>Transformers</strong> architecture which is based on the concept of <strong>Attention</strong>, which learns the influence each previous token has in generating the next token, in the translation.</p>
-<p>Same concept applied more simply in <strong>Paraphrasing</strong>, <strong>Summarization</strong>, and even <strong>Question-Answering</strong>.</p>
-<p>Trained on back-and-forth <strong>Chat Conversations</strong>, models were able to mimic chat-like interactions.</p>
-<p>A hypothesis was proven at the time that <strong>Multi-task Model</strong> performs better than a single-task model. A more general idea is to train models to <strong>“Follow Instructions”</strong>. In which the user <strong>Prompts</strong> it to do any of the previously mentioned tasks, on-demand. Of course this needed lots of special <em>Data Curation</em>.</p>
-<p>One task was especially important: <strong>JSON mode</strong>: in which models produced their output in json format, such that it can be parsed easily by programs.</p>
-<p>Following that, an especially key development was the task of <strong>Tool Calling</strong>: in which a model is required to select from a set of Python funcition signatures (parameters, types, and docstrings) upon instruction. This is where <strong>Agents</strong> were born.</p>
-<p>An <strong>Agent</strong> is based on an LLM in the following sequence:</p>
+<p>Why do we split? ..</p>
+<section id="a.-navigating-context-window-limits" class="level4">
+<h4 class="anchored" data-anchor-id="a.-navigating-context-window-limits">A. Navigating Context Window Limits</h4>
+<p>Even the most advanced Large Language Models (LLMs) have a <strong>context window</strong>—a maximum number of tokens (words/characters) they can “see” at one time.</p>
 <ul>
-<li>program takes input from user</li>
-<li>program feeds this input into the LLM</li>
-<li><strong>LLM generates</strong> text parsable as a tool call</li>
-<li>program parses the tool call</li>
-<li>program executes the tool (function)</li>
-<li>program feeds the output to the LLM</li>
-<li><strong>LLM generates</strong> output</li>
-<li>program prints this output to the user</li>
-</ul>
-<section id="choosing-between-models" class="level3">
-<h3 class="anchored" data-anchor-id="choosing-between-models">Choosing between models</h3>
-<p>Quality of models vary.</p>
-<ul>
-<li>Humans vote fairly for the best model on websites like <a href="https://arena.ai/">Arena.ai</a>.</li>
-<li>You can also compare pricing, providers, and usage tends on <a href="https://openrouter.ai/models">OpenRouter.ai</a></li>
-<li>An automatic short list models based on your priorities: <a href="https://artificialanalysis.ai/models/recommend">Model Recommendation | Artficial Analysis</a></li>
+<li><strong>The Problem:</strong> Many documents (legal contracts, technical manuals, books) are significantly larger than an LLM’s context window.</li>
+<li><strong>The Solution:</strong> By splitting a 500-page manual into 500-word chunks, an agent can “pull” only the relevant pieces into its memory to answer a specific query without hitting a technical ceiling.</li>
 </ul>
 </section>
-</section>
-<section id="applications-of-agentic-ai" class="level2">
-<h2 class="anchored" data-anchor-id="applications-of-agentic-ai">Applications of Agentic AI</h2>
-<p>What can Agentic AI do in the real-world? This question is best answered by looking at <a href="https://docs.langchain.com/oss/python/langgraph/case-studies">Case Studies</a>.</p>
-<p>Also, reading the <a href="https://www.langchain.com/state-of-agent-engineering">State of Agent Engineering 2026</a>, a survey of 1,300 professionals — from engineers and product managers to business leaders and executives — to uncover the state of AI agents.</p>
-</section>
-<section id="agent-framework" class="level2">
-<h2 class="anchored" data-anchor-id="agent-framework">Agent Framework</h2>
-<p>In programming, frameworks are a way of thinking about a logical system. In two-folds:</p>
-<p>Firslty, <a href="https://docs.langchain.com/oss/python/langchain/philosophy"><strong>Abstractions</strong></a>: which are the conceptual objects that are defined with specific properties and rules of interaction with other objects. Langchain has:</p>
+<section id="b.-improving-retrieval-accuracy-rag" class="level4">
+<h4 class="anchored" data-anchor-id="b.-improving-retrieval-accuracy-rag">B. Improving Retrieval Accuracy (RAG)</h4>
+<p>Most agentic systems use <strong>Retrieval-Augmented Generation (RAG)</strong>. This process relies on converting text into “embeddings” (mathematical vectors) to find similarities.</p>
 <ul>
-<li>Agents</li>
-<li>Models</li>
-<li>Messages</li>
-<li>Tools</li>
-<li>Short-term memory</li>
-<li>Streaming</li>
-<li>Structured output</li>
-</ul>
-<p>Secondly, <a href="https://docs.langchain.com/oss/python/integrations/providers/overview"><strong>Integrations</strong></a>: which are “external” objects that interact with our internal framework of objects. Langchain has:</p>
-<ul>
-<li>Chat models</li>
-<li>Tools and toolkits</li>
-<li>Middleware</li>
-<li>Retrievers</li>
-<li>Text splitters</li>
-<li>Embedding models</li>
-<li>Vector stores</li>
-<li>Document loaders</li>
-<li>Key-value stores</li>
-</ul>
-<p>Examples of Agentic frameworks are:</p>
-<ul>
-<li><a href="https://docs.langchain.com/oss/python/langchain/overview">LangChain</a></li>
-<li>Vercel’s AI SDK</li>
-<li>CrewAI</li>
-<li>OpenAI Agents SDK</li>
-<li>Google ADK</li>
-<li>LlamaIndex</li>
+<li><strong>Semantic Density:</strong> A 50-page document covers many different topics. If you turn that entire document into one vector, the “meaning” becomes diluted and fuzzy.</li>
+<li><strong>Precision:</strong> Chunking allows the agent to find the <em>exact</em> paragraph that answers a question. It’s easier for a system to match the query “What is the refund policy?” to a specific 200-word chunk about refunds than to a 10,000-word general Terms of Service document.</li>
 </ul>
 </section>
-<section id="agent-runtime" class="level2">
-<h2 class="anchored" data-anchor-id="agent-runtime">Agent Runtime</h2>
-<p>Runtimes manage state, and state transitions (orchestration). In other words, building, managing, and deploying long-running, stateful agents. Concretely, things like:</p>
-<ul>
-<li><strong>Control-flow</strong>: Step by step instructions, conditional execution, and loops.</li>
-<li><strong>Persistence</strong>: Thread-level and cross-thread persistence for state management.</li>
-<li><strong>Durable execution</strong>: Agents persist through failures and can run for extended periods, resuming from where they left off.</li>
-<li><strong>Streaming</strong>: Support for streaming workflows and responses.</li>
-<li><strong>Human-in-the-loop</strong>: Incorporate human oversight by inspecting and modifying agent state.</li>
-</ul>
-<p>Examples:</p>
-<ul>
-<li><a href="https://docs.langchain.com/oss/python/langgraph/overview">LangGraph</a></li>
-<li>Temporal</li>
-<li>Inngest</li>
-</ul>
-<p>Note: for the best DX (Developer Experience), we will be using the <strong>Functional API</strong>.</p>
+<section id="c.-reducing-lost-in-the-middle-phenomena" class="level4">
+<h4 class="anchored" data-anchor-id="c.-reducing-lost-in-the-middle-phenomena">C. Reducing “Lost in the Middle” Phenomena</h4>
+<p><a href="https://www.amazon.science/publications/context-length-alone-hurts-llm-performance-despite-perfect-retrieval">Research shows</a> that LLMs are best at recalling information located at the very beginning or the very end of a prompt. Information buried in the middle of a massive block of text is often ignored or “hallucinated” away.</p>
+<p>By providing the agent with several <strong>small, concise chunks</strong>, you ensure the relevant information stays at the “top of mind” for the model, leading to higher reasoning accuracy.</p>
 </section>
-<section id="agent-platform" class="level2">
-<h2 class="anchored" data-anchor-id="agent-platform">Agent Platform</h2>
-<p><strong>LangSmith</strong>:</p>
+<section id="d.-cost-and-latency-optimization" class="level4">
+<h4 class="anchored" data-anchor-id="d.-cost-and-latency-optimization">D. Cost and Latency Optimization</h4>
+<p>Every token sent to an LLM costs money and takes time to process.</p>
 <ul>
-<li><strong>Deployment</strong>: <code>localhost</code> -&gt; production server</li>
-<li><strong>Observability</strong>: tracing, real-time monitoring, alerting and usage.</li>
-<li><strong>Evaluation</strong>: testing versions and providing feedback on traces.</li>
-</ul>
-</section>
-<section id="key-takeways" class="level2">
-<h2 class="anchored" data-anchor-id="key-takeways">Key Takeways</h2>
-<ul>
-<li>LangChain is the framework.</li>
-<li>LangGraph is the runtime.</li>
-<li>LangSmith is the platform.</li>
-</ul>
-<hr>
-<ul>
-<li><a href="https://docs.langchain.com/oss/python/concepts/products">Read More</a>.</li>
-<li><a href="https://chat.langchain.com/">Help: Chat with langchain docs</a></li>
+<li><strong>Efficiency:</strong> If an agent needs to know a specific date in a 100MB file, sending the whole file is expensive and slow.</li>
+<li><strong>Speed:</strong> Sending three 500-token chunks is nearly instantaneous and costs a fraction of the price, allowing the agent to move through its task pipeline much faster.</li>
 </ul>
 
 

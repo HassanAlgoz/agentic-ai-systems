@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Components of RAG Systems – Building Agentic AI Systems</title>
+<title>Memory – Building Agentic AI Systems</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -69,10 +69,6 @@ ul.task-list li input[type="checkbox"] {
   }
 }</script>
 <style>html{ scroll-behavior: smooth; }</style>
-<meta name="mermaid-theme" content="default">
-<script src="../site_libs/quarto-diagram/mermaid.min.js"></script>
-<script src="../site_libs/quarto-diagram/mermaid-init.js"></script>
-<link href="../site_libs/quarto-diagram/mermaid.css" rel="stylesheet">
 
 
 </head>
@@ -109,24 +105,15 @@ ul.task-list li input[type="checkbox"] {
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc" class="toc-active">
-    <h2 id="toc-title">Contents</h2>
-   
-  <ul>
-  <li><a href="#core-component-ecosystem" id="toc-core-component-ecosystem" class="nav-link active" data-scroll-target="#core-component-ecosystem">Core component ecosystem</a>
-  <ul class="collapse">
-  <li><a href="#how-components-connect" id="toc-how-components-connect" class="nav-link" data-scroll-target="#how-components-connect">How components connect</a></li>
-  </ul></li>
-  </ul>
-</nav>
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
+        
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Components of RAG Systems</h1>
+<h1 class="title">Memory</h1>
 </div>
 
 
@@ -143,76 +130,18 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<p><a href="https://docs.langchain.com/oss/python/langchain/component-architecture">Source</a>.</p>
-<p>LangChain’s power comes from how its components work together to create sophisticated AI applications. This page provides diagrams showcasing the relationships between different components.</p>
-<section id="core-component-ecosystem" class="level2">
-<h2 class="anchored" data-anchor-id="core-component-ecosystem">Core component ecosystem</h2>
-<p>The diagram below shows how LangChain’s major components connect to form complete AI applications:</p>
-<div class="cell" data-layout-align="default">
-<div class="cell-output-display">
-<div>
-<p></p><figure class="figure"><p></p>
-<div>
-<pre class="mermaid mermaid-js">graph TD
-    %% Input processing
-    subgraph "📥 Input processing"
-        A[Text input] --&gt; B[Document loaders]
-        B --&gt; C[Text splitters]
-        C --&gt; D[Documents]
-    end
-
-    %% Embedding &amp; storage
-    subgraph "🔢 Embedding &amp; storage"
-        D --&gt; E[Embedding models]
-        E --&gt; F[Vectors]
-        F --&gt; G[(Vector stores)]
-    end
-
-    %% Retrieval
-    subgraph "🔍 Retrieval"
-        H[User Query] --&gt; I[Embedding models]
-        I --&gt; J[Query vector]
-        J --&gt; K[Retrievers]
-        K --&gt; G
-        G --&gt; L[Relevant context]
-    end
-
-    %% Generation
-    subgraph "🤖 Generation"
-        M[Chat models] --&gt; N[Tools]
-        N --&gt; O[Tool results]
-        O --&gt; M
-        L --&gt; M
-        M --&gt; P[AI response]
-    end
-
-    %% Orchestration
-    subgraph "🎯 Orchestration"
-        Q[Agents] --&gt; M
-        Q --&gt; N
-        Q --&gt; K
-        Q --&gt; R[Memory]
-    end
-</pre>
-</div>
-<p></p></figure><p></p>
-</div>
-</div>
-</div>
-<section id="how-components-connect" class="level3">
-<h3 class="anchored" data-anchor-id="how-components-connect">How components connect</h3>
-<p>Each component layer builds on the previous ones:</p>
-<ol type="1">
-<li><strong>Input processing</strong> – Transform raw data into structured documents</li>
-<li><strong>Embedding &amp; storage</strong> – Convert text into searchable vector representations</li>
-<li><strong>Retrieval</strong> – Find relevant information based on user queries</li>
-<li><strong>Generation</strong> – Use AI models to create responses, optionally with tools</li>
-<li><strong>Orchestration</strong> – Coordinate everything through agents and memory systems</li>
-</ol>
+<p>Focus on reading the following section for getting to know how you can <strong>read/write memory in tools</strong>:</p>
+<ul>
+<li><a href="https://docs.langchain.com/oss/python/langchain/tools#access-context">Access context</a>
+<ul>
+<li><a href="https://docs.langchain.com/oss/python/langchain/tools#short-term-memory-state">Short-term memory (State)</a></li>
+<li><a href="https://docs.langchain.com/oss/python/langchain/tools#context">Context (Immutable Configuration)</a></li>
+<li><a href="https://docs.langchain.com/oss/python/langchain/tools#long-term-memory-store">Long-term memory (Store)</a></li>
+</ul></li>
+</ul>
+<hr>
 
 
-</section>
-</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Components of RAG Systems – Building Agentic AI Systems</title>
+<title>What is LangSmith? – Building Agentic AI Systems</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -69,10 +69,6 @@ ul.task-list li input[type="checkbox"] {
   }
 }</script>
 <style>html{ scroll-behavior: smooth; }</style>
-<meta name="mermaid-theme" content="default">
-<script src="../site_libs/quarto-diagram/mermaid.min.js"></script>
-<script src="../site_libs/quarto-diagram/mermaid-init.js"></script>
-<link href="../site_libs/quarto-diagram/mermaid.css" rel="stylesheet">
 
 
 </head>
@@ -114,10 +110,8 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">Contents</h2>
    
   <ul>
-  <li><a href="#core-component-ecosystem" id="toc-core-component-ecosystem" class="nav-link active" data-scroll-target="#core-component-ecosystem">Core component ecosystem</a>
-  <ul class="collapse">
-  <li><a href="#how-components-connect" id="toc-how-components-connect" class="nav-link" data-scroll-target="#how-components-connect">How components connect</a></li>
-  </ul></li>
+  <li><a href="#know-what-your-agents-are-really-doing" id="toc-know-what-your-agents-are-really-doing" class="nav-link active" data-scroll-target="#know-what-your-agents-are-really-doing">Know what your agents are really doing</a></li>
+  <li><a href="#sign-up-and-set-langsmith-api-free" id="toc-sign-up-and-set-langsmith-api-free" class="nav-link" data-scroll-target="#sign-up-and-set-langsmith-api-free">Sign up and Set LangSmith API (Free)</a></li>
   </ul>
 </nav>
     </div>
@@ -126,7 +120,7 @@ ul.task-list li input[type="checkbox"] {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Components of RAG Systems</h1>
+<h1 class="title">What is LangSmith?</h1>
 </div>
 
 
@@ -143,75 +137,20 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<p><a href="https://docs.langchain.com/oss/python/langchain/component-architecture">Source</a>.</p>
-<p>LangChain’s power comes from how its components work together to create sophisticated AI applications. This page provides diagrams showcasing the relationships between different components.</p>
-<section id="core-component-ecosystem" class="level2">
-<h2 class="anchored" data-anchor-id="core-component-ecosystem">Core component ecosystem</h2>
-<p>The diagram below shows how LangChain’s major components connect to form complete AI applications:</p>
-<div class="cell" data-layout-align="default">
-<div class="cell-output-display">
-<div>
-<p></p><figure class="figure"><p></p>
-<div>
-<pre class="mermaid mermaid-js">graph TD
-    %% Input processing
-    subgraph "📥 Input processing"
-        A[Text input] --&gt; B[Document loaders]
-        B --&gt; C[Text splitters]
-        C --&gt; D[Documents]
-    end
-
-    %% Embedding &amp; storage
-    subgraph "🔢 Embedding &amp; storage"
-        D --&gt; E[Embedding models]
-        E --&gt; F[Vectors]
-        F --&gt; G[(Vector stores)]
-    end
-
-    %% Retrieval
-    subgraph "🔍 Retrieval"
-        H[User Query] --&gt; I[Embedding models]
-        I --&gt; J[Query vector]
-        J --&gt; K[Retrievers]
-        K --&gt; G
-        G --&gt; L[Relevant context]
-    end
-
-    %% Generation
-    subgraph "🤖 Generation"
-        M[Chat models] --&gt; N[Tools]
-        N --&gt; O[Tool results]
-        O --&gt; M
-        L --&gt; M
-        M --&gt; P[AI response]
-    end
-
-    %% Orchestration
-    subgraph "🎯 Orchestration"
-        Q[Agents] --&gt; M
-        Q --&gt; N
-        Q --&gt; K
-        Q --&gt; R[Memory]
-    end
-</pre>
-</div>
-<p></p></figure><p></p>
-</div>
-</div>
-</div>
-<section id="how-components-connect" class="level3">
-<h3 class="anchored" data-anchor-id="how-components-connect">How components connect</h3>
-<p>Each component layer builds on the previous ones:</p>
-<ol type="1">
-<li><strong>Input processing</strong> – Transform raw data into structured documents</li>
-<li><strong>Embedding &amp; storage</strong> – Convert text into searchable vector representations</li>
-<li><strong>Retrieval</strong> – Find relevant information based on user queries</li>
-<li><strong>Generation</strong> – Use AI models to create responses, optionally with tools</li>
-<li><strong>Orchestration</strong> – Coordinate everything through agents and memory systems</li>
-</ol>
-
-
+<section id="know-what-your-agents-are-really-doing" class="level3">
+<h3 class="anchored" data-anchor-id="know-what-your-agents-are-really-doing">Know what your agents are really doing</h3>
+<p>LangSmith Observability gives you complete visibility into agent behavior with tracing, real-time monitoring, alerting, and high-level insights into usage.</p>
+<p><a href="https://www.youtube.com/watch?v=kYtnLaJeia8&amp;list=PLfaIDFEXuae2CjNiTeqXG5r8n9rld9qQu&amp;index=9">What Is <strong>LangSmith</strong>? Explained in 5 Minutes</a>.</p>
 </section>
+<section id="sign-up-and-set-langsmith-api-free" class="level3">
+<h3 class="anchored" data-anchor-id="sign-up-and-set-langsmith-api-free">Sign up and Set LangSmith API (Free)</h3>
+<ul>
+<li>Sign up for LangSmith <a href="https://docs.langchain.com/langsmith/create-account-api-key#create-an-account-and-api-key">here</a>, find out more about LangSmith and how to use it within your workflow <a href="https://www.langchain.com/langsmith">here</a>.</li>
+<li>Set <code>LANGSMITH_API_KEY</code>, <code>LANGSMITH_TRACING_V2="true"</code> <code>LANGSMITH_PROJECT="langchain-academy"</code>in your environment</li>
+<li>If you are on the EU instance also set <code>LANGSMITH_ENDPOINT</code>=“https://eu.api.smith.langchain.com” as well.</li>
+</ul>
+
+
 </section>
 
 </main> <!-- /main -->

@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Components of RAG Systems – Building Agentic AI Systems</title>
+<title>Introduction: What is Agentic AI? – Building Agentic AI Systems</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -114,10 +114,20 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">Contents</h2>
    
   <ul>
-  <li><a href="#core-component-ecosystem" id="toc-core-component-ecosystem" class="nav-link active" data-scroll-target="#core-component-ecosystem">Core component ecosystem</a>
+  <li><a href="#the-evolution-of-agents-from-llms" id="toc-the-evolution-of-agents-from-llms" class="nav-link active" data-scroll-target="#the-evolution-of-agents-from-llms">The Evolution of Agents from LLMs</a>
   <ul class="collapse">
-  <li><a href="#how-components-connect" id="toc-how-components-connect" class="nav-link" data-scroll-target="#how-components-connect">How components connect</a></li>
+  <li><a href="#choosing-between-models" id="toc-choosing-between-models" class="nav-link" data-scroll-target="#choosing-between-models">Choosing between models</a></li>
   </ul></li>
+  <li><a href="#applications-of-agentic-ai" id="toc-applications-of-agentic-ai" class="nav-link" data-scroll-target="#applications-of-agentic-ai">Applications of Agentic AI</a></li>
+  <li><a href="#agent-framework" id="toc-agent-framework" class="nav-link" data-scroll-target="#agent-framework">Agent Framework</a></li>
+  <li><a href="#agent-runtime" id="toc-agent-runtime" class="nav-link" data-scroll-target="#agent-runtime">Agent Runtime</a>
+  <ul class="collapse">
+  <li><a href="#rag-retrieval-augmented-generation" id="toc-rag-retrieval-augmented-generation" class="nav-link" data-scroll-target="#rag-retrieval-augmented-generation">RAG (Retrieval-Augmented generation)</a></li>
+  <li><a href="#agent-with-tools" id="toc-agent-with-tools" class="nav-link" data-scroll-target="#agent-with-tools">Agent with tools</a></li>
+  <li><a href="#multi-agent-system" id="toc-multi-agent-system" class="nav-link" data-scroll-target="#multi-agent-system">Multi-agent system</a></li>
+  </ul></li>
+  <li><a href="#agent-platform" id="toc-agent-platform" class="nav-link" data-scroll-target="#agent-platform">Agent Platform</a></li>
+  <li><a href="#key-takeways" id="toc-key-takeways" class="nav-link" data-scroll-target="#key-takeways">Key Takeways</a></li>
   </ul>
 </nav>
     </div>
@@ -126,7 +136,7 @@ ul.task-list li input[type="checkbox"] {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Components of RAG Systems</h1>
+<h1 class="title">Introduction: What is Agentic AI?</h1>
 </div>
 
 
@@ -143,75 +153,215 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<p><a href="https://docs.langchain.com/oss/python/langchain/component-architecture">Source</a>.</p>
-<p>LangChain’s power comes from how its components work together to create sophisticated AI applications. This page provides diagrams showcasing the relationships between different components.</p>
-<section id="core-component-ecosystem" class="level2">
-<h2 class="anchored" data-anchor-id="core-component-ecosystem">Core component ecosystem</h2>
-<p>The diagram below shows how LangChain’s major components connect to form complete AI applications:</p>
+<p><strong>Artificial Intelligence</strong> is a field of Computer Science, studying how to automate decision making.</p>
+<p><strong>Agentic AI</strong> is where autonomy of the system is at the level of dealing not just with structured tabular data, but with unstructured data such as natural language, speech, visual to inform their decision, in a growingly less supervised manner; and hence, autonomous.</p>
+<p>Specifically, today’s Agentic AI systems are driven by <strong>Large Language Models (LLMs)</strong>.</p>
+<section id="the-evolution-of-agents-from-llms" class="level2">
+<h2 class="anchored" data-anchor-id="the-evolution-of-agents-from-llms">The Evolution of Agents from LLMs</h2>
+<p><strong>Large Language Models (LLMs)</strong> are deep neural networks trained to model the most likely token given previous tokens.</p>
+<p>First application was: <strong>Translation</strong>. Given an English sentence, the task is to generate the most likely Arabic equivalent. This is done word-by-word, by repeatedly predicting the next Arabic word, the original sentence plus all predicted words thus far.</p>
+<p>This technique was able to scale thanks to the <strong>Transformers</strong> architecture which is based on the concept of <strong>Attention</strong>, which learns the influence each previous token has in generating the next token, in the translation.</p>
+<p>Same concept applied more simply in <strong>Paraphrasing</strong>, <strong>Summarization</strong>, and even <strong>Question-Answering</strong>.</p>
+<p>Trained on back-and-forth <strong>Chat Conversations</strong>, models were able to mimic chat-like interactions.</p>
+<p>A hypothesis was proven at the time that <strong>Multi-task Model</strong> performs better than a single-task model. A more general idea is to train models to <strong>“Follow Instructions”</strong>. In which the user <strong>Prompts</strong> it to do any of the previously mentioned tasks, on-demand. Of course this needed lots of special <em>Data Curation</em>.</p>
+<p>One task was especially important: <strong>JSON mode</strong>: in which models produced their output in json format, such that it can be parsed easily by programs.</p>
+<p>Following that, an especially key development was the task of <strong>Tool Calling</strong>: in which a model is required to select from a set of Python funcition signatures (parameters, types, and docstrings) upon instruction. This is where <strong>Agents</strong> were born.</p>
+<p>An <strong>Agent</strong> is based on an LLM in the following sequence:</p>
+<ul>
+<li>program takes input from user</li>
+<li>program feeds this input + available tools, into the LLM</li>
+<li><strong>LLM generates</strong> text parsable as a tool call</li>
+<li>program parses the tool call</li>
+<li>program executes the tool (function)</li>
+<li>program feeds the output to the LLM</li>
+<li><strong>LLM generates</strong> output</li>
+<li>program prints this output to the user</li>
+</ul>
+<section id="choosing-between-models" class="level3">
+<h3 class="anchored" data-anchor-id="choosing-between-models">Choosing between models</h3>
+<p>Quality of models vary.</p>
+<ul>
+<li>Humans vote fairly for the best model on websites like <a href="https://arena.ai/">Arena.ai</a>.</li>
+<li>You can also compare pricing, providers, and usage tends on <a href="https://openrouter.ai/models">OpenRouter.ai</a></li>
+<li>An automatic short list models based on your priorities: <a href="https://artificialanalysis.ai/models/recommend">Model Recommendation | Artficial Analysis</a></li>
+</ul>
+</section>
+</section>
+<section id="applications-of-agentic-ai" class="level2">
+<h2 class="anchored" data-anchor-id="applications-of-agentic-ai">Applications of Agentic AI</h2>
+<p>What can Agentic AI do in the real-world? This question is best answered by looking at <a href="https://docs.langchain.com/oss/python/langgraph/case-studies">Case Studies</a>.</p>
+<p>Also, reading the <a href="https://www.langchain.com/state-of-agent-engineering">State of Agent Engineering 2026</a>, a survey of 1,300 professionals — from engineers and product managers to business leaders and executives — to uncover the state of AI agents.</p>
+</section>
+<section id="agent-framework" class="level2">
+<h2 class="anchored" data-anchor-id="agent-framework">Agent Framework</h2>
+<p><a href="https://docs.langchain.com/oss/python/langchain/overview">LangChain</a> organizes components into these main categories:</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Category</th>
+<th>Purpose</th>
+<th>Key Components</th>
+<th>Use Cases</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong><a href="https://docs.langchain.com/oss/python/langchain/models">Models</a></strong></td>
+<td>AI reasoning and generation</td>
+<td>Chat models, LLMs, Embedding models</td>
+<td>Text generation, reasoning, semantic understanding</td>
+</tr>
+<tr class="even">
+<td><strong><a href="https://docs.langchain.com/oss/python/langchain/tools">Tools</a></strong></td>
+<td>External capabilities</td>
+<td>APIs, databases, etc.</td>
+<td>Web search, data access, computations</td>
+</tr>
+<tr class="odd">
+<td><strong><a href="https://docs.langchain.com/oss/python/langchain/agents">Agents</a></strong></td>
+<td>Orchestration and reasoning</td>
+<td>ReAct agents, tool calling agents</td>
+<td>Nondeterministic workflows, decision making</td>
+</tr>
+<tr class="even">
+<td><strong><a href="https://docs.langchain.com/oss/python/langchain/short-term-memory">Memory</a></strong></td>
+<td>Context preservation</td>
+<td>Message history, custom state</td>
+<td>Conversations, stateful interactions</td>
+</tr>
+<tr class="odd">
+<td><strong><a href="https://docs.langchain.com/oss/python/integrations/retrievers">Retrievers</a></strong></td>
+<td>Information access</td>
+<td>Vector retrievers, web retrievers</td>
+<td>RAG, knowledge base search</td>
+</tr>
+<tr class="even">
+<td><strong><a href="https://docs.langchain.com/oss/python/integrations/document_loaders">Document processing</a></strong></td>
+<td>Data ingestion</td>
+<td>Loaders, splitters, transformers</td>
+<td>PDF processing, web scraping</td>
+</tr>
+<tr class="odd">
+<td><strong><a href="https://docs.langchain.com/oss/python/integrations/vectorstores">Vector Stores</a></strong></td>
+<td>Semantic search</td>
+<td>Chroma, Pinecone, FAISS</td>
+<td>Similarity search, embeddings storage</td>
+</tr>
+</tbody>
+</table>
+<p>Examples of other frameworks are:</p>
+<ul>
+<li>Vercel’s AI SDK</li>
+<li>CrewAI</li>
+<li>OpenAI Agents SDK</li>
+<li>Google ADK</li>
+<li>LlamaIndex</li>
+</ul>
+</section>
+<section id="agent-runtime" class="level2">
+<h2 class="anchored" data-anchor-id="agent-runtime">Agent Runtime</h2>
+<p>Runtimes manage state, and state transitions (orchestration). In other words, building, managing, and deploying long-running, stateful agents. Concretely, things like:</p>
+<ul>
+<li><strong>Control-flow</strong>: Step by step instructions, conditional execution, and loops.</li>
+<li><strong>Persistence</strong>: Thread-level and cross-thread persistence for state management.</li>
+<li><strong>Durable execution</strong>: Agents persist through failures and can run for extended periods, resuming from where they left off.</li>
+<li><strong>Streaming</strong>: Support for streaming workflows and responses.</li>
+<li><strong>Human-in-the-loop</strong>: Incorporate human oversight by inspecting and modifying agent state.</li>
+</ul>
+<p><a href="https://docs.langchain.com/oss/python/langgraph/overview">LangGraph</a> builds and runs the flowchart..</p>
+<section id="rag-retrieval-augmented-generation" class="level3">
+<h3 class="anchored" data-anchor-id="rag-retrieval-augmented-generation">RAG (Retrieval-Augmented generation)</h3>
 <div class="cell" data-layout-align="default">
 <div class="cell-output-display">
 <div>
 <p></p><figure class="figure"><p></p>
 <div>
-<pre class="mermaid mermaid-js">graph TD
-    %% Input processing
-    subgraph "📥 Input processing"
-        A[Text input] --&gt; B[Document loaders]
-        B --&gt; C[Text splitters]
-        C --&gt; D[Documents]
-    end
-
-    %% Embedding &amp; storage
-    subgraph "🔢 Embedding &amp; storage"
-        D --&gt; E[Embedding models]
-        E --&gt; F[Vectors]
-        F --&gt; G[(Vector stores)]
-    end
-
-    %% Retrieval
-    subgraph "🔍 Retrieval"
-        H[User Query] --&gt; I[Embedding models]
-        I --&gt; J[Query vector]
-        J --&gt; K[Retrievers]
-        K --&gt; G
-        G --&gt; L[Relevant context]
-    end
-
-    %% Generation
-    subgraph "🤖 Generation"
-        M[Chat models] --&gt; N[Tools]
-        N --&gt; O[Tool results]
-        O --&gt; M
-        L --&gt; M
-        M --&gt; P[AI response]
-    end
-
-    %% Orchestration
-    subgraph "🎯 Orchestration"
-        Q[Agents] --&gt; M
-        Q --&gt; N
-        Q --&gt; K
-        Q --&gt; R[Memory]
-    end
+<pre class="mermaid mermaid-js">graph LR
+    A[User question] --&gt; B[Retriever]
+    B --&gt; C[Relevant docs]
+    C --&gt; D[Chat model]
+    A --&gt; D
+    D --&gt; E[Informed response]
 </pre>
 </div>
 <p></p></figure><p></p>
 </div>
 </div>
 </div>
-<section id="how-components-connect" class="level3">
-<h3 class="anchored" data-anchor-id="how-components-connect">How components connect</h3>
-<p>Each component layer builds on the previous ones:</p>
-<ol type="1">
-<li><strong>Input processing</strong> – Transform raw data into structured documents</li>
-<li><strong>Embedding &amp; storage</strong> – Convert text into searchable vector representations</li>
-<li><strong>Retrieval</strong> – Find relevant information based on user queries</li>
-<li><strong>Generation</strong> – Use AI models to create responses, optionally with tools</li>
-<li><strong>Orchestration</strong> – Coordinate everything through agents and memory systems</li>
-</ol>
-
-
 </section>
+<section id="agent-with-tools" class="level3">
+<h3 class="anchored" data-anchor-id="agent-with-tools">Agent with tools</h3>
+<div class="cell" data-layout-align="default">
+<div class="cell-output-display">
+<div>
+<p></p><figure class="figure"><p></p>
+<div>
+<pre class="mermaid mermaid-js">graph LR
+    A[User request] --&gt; B[Agent]
+    B --&gt; C{Need tool?}
+    C --&gt;|Yes| D[Call tool]
+    D --&gt; E[Tool result]
+    E --&gt; B
+    C --&gt;|No| F[Final answer]
+</pre>
+</div>
+<p></p></figure><p></p>
+</div>
+</div>
+</div>
+</section>
+<section id="multi-agent-system" class="level3">
+<h3 class="anchored" data-anchor-id="multi-agent-system">Multi-agent system</h3>
+<div class="cell" data-layout-align="default">
+<div class="cell-output-display">
+<div>
+<p></p><figure class="figure"><p></p>
+<div>
+<pre class="mermaid mermaid-js">graph LR
+    A[Complex Task] --&gt; B[Supervisor agent]
+    B --&gt; C[Specialist agent 1]
+    B --&gt; D[Specialist agent 2]
+    C --&gt; E[Results]
+    D --&gt; E
+    E --&gt; B
+    B --&gt; F[Coordinated response]
+</pre>
+</div>
+<p></p></figure><p></p>
+</div>
+</div>
+</div>
+<p>Other runtimes:</p>
+<ul>
+<li>Temporal</li>
+<li>Inngest</li>
+</ul>
+<p>Note: for the best DX (Developer Experience), we will be using the <strong>Functional API</strong>.</p>
+</section>
+</section>
+<section id="agent-platform" class="level2">
+<h2 class="anchored" data-anchor-id="agent-platform">Agent Platform</h2>
+<p><strong>LangSmith</strong>:</p>
+<ul>
+<li><strong>Deployment</strong>: <code>localhost</code> -&gt; production server</li>
+<li><strong>Observability</strong>: tracing, real-time monitoring, alerting and usage.</li>
+<li><strong>Evaluation</strong>: testing versions and providing feedback on traces.</li>
+</ul>
+</section>
+<section id="key-takeways" class="level2">
+<h2 class="anchored" data-anchor-id="key-takeways">Key Takeways</h2>
+<ul>
+<li>LangChain is the framework.</li>
+<li>LangGraph is the runtime.</li>
+<li>LangSmith is the platform.</li>
+</ul>
+<hr>
+<ul>
+<li><a href="https://docs.langchain.com/oss/python/concepts/products">Read More</a>.</li>
+<li><a href="https://chat.langchain.com/">Help: Chat with langchain docs</a></li>
+</ul>
+
+
 </section>
 
 </main> <!-- /main -->

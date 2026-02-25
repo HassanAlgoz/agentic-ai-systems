@@ -76,6 +76,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="../site_libs/bootstrap/bootstrap-7dc3907ddb6ec99bf1b87f80a83abe8b.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script src="../site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
+<link href="../site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
+<link href="../site_libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -146,6 +149,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
    
   <ul>
   <li><a href="#setup" id="toc-setup" class="nav-link active" data-scroll-target="#setup">Setup</a></li>
+  <li><a href="#langgraph" id="toc-langgraph" class="nav-link" data-scroll-target="#langgraph">LangGraph</a>
+  <ul class="collapse">
+  <li><a href="#understanding-the-functional-api-of-langgraph" id="toc-understanding-the-functional-api-of-langgraph" class="nav-link" data-scroll-target="#understanding-the-functional-api-of-langgraph">Understanding the Functional API of LangGraph</a></li>
+  <li><a href="#core-benefits-of-langgraph" id="toc-core-benefits-of-langgraph" class="nav-link" data-scroll-target="#core-benefits-of-langgraph">Core benefits of LangGraph</a></li>
+  </ul></li>
   <li><a href="#prompt-chaining" id="toc-prompt-chaining" class="nav-link" data-scroll-target="#prompt-chaining">Prompt chaining</a></li>
   <li><a href="#parallelization" id="toc-parallelization" class="nav-link" data-scroll-target="#parallelization">Parallelization</a></li>
   <li><a href="#routing" id="toc-routing" class="nav-link" data-scroll-target="#routing">Routing</a></li>
@@ -153,7 +161,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#evaluator-optimizer" id="toc-evaluator-optimizer" class="nav-link" data-scroll-target="#evaluator-optimizer">Evaluator-optimizer</a></li>
   <li><a href="#agents" id="toc-agents" class="nav-link" data-scroll-target="#agents">Agents</a></li>
   </ul>
-<div class="quarto-alternate-formats"><h2>Other Formats</h2><ul><li><a href="08_patterns.html"><i class="bi bi-file-slides"></i>RevealJS</a></li></ul></div></nav>
+<div class="quarto-alternate-formats"><h2>Other Formats</h2><ul><li><a href="08_workflow_patterns.html"><i class="bi bi-file-slides"></i>RevealJS</a></li></ul></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -182,7 +190,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li>Agents are dynamic and define their own processes and tool usage.</li>
 <li>Workflows have predetermined code paths and are designed to operate in a certain order.</li>
 </ul>
-<p><img src="https://mintcdn.com/langchain-5e9cc07a/-_xGPoyjhyiDWTPJ/oss/images/agent_workflow.png?fit=max&amp;auto=format&amp;n=-_xGPoyjhyiDWTPJ&amp;q=85&amp;s=c217c9ef517ee556cae3fc928a21dc55" alt="Agent Workflow" data-path="oss/images/agent_workflow.png" data-optimize="true" data-opv="3" srcset="https://mintcdn.com/langchain-5e9cc07a/-_xGPoyjhyiDWTPJ/oss/images/agent_workflow.png?w=280&amp;fit=max&amp;auto=format&amp;n=-_xGPoyjhyiDWTPJ&amp;q=85&amp;s=290e50cff2f72d524a107421ec8e3ff0 280w, https://mintcdn.com/langchain-5e9cc07a/-_xGPoyjhyiDWTPJ/oss/images/agent_workflow.png?w=560&amp;fit=max&amp;auto=format&amp;n=-_xGPoyjhyiDWTPJ&amp;q=85&amp;s=a2bfc87080aee7dd4844f7f24035825e 560w, https://mintcdn.com/langchain-5e9cc07a/-_xGPoyjhyiDWTPJ/oss/images/agent_workflow.png?w=840&amp;fit=max&amp;auto=format&amp;n=-_xGPoyjhyiDWTPJ&amp;q=85&amp;s=ae1fa9087b33b9ff8bc3446ccaa23e3d 840w, https://mintcdn.com/langchain-5e9cc07a/-_xGPoyjhyiDWTPJ/oss/images/agent_workflow.png?w=1100&amp;fit=max&amp;auto=format&amp;n=-_xGPoyjhyiDWTPJ&amp;q=85&amp;s=06003ee1fe07d7a1ea8cf9200e7d0a10 1100w, https://mintcdn.com/langchain-5e9cc07a/-_xGPoyjhyiDWTPJ/oss/images/agent_workflow.png?w=1650&amp;fit=max&amp;auto=format&amp;n=-_xGPoyjhyiDWTPJ&amp;q=85&amp;s=bc98b459a9b1fb226c2887de1696bde0 1650w, https://mintcdn.com/langchain-5e9cc07a/-_xGPoyjhyiDWTPJ/oss/images/agent_workflow.png?w=2500&amp;fit=max&amp;auto=format&amp;n=-_xGPoyjhyiDWTPJ&amp;q=85&amp;s=1933bcdfd5c5b69b98ce96aafa456848 2500w"></p>
+<p><a href="https://mintcdn.com/langchain-5e9cc07a/-_xGPoyjhyiDWTPJ/oss/images/agent_workflow.png?fit=max&amp;auto=format&amp;n=-_xGPoyjhyiDWTPJ&amp;q=85&amp;s=c217c9ef517ee556cae3fc928a21dc55" class="lightbox" data-gallery="quarto-lightbox-gallery-1"><img src="https://mintcdn.com/langchain-5e9cc07a/-_xGPoyjhyiDWTPJ/oss/images/agent_workflow.png?fit=max&amp;auto=format&amp;n=-_xGPoyjhyiDWTPJ&amp;q=85&amp;s=c217c9ef517ee556cae3fc928a21dc55" class="img-fluid"></a></p>
 <p>LangGraph offers several benefits when building agents and workflows, including <a href="https://docs.langchain.com/oss/python/langgraph/persistence">persistence</a>, <a href="https://docs.langchain.com/oss/python/langgraph/streaming">streaming</a>, and support for debugging as well as <a href="https://docs.langchain.com/oss/python/langgraph/deploy">deployment</a>.</p>
 <section id="setup" class="level2">
 <h2 class="anchored" data-anchor-id="setup">Setup</h2>
@@ -231,6 +239,34 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   from .autonotebook import tqdm as notebook_tqdm</code></pre>
 </div>
 </div>
+</section>
+<section id="langgraph" class="level2">
+<h2 class="anchored" data-anchor-id="langgraph">LangGraph</h2>
+<p><strong>LangGraph</strong> provides two different APIs to build agent workflows: the Graph API and the Functional API. Both APIs share the same underlying runtime and can be used together in the same application, but they are designed for different use cases and development preferences.</p>
+<p><strong>Bottom line</strong>: Use the Graph when your logic looks like a web, and the Functional when it looks like a list. For more details <a href="https://docs.langchain.com/oss/python/langgraph/choosing-apis">checkout the comparison here</a>.</p>
+<section id="understanding-the-functional-api-of-langgraph" class="level3">
+<h3 class="anchored" data-anchor-id="understanding-the-functional-api-of-langgraph">Understanding the Functional API of LangGraph</h3>
+<p>The <strong>Functional API</strong> allows you to add LangGraph’s key features — <a href="../oss/python/langgraph/persistence">persistence</a>, <a href="../oss/python/langgraph/add-memory">memory</a>, <a href="../oss/python/langgraph/interrupts">human-in-the-loop</a>, and <a href="../oss/python/langgraph/streaming">streaming</a> — to your applications with minimal changes to your existing code.</p>
+<p>It is designed to integrate these features into existing code that may use standard language primitives for branching and control flow, such as <code>if</code> statements, <code>for</code> loops, and function calls. Unlike many data orchestration frameworks that require restructuring code into an explicit pipeline or DAG, the Functional API allows you to incorporate these capabilities without enforcing a rigid execution model.</p>
+<p>The Functional API uses two key building blocks:</p>
+<ul>
+<li><strong><code>@entrypoint</code></strong> – Marks a function as the starting point of a workflow, encapsulating logic and managing execution flow, including handling long-running tasks and interrupts.</li>
+<li><strong><a href="https://reference.langchain.com/python/langgraph/func/task"><code>@task</code></a></strong> – Represents a discrete unit of work, such as an API call or data processing step, that can be executed asynchronously within an entrypoint. Tasks return a future-like object that can be awaited or resolved synchronously.</li>
+</ul>
+<p>This provides a minimal abstraction for building workflows with state management and streaming.</p>
+<p>See: The <a href="https://docs.langchain.com/oss/python/langgraph/functional-api">Functional API overview</a> for more informatino.</p>
+</section>
+<section id="core-benefits-of-langgraph" class="level3">
+<h3 class="anchored" data-anchor-id="core-benefits-of-langgraph">Core benefits of LangGraph</h3>
+<p>LangGraph provides low-level supporting infrastructure for <em>any</em> long-running, stateful workflow or agent. LangGraph does not abstract prompts or architecture, and provides the following central benefits:</p>
+<ul>
+<li><a href="https://docs.langchain.com/oss/python/langgraph/durable-execution">Durable execution</a>: Build agents that persist through failures and can run for extended periods, resuming from where they left off.</li>
+<li><a href="https://docs.langchain.com/oss/python/langgraph/interrupts">Human-in-the-loop</a>: Incorporate human oversight by inspecting and modifying agent state at any point.</li>
+<li><a href="https://docs.langchain.com/oss/python/concepts/memory">Comprehensive memory</a>: Create stateful agents with both short-term working memory for ongoing reasoning and long-term memory across sessions.</li>
+<li><a href="../langsmith/home">Debugging with LangSmith</a>: Gain deep visibility into complex agent behavior with visualization tools that trace execution paths, capture state transitions, and provide detailed runtime metrics.</li>
+<li><a href="../langsmith/deployments">Production-ready deployment</a>: Deploy sophisticated agent systems confidently with scalable infrastructure designed to handle the unique challenges of stateful, long-running workflows.</li>
+</ul>
+</section>
 </section>
 <section id="prompt-chaining" class="level2">
 <h2 class="anchored" data-anchor-id="prompt-chaining">Prompt chaining</h2>
@@ -352,7 +388,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb9-29"><a href="#cb9-29" aria-hidden="true" tabindex="-1"></a>    combined <span class="op">+=</span> <span class="ss">f"POEM:</span><span class="ch">\n</span><span class="sc">{</span>poem<span class="sc">}</span><span class="ss">"</span></span>
 <span id="cb9-30"><a href="#cb9-30" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> combined</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<div id="f4ecf63e" class="cell" data-execution_count="11">
+<div id="f4ecf63e" class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Build workflow</span></span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="at">@entrypoint</span>()</span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> parallel_workflow(topic: <span class="bu">str</span>):</span>
@@ -360,8 +396,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>    story_fut <span class="op">=</span> call_llm_2(topic)</span>
 <span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>    poem_fut <span class="op">=</span> call_llm_3(topic)</span>
 <span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> aggregator(</span>
-<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>        topic, joke_fut.result(), story_fut.result(), poem_fut.result()</span>
-<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>    ).result()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>        topic,</span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>        joke_fut.result(),</span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>        story_fut.result(),</span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>        poem_fut.result()</span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>    ).result()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div id="84dcfe53" class="cell" data-execution_count="12">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Invoke</span></span>
@@ -391,9 +430,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h2 class="anchored" data-anchor-id="routing">Routing</h2>
 <p>Routing workflows process inputs and then directs them to context-specific tasks. This allows you to define specialized flows for complex tasks. For example, a workflow built to answer product related questions might process the type of question first, and then route the request to specific processes for pricing, refunds, returns, etc.</p>
 <p><img src="https://mintcdn.com/langchain-5e9cc07a/dL5Sn6Cmy9pwtY0V/oss/images/routing.png?fit=max&amp;auto=format&amp;n=dL5Sn6Cmy9pwtY0V&amp;q=85&amp;s=272e0e9b681b89cd7d35d5c812c50ee6" alt="routing.png" data-path="oss/images/routing.png" data-optimize="true" data-opv="3" srcset="https://mintcdn.com/langchain-5e9cc07a/dL5Sn6Cmy9pwtY0V/oss/images/routing.png?w=280&amp;fit=max&amp;auto=format&amp;n=dL5Sn6Cmy9pwtY0V&amp;q=85&amp;s=ab85efe91d20c816f9a4e491e92a61f7 280w, https://mintcdn.com/langchain-5e9cc07a/dL5Sn6Cmy9pwtY0V/oss/images/routing.png?w=560&amp;fit=max&amp;auto=format&amp;n=dL5Sn6Cmy9pwtY0V&amp;q=85&amp;s=769e29f9be058a47ee85e0c9228e6e44 560w, https://mintcdn.com/langchain-5e9cc07a/dL5Sn6Cmy9pwtY0V/oss/images/routing.png?w=840&amp;fit=max&amp;auto=format&amp;n=dL5Sn6Cmy9pwtY0V&amp;q=85&amp;s=3711ee40746670731a0ce3e96b7cfeb1 840w, https://mintcdn.com/langchain-5e9cc07a/dL5Sn6Cmy9pwtY0V/oss/images/routing.png?w=1100&amp;fit=max&amp;auto=format&amp;n=dL5Sn6Cmy9pwtY0V&amp;q=85&amp;s=9aaa28410da7643f4a2587f7bfae0f21 1100w, https://mintcdn.com/langchain-5e9cc07a/dL5Sn6Cmy9pwtY0V/oss/images/routing.png?w=1650&amp;fit=max&amp;auto=format&amp;n=dL5Sn6Cmy9pwtY0V&amp;q=85&amp;s=6706326c7fef0511805c684d1e4f7082 1650w, https://mintcdn.com/langchain-5e9cc07a/dL5Sn6Cmy9pwtY0V/oss/images/routing.png?w=2500&amp;fit=max&amp;auto=format&amp;n=dL5Sn6Cmy9pwtY0V&amp;q=85&amp;s=f6d603145ca33791b18c8c8afec0bb4d 2500w"></p>
-<div id="fc17ddad" class="cell" data-execution_count="13">
+<div id="fc17ddad" class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> typing_extensions <span class="im">import</span> Literal</span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pydantic <span class="im">import</span> BaseModel</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pydantic <span class="im">import</span> BaseModel, Field</span>
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> langchain.messages <span class="im">import</span> HumanMessage, SystemMessage</span>
 <span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a></span>
@@ -2575,6 +2614,38 @@ Note
   });
   </script>
 </div> <!-- /content -->
+<script>var lightboxQuarto = GLightbox({"closeEffect":"zoom","descPosition":"bottom","loop":false,"openEffect":"zoom","selector":".lightbox"});
+(function() {
+  let previousOnload = window.onload;
+  window.onload = () => {
+    if (previousOnload) {
+      previousOnload();
+    }
+    lightboxQuarto.on('slide_before_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      const href = trigger.getAttribute('href');
+      if (href !== null) {
+        const imgEl = window.document.querySelector(`a[href="${href}"] img`);
+        if (imgEl !== null) {
+          const srcAttr = imgEl.getAttribute("src");
+          if (srcAttr && srcAttr.startsWith("data:")) {
+            slideConfig.href = srcAttr;
+          }
+        }
+      } 
+    });
+  
+    lightboxQuarto.on('slide_after_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(slideNode);
+      }
+    });
+  
+  };
+  
+})();
+          </script>
 
 
 

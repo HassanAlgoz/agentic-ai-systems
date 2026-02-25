@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Components of RAG Systems – Building Agentic AI Systems</title>
+<title>tasks – Building Agentic AI Systems</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -69,10 +69,6 @@ ul.task-list li input[type="checkbox"] {
   }
 }</script>
 <style>html{ scroll-behavior: smooth; }</style>
-<meta name="mermaid-theme" content="default">
-<script src="../site_libs/quarto-diagram/mermaid.min.js"></script>
-<script src="../site_libs/quarto-diagram/mermaid-init.js"></script>
-<link href="../site_libs/quarto-diagram/mermaid.css" rel="stylesheet">
 
 
 </head>
@@ -114,101 +110,69 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">Contents</h2>
    
   <ul>
-  <li><a href="#core-component-ecosystem" id="toc-core-component-ecosystem" class="nav-link active" data-scroll-target="#core-component-ecosystem">Core component ecosystem</a>
+  <li><a href="#task-execution" id="toc-task-execution" class="nav-link active" data-scroll-target="#task-execution">Task Execution</a></li>
+  <li><a href="#initialize-the-llm-model" id="toc-initialize-the-llm-model" class="nav-link" data-scroll-target="#initialize-the-llm-model">Initialize the LLM model</a></li>
+  <li><a href="#task-that-generates-a-paragraph-about-a-given-topic" id="toc-task-that-generates-a-paragraph-about-a-given-topic" class="nav-link" data-scroll-target="#task-that-generates-a-paragraph-about-a-given-topic">Task that generates a paragraph about a given topic</a></li>
+  <li><a href="#create-a-checkpointer-for-persistence" id="toc-create-a-checkpointer-for-persistence" class="nav-link" data-scroll-target="#create-a-checkpointer-for-persistence">Create a checkpointer for persistence</a></li>
+  <li><a href="#run-the-workflow" id="toc-run-the-workflow" class="nav-link" data-scroll-target="#run-the-workflow">Run the workflow</a>
   <ul class="collapse">
-  <li><a href="#how-components-connect" id="toc-how-components-connect" class="nav-link" data-scroll-target="#how-components-connect">How components connect</a></li>
+  <li><a href="#when-to-use-a-task" id="toc-when-to-use-a-task" class="nav-link" data-scroll-target="#when-to-use-a-task">When to use a task</a></li>
   </ul></li>
   </ul>
-</nav>
+<div class="quarto-alternate-formats"><h2>Other Formats</h2><ul><li><a href="tasks.html"><i class="bi bi-file-slides"></i>RevealJS</a></li></ul></div></nav>
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content">
-
-<header id="title-block-header" class="quarto-title-block default">
-<div class="quarto-title">
-<h1 class="title">Components of RAG Systems</h1>
-</div>
+<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block"></header>
 
 
 
-<div class="quarto-title-meta">
 
-    
-  
-    
-  </div>
-  
-
-
-</header>
-
-
-<p><a href="https://docs.langchain.com/oss/python/langchain/component-architecture">Source</a>.</p>
-<p>LangChain’s power comes from how its components work together to create sophisticated AI applications. This page provides diagrams showcasing the relationships between different components.</p>
-<section id="core-component-ecosystem" class="level2">
-<h2 class="anchored" data-anchor-id="core-component-ecosystem">Core component ecosystem</h2>
-<p>The diagram below shows how LangChain’s major components connect to form complete AI applications:</p>
-<div class="cell" data-layout-align="default">
-<div class="cell-output-display">
-<div>
-<p></p><figure class="figure"><p></p>
-<div>
-<pre class="mermaid mermaid-js">graph TD
-    %% Input processing
-    subgraph "📥 Input processing"
-        A[Text input] --&gt; B[Document loaders]
-        B --&gt; C[Text splitters]
-        C --&gt; D[Documents]
-    end
-
-    %% Embedding &amp; storage
-    subgraph "🔢 Embedding &amp; storage"
-        D --&gt; E[Embedding models]
-        E --&gt; F[Vectors]
-        F --&gt; G[(Vector stores)]
-    end
-
-    %% Retrieval
-    subgraph "🔍 Retrieval"
-        H[User Query] --&gt; I[Embedding models]
-        I --&gt; J[Query vector]
-        J --&gt; K[Retrievers]
-        K --&gt; G
-        G --&gt; L[Relevant context]
-    end
-
-    %% Generation
-    subgraph "🤖 Generation"
-        M[Chat models] --&gt; N[Tools]
-        N --&gt; O[Tool results]
-        O --&gt; M
-        L --&gt; M
-        M --&gt; P[AI response]
-    end
-
-    %% Orchestration
-    subgraph "🎯 Orchestration"
-        Q[Agents] --&gt; M
-        Q --&gt; N
-        Q --&gt; K
-        Q --&gt; R[Memory]
-    end
-</pre>
-</div>
-<p></p></figure><p></p>
-</div>
-</div>
-</div>
-<section id="how-components-connect" class="level3">
-<h3 class="anchored" data-anchor-id="how-components-connect">How components connect</h3>
-<p>Each component layer builds on the previous ones:</p>
+<section id="task-execution" class="level3">
+<h3 class="anchored" data-anchor-id="task-execution">Task Execution</h3>
+<ul>
+<li><strong>Tasks</strong> can only be called from within an <strong>entrypoint</strong>, another <strong>task</strong>, or a <a href="../oss/python/langgraph/graph-api#nodes">state graph node</a>.
+<ul>
+<li>Tasks <em>cannot</em> be called directly from the main application code.</li>
+</ul></li>
+<li>When you call a <strong>task</strong>, the runtime kick-starts the task, and immediate <strong>Future object</strong> is returned.
+<ul>
+<li>A future is a placeholder for a result that will be available later.</li>
+</ul></li>
+<li>To obtain the result of a <strong>task</strong>, you can either:
 <ol type="1">
-<li><strong>Input processing</strong> – Transform raw data into structured documents</li>
-<li><strong>Embedding &amp; storage</strong> – Convert text into searchable vector representations</li>
-<li><strong>Retrieval</strong> – Find relevant information based on user queries</li>
-<li><strong>Generation</strong> – Use AI models to create responses, optionally with tools</li>
-<li><strong>Orchestration</strong> – Coordinate everything through agents and memory systems</li>
-</ol>
+<li>wait for it synchronously (blocking the thread), using <code>result()</code> or</li>
+<li>await it asynchronously (non-blocking), using <code>await</code> ## Parallel execution</li>
+</ol></li>
+</ul>
+<p>Tasks can be executed in parallel by invoking them concurrently and waiting for the results. This is useful for improving performance in IO bound tasks (e.g., calling APIs for LLMs). from langgraph.func import entrypoint, task</p>
+<p><span class="citation" data-cites="task">@task</span> def add_one(number: int) -&gt; int: return number + 1</p>
+<p><span class="citation" data-cites="entrypoint">@entrypoint</span>() def graph(numbers: list[int]) -&gt; list[str]: futures = [add_one(i) for i in numbers] return [f.result() for f in futures] graph.invoke([10, 20, 30])</p>
+<p>from langgraph.func import entrypoint, task from langgraph.checkpoint.memory import InMemorySaver</p>
+</section>
+<section id="initialize-the-llm-model" class="level1">
+<h1>Initialize the LLM model</h1>
+<p>model = init_chat_model(“gpt-3.5-turbo”)</p>
+</section>
+<section id="task-that-generates-a-paragraph-about-a-given-topic" class="level1">
+<h1>Task that generates a paragraph about a given topic</h1>
+<p><span class="citation" data-cites="task">@task</span> def generate_paragraph(topic: str) -&gt; str: response = model.invoke([ SystemMessage(“You are a helpful assistant that writes educational paragraphs.”), HumanMessage(f”Write a paragraph about {topic}.”) ]) return response.content</p>
+</section>
+<section id="create-a-checkpointer-for-persistence" class="level1">
+<h1>Create a checkpointer for persistence</h1>
+<p>checkpointer = InMemorySaver()</p>
+<p><span class="citation" data-cites="entrypoint">@entrypoint</span>(checkpointer=checkpointer) def workflow(topics: list[str]) -&gt; str: “““Generates multiple paragraphs in parallel and combines them.”“” futures = [generate_paragraph(topic) for topic in topics] paragraphs = [f.result() for f in futures] return “”.join(paragraphs)</p>
+</section>
+<section id="run-the-workflow" class="level1">
+<h1>Run the workflow</h1>
+<p>config = {“configurable”: {“thread_id”: str(uuid.uuid4())}} result = workflow.invoke([“quantum computing”, “climate change”, “history of aviation”], config=config) print(result)</p>
+<section id="when-to-use-a-task" class="level2">
+<h2 class="anchored" data-anchor-id="when-to-use-a-task">When to use a task</h2>
+<p><strong>Tasks</strong> are useful in the following scenarios:</p>
+<p><strong>Checkpointing</strong>: When you need to save the result of a long-running operation to a checkpoint, so you don’t need to recompute it when resuming the workflow.</p>
+<p><strong>Human-in-the-loop</strong>: If you’re building a workflow that requires human intervention, you MUST use <strong>tasks</strong> to encapsulate any randomness (e.g., API calls) to ensure that the workflow can be resumed correctly. See the <a href="#determinism">determinism</a> section for more details.</p>
+<p><strong>Parallel Execution</strong>: For I/O-bound tasks, <strong>tasks</strong> enable parallel execution, allowing multiple operations to run concurrently without blocking (e.g., calling multiple APIs).</p>
+<p><strong>Observability</strong>: Wrapping operations in <strong>tasks</strong> provides a way to track the progress of the workflow and monitor the execution of individual operations using <a href="https://docs.langchain.com/langsmith/home">LangSmith</a>.</p>
+<p><strong>Retryable Work</strong>: When work needs to be retried to handle failures or inconsistencies, <strong>tasks</strong> provide a way to encapsulate and manage the retry logic.</p>
 
 
 </section>
