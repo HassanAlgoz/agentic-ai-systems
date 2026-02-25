@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Build a semantic search engine with LangChain – Building Agentic AI Systems</title>
+<title>semantic-search – Building Agentic AI Systems</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -145,7 +145,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">Contents</h2>
    
   <ul>
-  <li><a href="#overview" id="toc-overview" class="nav-link active" data-scroll-target="#overview">Overview</a>
+  <li><a href="#build-a-semantic-search-engine-with-langchain" id="toc-build-a-semantic-search-engine-with-langchain" class="nav-link active" data-scroll-target="#build-a-semantic-search-engine-with-langchain">Build a semantic search engine with LangChain</a>
+  <ul class="collapse">
+  <li><a href="#overview" id="toc-overview" class="nav-link" data-scroll-target="#overview">Overview</a>
   <ul class="collapse">
   <li><a href="#concepts" id="toc-concepts" class="nav-link" data-scroll-target="#concepts">Concepts</a></li>
   </ul></li>
@@ -163,31 +165,19 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#retrievers" id="toc-retrievers" class="nav-link" data-scroll-target="#retrievers">4. Retrievers</a></li>
   <li><a href="#next-steps" id="toc-next-steps" class="nav-link" data-scroll-target="#next-steps">Next steps</a></li>
   <li><a href="#activity" id="toc-activity" class="nav-link" data-scroll-target="#activity">Activity</a></li>
+  </ul></li>
   </ul>
 <div class="quarto-alternate-formats"><h2>Other Formats</h2><ul><li><a href="04_semantic-search.html"><i class="bi bi-file-slides"></i>RevealJS</a></li></ul></div></nav>
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content">
-
-<header id="title-block-header" class="quarto-title-block default">
-<div class="quarto-title">
-<h1 class="title">Build a semantic search engine with LangChain</h1>
-</div>
+<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block"></header>
 
 
 
-<div class="quarto-title-meta">
 
-    
-  
-    
-  </div>
-  
-
-
-</header>
-
-
+<p><a href="https://colab.research.google.com/github/HassanAlgoz/agentic-ai-systems/blob/main/Lessons/L01/04_semantic-search.ipynb"><strong>Open In Colab</strong></a></p>
+<section id="build-a-semantic-search-engine-with-langchain" class="level1">
+<h1>Build a semantic search engine with LangChain</h1>
 <section id="overview" class="level2">
 <h2 class="anchored" data-anchor-id="overview">Overview</h2>
 <p>This tutorial will familiarize you with LangChain’s <a href="https://docs.langchain.com/oss/python/langchain/retrieval#document-loaders">document loader</a>, <a href="https://docs.langchain.com/oss/python/langchain/retrieval#embedding-models">embedding</a>, and <a href="https://docs.langchain.com/oss/python/langchain/retrieval#vector-store">vector store</a> abstractions. These abstractions are designed to support retrieval of data– from (vector) databases and other sources – for integration with LLM workflows. They are important for applications that fetch data to be reasoned over as part of model inference, as in the case of retrieval-augmented generation, or <a href="https://docs.langchain.com/oss/python/langchain/retrieval">RAG</a>.</p>
@@ -208,7 +198,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="installation" class="level3">
 <h3 class="anchored" data-anchor-id="installation">Installation</h3>
 <p>This tutorial requires the <code>langchain-community</code> and <code>pypdf</code> packages. Using <a href="https://docs.astral.sh/uv/">uv</a>:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">!uv</span> add langchain-community pypdf</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">!pip</span> install langchain-community pypdf</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>For more details, see our <a href="https://docs.langchain.com/oss/python/langchain/install">Installation guide</a>.</p>
 </section>
 </section>
@@ -298,7 +288,7 @@ Attention Is All You Need
 <h2 class="anchored" data-anchor-id="embeddings">2. Embeddings</h2>
 <p>Vector search is a common way to store and search over unstructured data (such as unstructured text). The idea is to store numeric vectors that are associated with the text. Given a query, we can <a href="https://docs.langchain.com/oss/python/langchain/retrieval#embedding_models">embed</a> it as a vector of the same dimension and use vector similarity metrics (such as cosine similarity) to identify related text.</p>
 <p>LangChain supports embeddings from <a href="https://docs.langchain.com/oss/python/integrations/text_embedding/">dozens of providers</a>. These models specify how text should be converted into a numeric vector. We use HuggingFace with the <code>all-mpnet-base-v2</code> sentence transformer:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="ex">uv</span> add langchain-huggingface sentence-transformers</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="ex">!pip</span> install langchain-huggingface sentence-transformers</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div id="711c624b" class="cell" data-execution_count="8">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> langchain_huggingface <span class="im">import</span> HuggingFaceEmbeddings</span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a></span>
@@ -503,6 +493,7 @@ development set, newstest2013. We used beam search as described in the previous 
 <p><strong>Over to you</strong>: Apply the Load, Embed, Store, and Retrieve, on another document.</p>
 
 
+</section>
 </section>
 
 </main> <!-- /main -->

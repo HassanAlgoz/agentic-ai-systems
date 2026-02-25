@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Build a RAG agent with LangChain – Building Agentic AI Systems</title>
+<title>rag_agent – Building Agentic AI Systems</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -148,7 +148,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">Contents</h2>
    
   <ul>
-  <li><a href="#overview" id="toc-overview" class="nav-link active" data-scroll-target="#overview">Overview</a>
+  <li><a href="#build-a-rag-agent-with-langchain" id="toc-build-a-rag-agent-with-langchain" class="nav-link active" data-scroll-target="#build-a-rag-agent-with-langchain">Build a RAG agent with LangChain</a>
+  <ul class="collapse">
+  <li><a href="#overview" id="toc-overview" class="nav-link" data-scroll-target="#overview">Overview</a>
   <ul class="collapse">
   <li><a href="#concepts" id="toc-concepts" class="nav-link" data-scroll-target="#concepts">Concepts</a></li>
   <li><a href="#preview" id="toc-preview" class="nav-link" data-scroll-target="#preview">Preview</a></li>
@@ -168,7 +170,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <ul class="collapse">
   <li><a href="#rag-agents" id="toc-rag-agents" class="nav-link" data-scroll-target="#rag-agents">RAG agents</a></li>
   </ul></li>
-  <li><a href="#build-a-rag-agent-with-langchain" id="toc-build-a-rag-agent-with-langchain" class="nav-link" data-scroll-target="#build-a-rag-agent-with-langchain">Build a RAG agent with LangChain</a>
+  </ul></li>
+  <li><a href="#build-a-rag-agent-with-langchain-1" id="toc-build-a-rag-agent-with-langchain-1" class="nav-link" data-scroll-target="#build-a-rag-agent-with-langchain-1">Build a RAG agent with LangChain</a>
   <ul class="collapse">
   <li><a href="#overview-1" id="toc-overview-1" class="nav-link" data-scroll-target="#overview-1">Overview</a>
   <ul class="collapse">
@@ -192,27 +195,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="quarto-alternate-formats"><h2>Other Formats</h2><ul><li><a href="05_RAG_agent.html"><i class="bi bi-file-slides"></i>RevealJS</a></li></ul></div></nav>
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content">
-
-<header id="title-block-header" class="quarto-title-block default">
-<div class="quarto-title">
-<h1 class="title">Build a RAG agent with LangChain</h1>
-</div>
+<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block"></header>
 
 
 
-<div class="quarto-title-meta">
 
-    
-  
-    
-  </div>
-  
-
-
-</header>
-
-
+<p><a href="https://colab.research.google.com/github/HassanAlgoz/agentic-ai-systems/blob/main/Lessons/L01/05_RAG_agent.ipynb"><strong>Open In Colab</strong></a></p>
+<section id="build-a-rag-agent-with-langchain" class="level1">
+<h1>Build a RAG agent with LangChain</h1>
 <section id="overview" class="level2">
 <h2 class="anchored" data-anchor-id="overview">Overview</h2>
 <p>One of the most powerful applications enabled by LLMs is sophisticated question-answering (Q&amp;A) chatbots. These are applications that can answer questions about specific source information. These applications use a technique known as Retrieval Augmented Generation, or <a href="https://docs.langchain.com/oss/python/langchain/retrieval/">RAG</a>.</p>
@@ -303,7 +293,7 @@ Note
 <section id="installation" class="level3">
 <h3 class="anchored" data-anchor-id="installation">Installation</h3>
 <p>This tutorial requires these langchain dependencies:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">uv</span> add langchain langchain-text-splitters langchain-community bs4</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">!pip</span> install langchain langchain-text-splitters langchain-community bs4</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>For more details, see our <a href="https://docs.langchain.com/oss/python/langchain/install">Installation guide</a>.</p>
 </section>
 <section id="components" class="level3">
@@ -312,20 +302,14 @@ Note
 <section id="select-a-chat-model" class="level4">
 <h4 class="anchored" data-anchor-id="select-a-chat-model">1. Select a chat model</h4>
 <p>👉 Read the <a href="https://docs.langchain.com/oss/python/integrations/chat/openai/">OpenAI chat model integration docs</a></p>
-<pre class="shell"><code>uv add "langchain[openai]"</code></pre>
+<pre class="shell"><code>!pip install "langchain[openai]"</code></pre>
 <div id="3c98b6a6" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> dotenv <span class="im">import</span> load_dotenv</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> google.colab <span class="im">import</span> userdata</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>load_dotenv()</span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="co"># We use OpenRouter for the agent — set OPENROUTER_API_KEY in .env</span></span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Get your key at https://openrouter.ai/keys</span></span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="kw">not</span> os.environ.get(<span class="st">"OPENROUTER_API_KEY"</span>):</span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">raise</span> <span class="pp">RuntimeError</span>(</span>
-<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>        <span class="st">"OPENROUTER_API_KEY is not set. Add it to your .env file, e.g.:</span><span class="ch">\n</span><span class="st">"</span></span>
-<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>        <span class="st">"OPENROUTER_API_KEY=your-openrouter-api-key"</span></span>
-<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>    )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="co"># We use OpenRouter for the agent — add OPENROUTER_API_KEY to Colab Secrets (key icon in left sidebar)</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Get your key at https://openrouter.ai/keys</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>os.environ[<span class="st">"OPENROUTER_API_KEY"</span>] <span class="op">=</span> userdata.get(<span class="st">"OPENROUTER_API_KEY"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div id="f902629e" class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> langchain.chat_models <span class="im">import</span> init_chat_model</span>
@@ -347,7 +331,7 @@ Note
 </section>
 <section id="select-a-vector-store" class="level4">
 <h4 class="anchored" data-anchor-id="select-a-vector-store">3. Select a vector store</h4>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="ex">uv</span> add <span class="st">"langchain-core"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="ex">!pip</span> install langchain-core</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div id="8547b9ff" class="cell" data-execution_count="4">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> langchain_core.vectorstores <span class="im">import</span> InMemoryVectorStore</span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
@@ -711,7 +695,8 @@ Tip
 </div>
 </section>
 </section>
-<section id="build-a-rag-agent-with-langchain" class="level1">
+</section>
+<section id="build-a-rag-agent-with-langchain-1" class="level1">
 <h1>Build a RAG agent with LangChain</h1>
 <section id="overview-1" class="level2">
 <h2 class="anchored" data-anchor-id="overview-1">Overview</h2>
@@ -774,7 +759,7 @@ Task decomposition refers to...</code></pre>
 <h3 class="anchored" data-anchor-id="installation-1">Installation</h3>
 <p>This tutorial requires these langchain dependencies:</p>
 <p><codegroup> <code>bash pip theme={null}   pip install langchain langchain-text-splitters langchain-community bs4</code></codegroup></p>
-<p><code>bash uv theme={null}   uv add langchain langchain-text-splitters langchain-community bs4</code> </p>
+<p><code>bash uv theme={null}   !pip install langchain langchain-text-splitters langchain-community bs4</code> </p>
 <p>For more details, see our <a href="https://docs.langchain.com/oss/python/langchain/install">Installation guide</a>.</p>
 </section>
 <section id="langsmith" class="level3">
