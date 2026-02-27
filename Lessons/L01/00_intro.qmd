@@ -17,6 +17,17 @@ First application was: **Translation**. Given an English sentence, the task is t
 
 This technique was able to scale thanks to the **Transformers** architecture which is based on the concept of **Attention**, which learns the influence each previous token has in generating the next token, in the translation.
 
+```
+[
+    ("The meuseum is far to the right", "ال")
+    ("The meuseum is far to the right", "المتحف")
+    ("The meuseum is far to the right", "المتحف في")
+    ("The meuseum is far to the right", "المتحف في أقصى")
+    ("The meuseum is far to the right", "المتحف في أقصى ال")
+    ("The meuseum is far to the right", "المتحف في أقصى اليمين")
+]
+```
+
 Same concept applied more simply in **Paraphrasing**, **Summarization**, and even **Question-Answering**.
 
 Trained on back-and-forth **Chat Conversations**, models were able to mimic chat-like interactions.
