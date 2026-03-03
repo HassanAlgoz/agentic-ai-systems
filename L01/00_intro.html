@@ -161,6 +161,14 @@ ul.task-list li input[type="checkbox"] {
 <p><strong>Large Language Models (LLMs)</strong> are deep neural networks trained to model the most likely token given previous tokens.</p>
 <p>First application was: <strong>Translation</strong>. Given an English sentence, the task is to generate the most likely Arabic equivalent. This is done word-by-word, by repeatedly predicting the next Arabic word, the original sentence plus all predicted words thus far.</p>
 <p>This technique was able to scale thanks to the <strong>Transformers</strong> architecture which is based on the concept of <strong>Attention</strong>, which learns the influence each previous token has in generating the next token, in the translation.</p>
+<pre><code>[
+    ("The meuseum is far to the right", "ال")
+    ("The meuseum is far to the right", "المتحف")
+    ("The meuseum is far to the right", "المتحف في")
+    ("The meuseum is far to the right", "المتحف في أقصى")
+    ("The meuseum is far to the right", "المتحف في أقصى ال")
+    ("The meuseum is far to the right", "المتحف في أقصى اليمين")
+]</code></pre>
 <p>Same concept applied more simply in <strong>Paraphrasing</strong>, <strong>Summarization</strong>, and even <strong>Question-Answering</strong>.</p>
 <p>Trained on back-and-forth <strong>Chat Conversations</strong>, models were able to mimic chat-like interactions.</p>
 <p>A hypothesis was proven at the time that <strong>Multi-task Model</strong> performs better than a single-task model. A more general idea is to train models to <strong>“Follow Instructions”</strong>. In which the user <strong>Prompts</strong> it to do any of the previously mentioned tasks, on-demand. Of course this needed lots of special <em>Data Curation</em>.</p>

@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Build a voice agent with LangChain – Building Agentic AI Systems</title>
+<title>Never Expose API Keys – Building Agentic AI Systems</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -41,9 +41,6 @@ ul.task-list li input[type="checkbox"] {
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="../site_libs/bootstrap/bootstrap-7dc3907ddb6ec99bf1b87f80a83abe8b.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
-<script src="../site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
-<link href="../site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
-<link href="../site_libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -113,13 +110,8 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">Contents</h2>
    
   <ul>
-  <li><a href="#overview" id="toc-overview" class="nav-link active" data-scroll-target="#overview">Overview</a>
-  <ul class="collapse">
-  <li><a href="#what-are-voice-agents" id="toc-what-are-voice-agents" class="nav-link" data-scroll-target="#what-are-voice-agents">What are voice agents?</a></li>
-  <li><a href="#how-do-voice-agents-work" id="toc-how-do-voice-agents-work" class="nav-link" data-scroll-target="#how-do-voice-agents-work">How do voice agents work?</a></li>
-  <li><a href="#demo-application-overview" id="toc-demo-application-overview" class="nav-link" data-scroll-target="#demo-application-overview">Demo Application overview</a></li>
-  <li><a href="#architecture" id="toc-architecture" class="nav-link" data-scroll-target="#architecture">Architecture</a></li>
-  </ul></li>
+  <li><a href="#what-why" id="toc-what-why" class="nav-link active" data-scroll-target="#what-why">What &amp; Why</a></li>
+  <li><a href="#security-risks" id="toc-security-risks" class="nav-link" data-scroll-target="#security-risks">Security Risks</a></li>
   </ul>
 </nav>
     </div>
@@ -128,7 +120,7 @@ ul.task-list li input[type="checkbox"] {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Build a voice agent with LangChain</h1>
+<h1 class="title">Never Expose API Keys</h1>
 </div>
 
 
@@ -145,136 +137,29 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<section id="overview" class="level2">
-<h2 class="anchored" data-anchor-id="overview">Overview</h2>
-<p>Chat interfaces have dominated how we interact with AI, but recent breakthroughs in multimodal AI are opening up exciting new possibilities. High-quality generative models and expressive text-to-speech (TTS) systems now make it possible to build agents that feel less like tools and more like conversational partners.</p>
-<p>Voice agents are one example of this. Instead of relying on a keyboard and mouse to type inputs into an agent, you can use spoken words to interact with it. This can be a more natural and engaging way to interact with AI, and can be especially useful for certain contexts.</p>
-<section id="what-are-voice-agents" class="level3">
-<h3 class="anchored" data-anchor-id="what-are-voice-agents">What are voice agents?</h3>
-<p>Voice agents are <a href="https://docs.langchain.com/oss/python/langchain/agents">agents</a> that can engage in natural spoken conversations with users. These agents combine speech recognition, natural language processing, generative AI, and text-to-speech technologies to create seamless, natural conversations.</p>
-<p>They’re suited for a variety of use cases, including:</p>
+<p>Think of an <strong>API Key</strong> as a <strong>hotel key card</strong>.</p>
 <ul>
-<li>Customer support</li>
-<li>Personal assistants</li>
-<li>Hands-free interfaces</li>
-<li>Coaching and training</li>
+<li><strong>The Hotel (Server):</strong> Has resources (rooms) but keeps them locked.</li>
+<li><strong>The Guest (Client):</strong> Wants access.</li>
+<li><strong>The Key Card (API Key):</strong> Identifies you and proves you are allowed to enter specific rooms.</li>
+</ul>
+<section id="what-why" class="level2">
+<h2 class="anchored" data-anchor-id="what-why">What &amp; Why</h2>
+<p>An API key is a unique string of characters used to identify the calling program.</p>
+<ul>
+<li><strong>Identification:</strong> Keys “authenticate the calling project,” allowing the server to recognize who is asking for data.</li>
+<li><strong>Control:</strong> This lets the server track usage for billing and enforce limits (quotas) so one user doesn’t crash the system.</li>
 </ul>
 </section>
-<section id="how-do-voice-agents-work" class="level3">
-<h3 class="anchored" data-anchor-id="how-do-voice-agents-work">How do voice agents work?</h3>
-<p>At a high level, every voice agent needs to handle three tasks:</p>
-<ol type="1">
-<li><strong>Listen</strong> - capture audio and transcribe it</li>
-<li><strong>Think</strong> - interpret intent, reason, plan</li>
-<li><strong>Speak</strong> - generate audio and stream it back to the user</li>
-</ol>
-<p>The difference lies in how these steps are sequenced and coupled. In practice, production agents follow one of two main architectures:</p>
-<section id="stt-agent-tts-architecture-the-sandwich" class="level4">
-<h4 class="anchored" data-anchor-id="stt-agent-tts-architecture-the-sandwich">1. STT &gt; Agent &gt; TTS architecture (The “Sandwich”)</h4>
-<p>The Sandwich architecture composes three distinct components: speech-to-text (STT), a text-based LangChain agent, and text-to-speech (TTS).</p>
-<div class="cell" data-layout-align="default">
-<div class="cell-output-display">
-<div>
-<p></p><figure class="figure"><p></p>
-<div>
-<p><a href="Voice_Agent_files/figure-html/mermaid-figure-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1"><img src="Voice_Agent_files/figure-html/mermaid-figure-1.png" style="width:10.64in;height:0.73in" class="figure-img"></a></p>
-</div>
-<p></p></figure><p></p>
-</div>
-</div>
-</div>
-<p><strong>Pros:</strong></p>
+<section id="security-risks" class="level2">
+<h2 class="anchored" data-anchor-id="security-risks">Security Risks</h2>
+<p>If you lose your key, it is like dropping your credit card.</p>
 <ul>
-<li>Full control over each component (swap STT/TTS providers as needed)</li>
-<li>Access to latest capabilities from modern text-modality models</li>
-<li>Transparent behavior with clear boundaries between components</li>
+<li><strong>Theft:</strong> Attackers can use your key to make requests on your behalf.</li>
+<li><strong>Consequences:</strong> You suffer <strong>financial loss</strong> (paying for their usage) or <strong>service denial</strong> (they use up your available quota).</li>
 </ul>
-<p><strong>Cons:</strong></p>
-<ul>
-<li>Requires orchestrating multiple services</li>
-<li>Additional complexity in managing the pipeline</li>
-<li>Conversion from speech to text loses information (e.g., tone, emotion)</li>
-</ul>
-</section>
-<section id="speech-to-speech-architecture-s2s" class="level4">
-<h4 class="anchored" data-anchor-id="speech-to-speech-architecture-s2s">2. Speech-to-Speech architecture (S2S)</h4>
-<p>Speech-to-speech uses a multimodal model that processes audio input and generates audio output natively.</p>
-<div class="cell" data-layout-align="default">
-<div class="cell-output-display">
-<div>
-<p></p><figure class="figure"><p></p>
-<div>
-<p><a href="Voice_Agent_files/figure-html/mermaid-figure-3.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2"><img src="Voice_Agent_files/figure-html/mermaid-figure-3.png" style="width:6.18in;height:0.73in" class="figure-img"></a></p>
-</div>
-<p></p></figure><p></p>
-</div>
-</div>
-</div>
-<p><strong>Pros:</strong></p>
-<ul>
-<li>Simpler architecture with fewer moving parts</li>
-<li>Typically lower latency for simple interactions</li>
-<li>Direct audio processing captures tone and other nuances of speech</li>
-</ul>
-<p><strong>Cons:</strong></p>
-<ul>
-<li>Limited model options, greater risk of provider lock-in</li>
-<li>Features may lag behind text-modality models</li>
-<li>Less transparency in how audio is processed</li>
-<li>Reduced controllability and customization options</li>
-</ul>
-<p>This guide demonstrates the <strong>sandwich architecture</strong> to balance performance, controllability, and access to modern model capabilities. The sandwich can achieve sub-700ms latency with some STT and TTS providers while maintaining control over modular components.</p>
-</section>
-</section>
-<section id="demo-application-overview" class="level3">
-<h3 class="anchored" data-anchor-id="demo-application-overview">Demo Application overview</h3>
-<p>We’ll walk through building a voice-based agent using the sandwich architecture. The agent will manage orders for a sandwich shop. The application will demonstrate all three components of the sandwich architecture, using <a href="https://www.assemblyai.com/">AssemblyAI</a> for STT and <a href="https://cartesia.ai/">Cartesia</a> for TTS (although adapters can be built for most providers).</p>
-<p>An end-to-end reference application is available in the <a href="https://github.com/langchain-ai/voice-sandwich-demo">voice-sandwich-demo</a> repository. We will walk through that application here.</p>
-<p>The demo uses WebSockets for real-time bidirectional communication between the browser and server. The same architecture can be adapted for other transports like telephony systems (Twilio, Vonage) or WebRTC connections.</p>
-</section>
-<section id="architecture" class="level3">
-<h3 class="anchored" data-anchor-id="architecture">Architecture</h3>
-<div class="cell" data-layout-align="default">
-<div class="cell-output-display">
-<div>
-<p></p><figure class="figure"><p></p>
-<div>
-<p><a href="Voice_Agent_files/figure-html/mermaid-figure-2.png" class="lightbox" data-gallery="quarto-lightbox-gallery-3"><img src="Voice_Agent_files/figure-html/mermaid-figure-2.png" style="width:24.96in;height:3.69in" class="figure-img"></a></p>
-</div>
-<p></p></figure><p></p>
-</div>
-</div>
-</div>
-<p>The demo implements a streaming pipeline where each stage processes data asynchronously:</p>
-<p><strong>Client (Browser)</strong></p>
-<ul>
-<li>Captures microphone audio and encodes it as PCM</li>
-<li>Establishes WebSocket connection to the backend server</li>
-<li>Streams audio chunks to the server in real-time</li>
-<li>Receives and plays back synthesized speech audio</li>
-</ul>
-<p><strong>Server (Python)</strong></p>
-<ul>
-<li><p>Accepts WebSocket connections from clients</p></li>
-<li><p>Orchestrates the three-step pipeline:</p>
-<ul>
-<li><a href="#1-speech-to-text">Speech-to-text (STT)</a>: Forwards audio to the STT provider (e.g., AssemblyAI), receives transcript events</li>
-<li><a href="#2-langchain-agent">Agent</a>: Processes transcripts with LangChain agent, streams response tokens</li>
-<li><a href="#3-text-to-speech">Text-to-speech (TTS)</a>: Sends agent responses to the TTS provider (e.g., Cartesia), receives audio chunks</li>
-</ul></li>
-<li><p>Returns synthesized audio to the client for playback</p></li>
-</ul>
-<p>The pipeline uses async generators to enable streaming at each stage. This allows downstream components to begin processing before upstream stages complete, minimizing end-to-end latency.</p>
-<p>Each stage processes events independently and concurrently:</p>
-<ol type="1">
-<li>audio transcription begins as soon as audio arrives,</li>
-<li>the agent starts reasoning as soon as a transcript is available,</li>
-<li>and speech synthesis begins as soon as agent text is generated.</li>
-</ol>
-<p>This architecture can achieve sub-700ms latency to support natural conversation.</p>
 
 
-</section>
 </section>
 
 </main> <!-- /main -->
@@ -679,38 +564,6 @@ ul.task-list li input[type="checkbox"] {
   });
   </script>
 </div> <!-- /content -->
-<script>var lightboxQuarto = GLightbox({"closeEffect":"zoom","descPosition":"bottom","loop":false,"openEffect":"zoom","selector":".lightbox"});
-(function() {
-  let previousOnload = window.onload;
-  window.onload = () => {
-    if (previousOnload) {
-      previousOnload();
-    }
-    lightboxQuarto.on('slide_before_load', (data) => {
-      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
-      const href = trigger.getAttribute('href');
-      if (href !== null) {
-        const imgEl = window.document.querySelector(`a[href="${href}"] img`);
-        if (imgEl !== null) {
-          const srcAttr = imgEl.getAttribute("src");
-          if (srcAttr && srcAttr.startsWith("data:")) {
-            slideConfig.href = srcAttr;
-          }
-        }
-      } 
-    });
-  
-    lightboxQuarto.on('slide_after_load', (data) => {
-      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
-      if (window.Quarto?.typesetMath) {
-        window.Quarto.typesetMath(slideNode);
-      }
-    });
-  
-  };
-  
-})();
-          </script>
 
 
 

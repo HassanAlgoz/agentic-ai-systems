@@ -150,18 +150,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <ul>
   <li><a href="#agents-in-langchain" id="toc-agents-in-langchain" class="nav-link active" data-scroll-target="#agents-in-langchain">Agents in LangChain</a>
   <ul class="collapse">
-  <li><a href="#questions" id="toc-questions" class="nav-link" data-scroll-target="#questions">Questions</a></li>
-  <li><a href="#setup-virtual-environment" id="toc-setup-virtual-environment" class="nav-link" data-scroll-target="#setup-virtual-environment">Setup Virtual Environment</a>
+  <li><a href="#questions" id="toc-questions" class="nav-link" data-scroll-target="#questions">Questions</a>
   <ul class="collapse">
-  <li><a href="#activate-the-virtual-environment" id="toc-activate-the-virtual-environment" class="nav-link" data-scroll-target="#activate-the-virtual-environment">Activate the virtual environment</a></li>
   <li><a href="#install-dependencies" id="toc-install-dependencies" class="nav-link" data-scroll-target="#install-dependencies">Install dependencies</a></li>
+  <li><a href="#environment-variables" id="toc-environment-variables" class="nav-link" data-scroll-target="#environment-variables">Environment variables</a></li>
   </ul></li>
-  <li><a href="#openrouter" id="toc-openrouter" class="nav-link" data-scroll-target="#openrouter">OpenRouter</a></li>
-  <li><a href="#what-is-an-api-key" id="toc-what-is-an-api-key" class="nav-link" data-scroll-target="#what-is-an-api-key">What is an API Key?</a>
+  <li><a href="#openrouter" id="toc-openrouter" class="nav-link" data-scroll-target="#openrouter">OpenRouter</a>
   <ul class="collapse">
-  <li><a href="#what-why" id="toc-what-why" class="nav-link" data-scroll-target="#what-why">What &amp; Why</a></li>
-  <li><a href="#security-risks" id="toc-security-risks" class="nav-link" data-scroll-target="#security-risks">Security Risks</a></li>
   <li><a href="#how-to-set-your-api-key" id="toc-how-to-set-your-api-key" class="nav-link" data-scroll-target="#how-to-set-your-api-key">How to Set Your API Key?</a></li>
+  <li><a href="#langsmith-tracing" id="toc-langsmith-tracing" class="nav-link" data-scroll-target="#langsmith-tracing">LangSmith (Tracing)</a></li>
+  <li><a href="#load-.env-file-locally" id="toc-load-.env-file-locally" class="nav-link" data-scroll-target="#load-.env-file-locally">Load <code>.env</code> file (locally)</a></li>
   </ul></li>
   <li><a href="#basic-usage" id="toc-basic-usage" class="nav-link" data-scroll-target="#basic-usage">Basic usage</a>
   <ul class="collapse">
@@ -216,35 +214,69 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li>How do I compare and select the best model for my agent?</li>
 <li>Can I run an agent locally without a provider?</li>
 </ul>
-</section>
-<section id="setup-virtual-environment" class="level2">
-<h2 class="anchored" data-anchor-id="setup-virtual-environment">Setup Virtual Environment</h2>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">uv</span> init</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="ex">uv</span> venv <span class="at">-p</span> 3.12</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<section id="activate-the-virtual-environment" class="level3">
-<h3 class="anchored" data-anchor-id="activate-the-virtual-environment">Activate the virtual environment</h3>
-<div class="tabset-margin-container"></div><div class="panel-tabset">
-<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true" href="">Windows</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false" href="">MacOS / Linux</a></li></ul>
-<div class="tab-content">
-<div id="tabset-1-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-1-1-tab">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">.venv\Scripts\activate.bat</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-<div id="tabset-1-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-2-tab">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="bu">source</span> .venv/bin/activate</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-</div>
-</div>
-</section>
 <section id="install-dependencies" class="level3">
 <h3 class="anchored" data-anchor-id="install-dependencies">Install dependencies</h3>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">!pip</span> install ipykernel</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">!pip</span> install langchain langchain_openai langchain_community</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>Note: <strong>Agents</strong> require <a href="https://openrouter.ai/models?fmt=cards&amp;supported_parameters=tools"><strong>a model that supports tool calling</strong></a>.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">%pip</span> install <span class="at">-q</span> langchain langchain_openai langchain_community</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section id="environment-variables" class="level3">
+<h3 class="anchored" data-anchor-id="environment-variables">Environment variables</h3>
+<p>The following environment variables are used in this notebook:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 31%">
+<col style="width: 13%">
+<col style="width: 55%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Variable</th>
+<th>Required</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>OPENROUTER_API_KEY</code></td>
+<td>Yes</td>
+<td>Authenticates requests to OpenRouter LLMs</td>
+</tr>
+<tr class="even">
+<td><code>LANGSMITH_API_KEY</code></td>
+<td>Optional</td>
+<td>Enables LangSmith tracing &amp; dashboard</td>
+</tr>
+<tr class="odd">
+<td><code>LANGSMITH_PROJECT</code></td>
+<td>Optional</td>
+<td>Names the LangSmith project for traces</td>
+</tr>
+<tr class="even">
+<td><code>LANGSMITH_TRACING_V2</code></td>
+<td>Optional</td>
+<td>Enables the newer LangSmith tracing mode</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Colab users:</strong> Store these as Colab <strong>Secrets</strong> (key icon in the left sidebar), using the variable names above (for example <code>OPENROUTER_API_KEY</code>). Grant this notebook access to the secrets so they can be read securely at runtime.</p>
+<p><strong>Local development:</strong> Store these in a <code>.env</code> file in your project directory (which should be listed in <code>.gitignore</code> so it is never committed). The code below uses <code>python-dotenv</code> to load values from this file into environment variables at runtime.</p>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Warning
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>API Keys are secrets and thus <a href="../L01/never_expose_api_keys.html"><strong>shall never be exposed</strong></a>.</p>
+</div>
+</div>
 </section>
 </section>
 <section id="openrouter" class="level2">
 <h2 class="anchored" data-anchor-id="openrouter">OpenRouter</h2>
-<p>OpenRouter is the Unified Interface For LLMs.</p>
+<p><a href="https://openrouter.ai/">OpenRouter</a> is the Unified Interface For LLMs.</p>
 <p>Key benefits include:</p>
 <ul>
 <li>One API for all models
@@ -255,56 +287,54 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li>Some models are free</li>
 <li>Circumvent regional restrictions</li>
 </ul>
+<p>If you don’t already have an OpenRouter API key, you can create one for free at: <a href="https://openrouter.ai/keys">OpenRouter</a>.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><a href="./assets/open_router.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="Open Router"><img src="./assets/open_router.png" class="img-fluid figure-img" alt="Open Router"></a></p>
 <figcaption>Open Router</figcaption>
 </figure>
 </div>
-<p>If you don’t already have an OpenRouter API key, you can create one for free at: <a href="https://openrouter.ai/keys">OpenRouter</a>.</p>
-</section>
-<section id="what-is-an-api-key" class="level2">
-<h2 class="anchored" data-anchor-id="what-is-an-api-key">What is an API Key?</h2>
-<p>Think of an <strong>API Key</strong> as a <strong>hotel key card</strong>.</p>
-<ul>
-<li><strong>The Hotel (Server):</strong> Has resources (rooms) but keeps them locked.</li>
-<li><strong>The Guest (Client):</strong> Wants access.</li>
-<li><strong>The Key Card (API Key):</strong> Identifies you and proves you are allowed to enter specific rooms.</li>
-</ul>
-<hr>
-<section id="what-why" class="level3">
-<h3 class="anchored" data-anchor-id="what-why">What &amp; Why</h3>
-<p>An API key is a unique string of characters used to identify the calling program.</p>
-<ul>
-<li><strong>Identification:</strong> Keys “authenticate the calling project,” allowing the server to recognize who is asking for data.</li>
-<li><strong>Control:</strong> This lets the server track usage for billing and enforce limits (quotas) so one user doesn’t crash the system.</li>
-</ul>
-<hr>
-</section>
-<section id="security-risks" class="level3">
-<h3 class="anchored" data-anchor-id="security-risks">Security Risks</h3>
-<p>If you lose your key, it is like dropping your credit card.</p>
-<ul>
-<li><strong>Theft:</strong> Attackers can use your key to make requests on your behalf.</li>
-<li><strong>Consequences:</strong> You suffer <strong>financial loss</strong> (paying for their usage) or <strong>service denial</strong> (they use up your available quota).</li>
-</ul>
-<blockquote class="blockquote">
-<p><strong>Rule:</strong> Never post keys on public sites like GitHub.</p>
-</blockquote>
-</section>
 <section id="how-to-set-your-api-key" class="level3">
 <h3 class="anchored" data-anchor-id="how-to-set-your-api-key">How to Set Your API Key?</h3>
 <p>In Colab, add your API key via <strong>Secrets</strong> (key icon in the left sidebar). Create a secret named <code>OPENROUTER_API_KEY</code> with your key as the value, then enable notebook access to it.</p>
-<p>If we use the OpenAI API, we’ll have to add:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="va">OPENAI_API_BASE</span><span class="op">=</span><span class="st">"https://openrouter.ai/api/v1"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>.. such that the model uses OpenRouter instead of the default OpenAI API.</p>
-<div id="03e794b8" class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> google.colab <span class="im">import</span> userdata</span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="co"># We use OpenRouter for the agent — add OPENROUTER_API_KEY to Colab Secrets (key icon in left sidebar)</span></span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Get your key at https://openrouter.ai/keys</span></span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>os.environ[<span class="st">"OPENROUTER_API_KEY"</span>] <span class="op">=</span> userdata.get(<span class="st">"OPENROUTER_API_KEY"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="d2ab431c" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div id="c6168d44" class="cell" data-execution_count="2">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="cf">try</span>:</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    <span class="co"># In Colab? read from userdata (secrets)</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    <span class="im">from</span> google.colab <span class="im">import</span> userdata</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    ON_COLAB <span class="op">=</span> <span class="va">True</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    os.environ[<span class="st">"OPENROUTER_API_KEY"</span>] <span class="op">=</span> userdata.get(<span class="st">"OPENROUTER_API_KEY"</span>)</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="cf">except</span> <span class="pp">ImportError</span>:</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">pass</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="langsmith-tracing" class="level3">
+<h3 class="anchored" data-anchor-id="langsmith-tracing">LangSmith (Tracing)</h3>
+<p>Many of the applications you build with LangChain will contain multiple steps with multiple invocations of LLM calls. As these applications get more complex, it becomes crucial to be able to inspect what exactly is going on inside your chain or agent. The best way to do this is with <a href="https://smith.langchain.com/">LangSmith</a>.</p>
+<div id="9fe3b362" class="cell" data-execution_count="3">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>os.environ[<span class="st">"LANGSMITH_PROJECT"</span>] <span class="op">=</span> <span class="st">"my-first-project"</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>os.environ[<span class="st">"LANGSMITH_TRACING_V2"</span>] <span class="op">=</span> <span class="st">"true"</span> <span class="co"># newer V2 tracing protocol</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div id="db6b639a" class="cell" data-execution_count="4">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="cf">try</span>:</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    <span class="im">from</span> google.colab <span class="im">import</span> userdata</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    os.environ[<span class="st">"LANGSMITH_API_KEY"</span>] <span class="op">=</span> userdata.get(<span class="st">"LANGSMITH_API_KEY"</span>)</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="cf">except</span> <span class="pp">ImportError</span>:</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">pass</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="load-.env-file-locally" class="level3">
+<h3 class="anchored" data-anchor-id="load-.env-file-locally">Load <code>.env</code> file (locally)</h3>
+<div id="282ee342" class="cell" data-execution_count="5">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> dotenv <span class="im">import</span> load_dotenv</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="co"># read from .env file</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>load_dotenv(override<span class="op">=</span><span class="va">True</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<pre><code>True</code></pre>
+</div>
 </div>
 </section>
 </section>
@@ -326,34 +356,48 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li><strong>High temperature</strong> (close to 1) is good for creative tasks or generating varied responses.</li>
 </ul></li>
 </ul>
+<p><a href="./assets/temperature_1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2"><img src="./assets/temperature_1.png" class="img-fluid"></a></p>
 <p>LangChain supports many models via <a href="https://docs.langchain.com/oss/python/integrations/chat">third-party integrations</a>. By default, the course will use <a href="https://docs.langchain.com/oss/python/integrations/chat/openai">ChatOpenAI</a> because it is both popular and performant.</p>
-<div id="44cc8280" class="cell" data-execution_count="2">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> langchain_openai <span class="im">import</span> ChatOpenAI</span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="co"># https://openrouter.ai/openai/gpt-5-nano</span></span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>model_gpt5_nano <span class="op">=</span> ChatOpenAI(</span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>    model<span class="op">=</span><span class="st">"openai/gpt-5-nano"</span>,</span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>    temperature<span class="op">=</span><span class="dv">0</span>,</span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>    base_url<span class="op">=</span><span class="st">"https://openrouter.ai/api/v1"</span>,</span>
-<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>    api_key<span class="op">=</span>os.environ.get(<span class="st">"OPENROUTER_API_KEY"</span>),</span>
-<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a><span class="co"># https://openrouter.ai/nvidia/nemotron-3-nano-30b-a3b:free</span></span>
-<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>model_nemotron3_nano <span class="op">=</span> ChatOpenAI(</span>
-<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>    model<span class="op">=</span><span class="st">"nvidia/nemotron-3-nano-30b-a3b:free"</span>,</span>
-<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>    temperature<span class="op">=</span><span class="dv">0</span>,</span>
-<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>    base_url<span class="op">=</span><span class="st">"https://openrouter.ai/api/v1"</span>,</span>
-<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>    api_key<span class="op">=</span>os.environ.get(<span class="st">"OPENROUTER_API_KEY"</span>),</span>
-<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stderr">
+<p>Note: <strong>Agents</strong> require <a href="https://openrouter.ai/models?fmt=cards&amp;supported_parameters=tools"><strong>a model that supports tool calling</strong></a>.</p>
+<div id="fb16b447" class="cell" data-execution_count="6">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> langchain_openai <span class="im">import</span> ChatOpenAI</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
 <pre><code>/home/halgoz/work/ai-agents/content/.venv/lib/python3.12/site-packages/tqdm/auto.py:21: TqdmWarning: IProgress not found. Please update jupyter and ipywidgets. See https://ipywidgets.readthedocs.io/en/stable/user_install.html
   from .autonotebook import tqdm as notebook_tqdm</code></pre>
 </div>
+</div>
+<div id="44cc8280" class="cell" data-execution_count="7">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># https://openrouter.ai/openai/gpt-5-nano</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>model_gpt5_nano <span class="op">=</span> ChatOpenAI(</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>    model<span class="op">=</span><span class="st">"openai/gpt-5-nano"</span>,</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>    temperature<span class="op">=</span><span class="dv">0</span>,</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>    <span class="co"># OpenRouter instead of the default OpenAI API</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>    base_url<span class="op">=</span><span class="st">"https://openrouter.ai/api/v1"</span>,</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>    api_key<span class="op">=</span>os.environ.get(<span class="st">"OPENROUTER_API_KEY"</span>),</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Filtering <strong>Tool Calling</strong> models that are also <strong>Free</strong>, we select NVIDIA’s Nemotron-3:</p>
+<div id="3d1e19cb" class="cell" data-execution_count="8">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># https://openrouter.ai/nvidia/nemotron-3-nano-30b-a3b:free</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>model_nemotron3_nano <span class="op">=</span> ChatOpenAI(</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>    model<span class="op">=</span><span class="st">"nvidia/nemotron-3-nano-30b-a3b:free"</span>,</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>    temperature<span class="op">=</span><span class="dv">0</span>,</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>    <span class="co"># OpenRouter instead of the default OpenAI API</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>    base_url<span class="op">=</span><span class="st">"https://openrouter.ai/api/v1"</span>,</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>    api_key<span class="op">=</span>os.environ.get(<span class="st">"OPENROUTER_API_KEY"</span>),</span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <section id="running-a-model-locally" class="level3">
 <h3 class="anchored" data-anchor-id="running-a-model-locally">Running a model locally</h3>
 <p>LangChain supports running models locally on your own hardware. This is useful for scenarios where either data privacy is critical, you want to invoke a custom model, or when you want to avoid the costs incurred when using a cloud-based model.</p>
 <p><a href="https://docs.langchain.com/oss/python/integrations/chat/ollama">Ollama</a> is one of the easiest ways to run chat and embedding models locally.</p>
+<p>On commodity laptops (for example 16–32 GB RAM machines), good starting points for <strong>tool-calling</strong> models in Ollama include:</p>
+<ul>
+<li><code>lfm2.5-thinking:1.2b</code> – very lightweight, designed specifically for on-device deployment.</li>
+<li><code>granite4:3b</code> (or <code>granite4:1b</code> / <code>granite4:350m</code>) – strong instruction-following with built-in tool-calling support.</li>
+<li><code>ministral-3:3b</code> – edge-optimized vision + text model with native function calling and agentic behavior.</li>
+</ul>
+<p>You can always browse the <a href="https://ollama.com/models">Ollama model catalog</a> and filter by the <strong>Tools</strong> tag and smaller parameter sizes (≤3B) to find up-to-date options that run well locally.</p>
 </section>
 </section>
 <section id="key-methods" class="level2">
@@ -366,52 +410,21 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="invoke" class="level3">
 <h3 class="anchored" data-anchor-id="invoke">1. Invoke</h3>
 <p>The most straightforward way to call a model is to use <code>invoke()</code> with a single message or a list of messages:</p>
-<div id="3b52c4ad" class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>message <span class="op">=</span> model_nemotron3_nano.invoke(<span class="st">"what is Ramadan?"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="3b52c4ad" class="cell" data-execution_count="9">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>message <span class="op">=</span> model_nemotron3_nano.invoke(<span class="st">"what is Ramadan? make it super short"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>.. this returns an <code>AIMessage</code> object:</p>
-<div id="b3b68f58" class="cell" data-execution_count="6">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>message</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-display" data-execution_count="6">
-<pre><code>AIMessage(content='**Ramadan** is the ninth month of the Islamic lunar calendar and is observed by Muslims worldwide as a month of fasting, prayer, reflection, and community.  \n\n### Key Features\n\n| Aspect | Description |\n|--------|-------------|\n| **Fasting (Sawm)** | From dawn (Fajr) to sunset (Maghrib) Muslims abstain from food, drink, smoking, and marital relations. The fast is intended to cultivate self‑discipline, empathy for the less fortunate, and spiritual growth. |\n| **Prayer** | Additional nightly prayers called **Tarawih** are performed at the mosque, often completing a recitation of the entire Qur’an over the course of the month. |\n| **Qur’an Recitation** | Many Muslims aim to read or listen to the entire Qur’an during Ramadan, taking advantage of the increased spiritual focus. |\n| **Charity (Zakat &amp; Sadaqah)** | The month emphasizes giving to those in need; many people increase charitable donations and volunteer work. |\n| **Community &amp; Iftar** | The evening meal that breaks the fast, **iftar**, is often shared with family, friends, and sometimes the wider community. It typically starts with dates and water, following the example of the Prophet Muhammad. |\n| **Spiritual Reflection** | Fasting is seen as a way to purify the heart, increase gratitude, and strengthen one’s relationship with God (Allah). |\n\n### Timing\n\n- **Lunar Calendar:** Ramadan follows the Islamic lunar calendar, so it moves about 10–12 days earlier each Gregorian year.  \n- **Duration:** It lasts 29 or 30 days, depending on the sighting of the new moon.  \n\n### End of Ramadan\n\n- The month concludes with **Eid al‑Fitr**, a festive celebration marking the first day of Shawwal (the next lunar month). Eid al‑Fitr includes communal prayers, feasting, giving of gifts, and charitable donations (often called **Zakat al‑Fitr**).  \n\n### Who Observes It?\n\n- **Obligatory** for all adult Muslims who are physically able, though exemptions exist for those who are ill, traveling, pregnant, nursing, or otherwise unable to fast.  \n- Many children begin practicing partial fasts to prepare for adulthood.  \n\n### Cultural Variations\n\n- While the core practices are universal, local customs enrich the observance: special foods for suhoor (pre‑dawn meal), communal iftars, charitable projects, and unique cultural performances.  \n\nIn summary, Ramadan is a deeply spiritual period that combines physical discipline through fasting with heightened devotion, community bonding, and charitable giving, culminating in the joyous celebration of Eid al‑Fitr.', additional_kwargs={'refusal': None}, response_metadata={'token_usage': {'completion_tokens': 646, 'prompt_tokens': 21, 'total_tokens': 667, 'completion_tokens_details': {'accepted_prediction_tokens': None, 'audio_tokens': 0, 'reasoning_tokens': 67, 'rejected_prediction_tokens': None}, 'prompt_tokens_details': {'audio_tokens': 0, 'cached_tokens': 0}, 'cost': 0, 'is_byok': False, 'cost_details': {'upstream_inference_cost': 0, 'upstream_inference_prompt_cost': 0, 'upstream_inference_completions_cost': 0}}, 'model_provider': 'openai', 'model_name': 'nvidia/nemotron-3-nano-30b-a3b:free', 'system_fingerprint': None, 'id': 'gen-1771843067-CE39pAmJGHoeBrlPaCGT', 'finish_reason': 'stop', 'logprobs': None}, id='lc_run--019c8a13-9ed6-7273-9973-db9b1588cee6-0', tool_calls=[], invalid_tool_calls=[], usage_metadata={'input_tokens': 21, 'output_tokens': 646, 'total_tokens': 667, 'input_token_details': {'audio': 0, 'cache_read': 0}, 'output_token_details': {'audio': 0, 'reasoning': 67}})</code></pre>
+<div id="4b7bc41d" class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>message</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<pre><code>langchain_core.messages.ai.AIMessage</code></pre>
 </div>
 </div>
 <p>.. which has a <code>content</code> property, which includes the generated response text:</p>
-<div id="4efc494d" class="cell" data-execution_count="7">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(message.content)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="4efc494d" class="cell" data-execution_count="15">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(message.content)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>**Ramadan** is the ninth month of the Islamic lunar calendar and is observed by Muslims worldwide as a month of fasting, prayer, reflection, and community.  
-
-### Key Features
-
-| Aspect | Description |
-|--------|-------------|
-| **Fasting (Sawm)** | From dawn (Fajr) to sunset (Maghrib) Muslims abstain from food, drink, smoking, and marital relations. The fast is intended to cultivate self‑discipline, empathy for the less fortunate, and spiritual growth. |
-| **Prayer** | Additional nightly prayers called **Tarawih** are performed at the mosque, often completing a recitation of the entire Qur’an over the course of the month. |
-| **Qur’an Recitation** | Many Muslims aim to read or listen to the entire Qur’an during Ramadan, taking advantage of the increased spiritual focus. |
-| **Charity (Zakat &amp; Sadaqah)** | The month emphasizes giving to those in need; many people increase charitable donations and volunteer work. |
-| **Community &amp; Iftar** | The evening meal that breaks the fast, **iftar**, is often shared with family, friends, and sometimes the wider community. It typically starts with dates and water, following the example of the Prophet Muhammad. |
-| **Spiritual Reflection** | Fasting is seen as a way to purify the heart, increase gratitude, and strengthen one’s relationship with God (Allah). |
-
-### Timing
-
-- **Lunar Calendar:** Ramadan follows the Islamic lunar calendar, so it moves about 10–12 days earlier each Gregorian year.  
-- **Duration:** It lasts 29 or 30 days, depending on the sighting of the new moon.  
-
-### End of Ramadan
-
-- The month concludes with **Eid al‑Fitr**, a festive celebration marking the first day of Shawwal (the next lunar month). Eid al‑Fitr includes communal prayers, feasting, giving of gifts, and charitable donations (often called **Zakat al‑Fitr**).  
-
-### Who Observes It?
-
-- **Obligatory** for all adult Muslims who are physically able, though exemptions exist for those who are ill, traveling, pregnant, nursing, or otherwise unable to fast.  
-- Many children begin practicing partial fasts to prepare for adulthood.  
-
-### Cultural Variations
-
-- While the core practices are universal, local customs enrich the observance: special foods for suhoor (pre‑dawn meal), communal iftars, charitable projects, and unique cultural performances.  
-
-In summary, Ramadan is a deeply spiritual period that combines physical discipline through fasting with heightened devotion, community bonding, and charitable giving, culminating in the joyous celebration of Eid al‑Fitr.</code></pre>
+<pre><code>Ramadan is the Islamic holy month during which Muslims fast from sunrise to sunset, focusing on prayer, reflection, and community. It ends with the celebration of Eid al‑Fitr.</code></pre>
 </div>
 </div>
 </section>
@@ -432,27 +445,21 @@ In summary, Ramadan is a deeply spiritual period that combines physical discipli
 </ol></li>
 </ul>
 <div id="04d81826" class="cell" data-execution_count="18">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> langchain.messages <span class="im">import</span> (</span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>    SystemMessage,</span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>    HumanMessage,</span>
-<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>    AIMessage</span>
-<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> langchain.messages <span class="im">import</span> (</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>    SystemMessage,</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>    HumanMessage,</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>    AIMessage</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div id="af799dea" class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>system_prompt <span class="op">=</span> SystemMessage(<span class="st">"You always answer with 10 concise words, no more."</span>)</span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>user_prompt <span class="op">=</span> HumanMessage(<span class="st">"How do I make an Agent in Python?"</span>)</span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>messages <span class="op">=</span> [</span>
-<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>    system_prompt,</span>
-<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>    user_prompt,</span>
-<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>]</span>
-<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>response <span class="op">=</span> model_nemotron3_nano.invoke(messages)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-<div id="90059d86" class="cell" data-execution_count="27">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="bu">type</span>(message)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-display" data-execution_count="27">
-<pre><code>langchain_core.messages.ai.AIMessage</code></pre>
-</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>system_prompt <span class="op">=</span> SystemMessage(<span class="st">"You always answer with 10 concise words, no more."</span>)</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>user_prompt <span class="op">=</span> HumanMessage(<span class="st">"How do I make an Agent in Python?"</span>)</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>messages <span class="op">=</span> [</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>    system_prompt,</span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>    user_prompt,</span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>]</span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>response <span class="op">=</span> model_nemotron3_nano.invoke(messages)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div id="a98b793f" class="cell" data-execution_count="25">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(response.content)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -790,7 +797,7 @@ Let me know if you'd like further clarification! 😊</code></pre>
 <p>An LLM Agent runs tools in a loop to achieve a goal. An agent runs until a stop condition is met - i.e., when the model emits a final output or an iteration limit is reached.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><a href="./assets/agent_loop.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2" title="Agent Loop"><img src="./assets/agent_loop.png" class="img-fluid figure-img" alt="Agent Loop"></a></p>
+<p><a href="./assets/agent_loop.png" class="lightbox" data-gallery="quarto-lightbox-gallery-3" title="Agent Loop"><img src="./assets/agent_loop.png" class="img-fluid figure-img" alt="Agent Loop"></a></p>
 <figcaption>Agent Loop</figcaption>
 </figure>
 </div>
