@@ -3,10 +3,6 @@ title: "Index"
 format: "html"
 ---
 
-## Pre-requisites
-
-- Python Basics. To prepare or refresh: [المقدمة البايثونية للبرمجة باللغة العربية | حسان القوز](https://halgoz.quarto.pub/pythonia/)
-
 ## Schedule
 
 | Lesson | Description | Materials |
@@ -24,3 +20,7 @@ format: "html"
 |  8  | **LangSmith**<br/> | [[notebook](./L01/10_langsmith.qmd)] |
 
 > [Get Help](https://docs.langchain.com/oss/python/langchain/get-help) or [Ask the docs anything about LangChain, powered by real-time docs](https://chat.langchain.com/).
+
+## Pre-requisites
+
+- Python Basics. To prepare or refresh: [المقدمة البايثونية للبرمجة باللغة العربية](https://halgoz.quarto.pub/pythonia/)
