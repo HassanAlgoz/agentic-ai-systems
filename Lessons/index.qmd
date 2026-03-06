@@ -10,9 +10,10 @@ format: "html"
 |  1  | **Overview**<br/>Introduction: LangChain, LangGraph, LangSmith. | [[lesson](./L01/00_intro.qmd)]<br/>[[Case Studies](./L01/case-studies.qmd)]<br/>[[Assignment 1](./L01/assignment/01_case_studies_ex.qmd)] |
 |     | **Agents**<br/>Models, Messages, Prompts, Structured Output, Tools, and Internet Search. | [[notebook](./L01/01_agents.ipynb)]<br/>[[Assignment 2](./L01/assignment/02_create_agent.qmd)] |
 |     | **Sub Agents**<br/> Build a personal assistant with agents as tools. | [[notebook](./L01/02_subagents.ipynb)]<br/>[[Assignment 3](./L01/assignment/03_subagents.qmd)] |
-|  2  | **Semantic Search**<br/>Load, Embed, Store, Retrieve text based on meaning. | [[notebook](./L01/04_semantic-search.ipynb)] |
-|     | **Retrieval Augmented Generation (RAG)**<br/>Answer questions about specific source of information. | [[notebook](./L01/05_RAG_agent.ipynb)] |
-|     | **RAG in Agentic Systems**<br/> Ingestion Pipeline, Retrieval, Orchestration, and Generation. | [[lesson](./L01/06_RAG_agentic_systems.qmd)] |
+|  2  | **RAG Overview**<br/>Building a knowledge base. Retrieval pipeline and building blocks. RAG Architectures | [[notebook](./L01/03_retrieval.qmd)] |
+|     | **Embeddings**<br/>What are embeddings and how do they compare similarity? | [[notebook](./L01/04_embeddings.ipynb)] |
+|     | **Semantic Search**<br/>Indexing and retrival of documents based on meaning. | [[notebook](./L01/05_semantic_search.ipynb)] |
+|     | **Agents with RAG**<br/>Answer questions based on specific sources of information. | [[lesson](./L01/06_RAG_agent.ipynb)] |
 |  3  | **LangGraph Workflow Patterns**<br/> | [[notebook](./L01/08_workflow_patterns.ipynb)] |
 |     | **Memory**<br/> Short-term, Long-term memories, and Immutable context. | [[notebook](./L01/09_memory.qmd)] |
 |  4  | **LangSmith**<br/> | [[notebook](./L01/10_langsmith.qmd)] |
