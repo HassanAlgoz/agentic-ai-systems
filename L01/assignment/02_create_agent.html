@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>LangChain Case Studies – Building Agentic AI Systems</title>
+<title>Assignment 2: Create an Agent – Building Agentic AI Systems</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -20,27 +20,62 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
-<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="../site_libs/quarto-nav/headroom.min.js"></script>
-<script src="../site_libs/clipboard/clipboard.min.js"></script>
-<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="../site_libs/quarto-search/fuse.min.js"></script>
-<script src="../site_libs/quarto-search/quarto-search.js"></script>
-<meta name="quarto:offset" content="../">
-<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
-<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
-<script src="../site_libs/quarto-html/popper.min.js"></script>
-<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="../site_libs/quarto-html/anchor.min.js"></script>
-<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-587c61ba64f3a5504c4d52d930310e48.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-7dc3907ddb6ec99bf1b87f80a83abe8b.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-587c61ba64f3a5504c4d52d930310e48.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-7dc3907ddb6ec99bf1b87f80a83abe8b.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -80,7 +115,7 @@ ul.task-list li input[type="checkbox"] {
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
-    <a class="navbar-brand" href="../index.html">
+    <a class="navbar-brand" href="../../index.html">
     <span class="navbar-title">Building Agentic AI Systems</span>
     </a>
   </div>
@@ -91,7 +126,7 @@ ul.task-list li input[type="checkbox"] {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link" href="../index.html"> 
+    <a class="nav-link" href="../../index.html"> 
 <span class="menu-text">Home</span></a>
   </li>  
 </ul>
@@ -105,26 +140,15 @@ ul.task-list li input[type="checkbox"] {
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc" class="toc-active">
-    <h2 id="toc-title">Contents</h2>
-   
-  <ul>
-  <li><a href="#autonomous-code-generation-developer-productivity" id="toc-autonomous-code-generation-developer-productivity" class="nav-link active" data-scroll-target="#autonomous-code-generation-developer-productivity">1. Autonomous Code Generation &amp; Developer Productivity</a></li>
-  <li><a href="#complex-api-orchestration-domain-specific-copilots" id="toc-complex-api-orchestration-domain-specific-copilots" class="nav-link" data-scroll-target="#complex-api-orchestration-domain-specific-copilots">2. Complex API Orchestration (“Domain-Specific Copilots”)</a></li>
-  <li><a href="#deep-research-multi-hop-rag" id="toc-deep-research-multi-hop-rag" class="nav-link" data-scroll-target="#deep-research-multi-hop-rag">3. Deep Research &amp; Multi-Hop RAG</a></li>
-  <li><a href="#stateful-customer-support-triage" id="toc-stateful-customer-support-triage" class="nav-link" data-scroll-target="#stateful-customer-support-triage">4. Stateful Customer Support &amp; Triage</a></li>
-  <li><a href="#messy-data-extraction-browser-automation" id="toc-messy-data-extraction-browser-automation" class="nav-link" data-scroll-target="#messy-data-extraction-browser-automation">5. Messy Data Extraction &amp; Browser Automation</a></li>
-  <li><a href="#the-tldr-for-software-engineers" id="toc-the-tldr-for-software-engineers" class="nav-link" data-scroll-target="#the-tldr-for-software-engineers">The TL;DR for Software Engineers:</a></li>
-  </ul>
-</nav>
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
+        
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">LangChain Case Studies</h1>
+<h1 class="title">Assignment 2: Create an Agent</h1>
 </div>
 
 
@@ -141,39 +165,34 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<p>Looking strictly at the <a href="https://docs.langchain.com/oss/python/langgraph/case-studies">real-world case studies</a> from LangGraph’s repository (used by companies like Uber, GitLab, Klarna, and Cisco), here is exactly what engineers are building with this pattern:</p>
-<section id="autonomous-code-generation-developer-productivity" class="level2">
-<h2 class="anchored" data-anchor-id="autonomous-code-generation-developer-productivity">1. Autonomous Code Generation &amp; Developer Productivity</h2>
-<p><strong>Who is doing it:</strong> Uber, GitLab, Replit, LinkedIn.</p>
-<p><strong>What it does:</strong> Instead of just auto-completing a line of code, the software acts as a background worker. It reads a Jira ticket or GitHub issue, uses tools to <code>grep</code> or search the repository for relevant files, generates a proposed fix, and runs unit tests. If the compiler or tests throw an error, the agent feeds the stack trace back into its own context window, attempts a fix, and iterates until the tests pass before opening a Pull Request.</p>
-</section>
-<section id="complex-api-orchestration-domain-specific-copilots" class="level2">
-<h2 class="anchored" data-anchor-id="complex-api-orchestration-domain-specific-copilots">2. Complex API Orchestration (“Domain-Specific Copilots”)</h2>
-<p><strong>Who is doing it:</strong> J.P. Morgan, BlackRock, Klarna, AppFolio.</p>
-<p><strong>What it does:</strong> These companies have thousands of internal APIs. Instead of building hundreds of custom UI forms for business users to interact with those systems, engineers expose the APIs to the agent as callable tools. A user types, “Pull the Q3 risk report for Client X, check if they meet compliance rule Y, and email the summary to the legal team.” The agent dynamically chains together the CRM lookup API, the compliance engine API, and the SMTP server payload, passing the JSON outputs of one into the inputs of the next.</p>
-</section>
-<section id="deep-research-multi-hop-rag" class="level2">
-<h2 class="anchored" data-anchor-id="deep-research-multi-hop-rag">3. Deep Research &amp; Multi-Hop RAG</h2>
-<p><strong>Who is doing it:</strong> Morningstar, Athena Intelligence.</p>
-<p><strong>What it does:</strong> Basic Retrieval-Augmented Generation (RAG) is just vector search + summarization. Agentic research tools perform <em>multi-hop</em> retrieval. The agent writes a SQL query, realizes the returned database table is missing a specific metric, writes a web search query to find that missing metric, scrapes the resulting URL, and merges the data sources into a final, <strong>highly structured financial or intelligence report</strong>.</p>
-</section>
-<section id="stateful-customer-support-triage" class="level2">
-<h2 class="anchored" data-anchor-id="stateful-customer-support-triage">4. Stateful Customer Support &amp; Triage</h2>
-<p><strong>Who is doing it:</strong> Cisco TAC, Prosper, Minimal.</p>
-<p><strong>What it does:</strong> Moving past stateless “chatbots” that just regurgitate FAQ documents. These agents have read/write access to internal systems. When a user submits a support ticket, the agent checks the user’s subscription tier, queries server telemetry logs for recent errors associated with their account, executes safe diagnostic commands, and either resolves the issue autonomously or drafts a highly detailed hand-off summary for a human Tier-2 engineer.</p>
-</section>
-<section id="messy-data-extraction-browser-automation" class="level2">
-<h2 class="anchored" data-anchor-id="messy-data-extraction-browser-automation">5. Messy Data Extraction &amp; Browser Automation</h2>
-<p><strong>Who is doing it:</strong> AirTop, Captide, WebToon.</p>
-<p><strong>What it does:</strong> Converting the chaotic, unstructured web into strictly typed JSON or SQL. These agents navigate messy internal portals or scrape complex sites, visually parsing the DOM or dealing with PDFs. Because websites change constantly, brittle traditional scrapers break. The agentic approach uses the LLM to dynamically find the correct data fields on the page, handle pagination or login states, and map the extracted text to a strict schema (like a Pydantic model).</p>
-</section>
-<section id="the-tldr-for-software-engineers" class="level2">
-<h2 class="anchored" data-anchor-id="the-tldr-for-software-engineers">The TL;DR for Software Engineers:</h2>
-<p>To strip away the marketing fluff, “<strong>Agentic AI</strong>” is essentially an architectural pattern where an <strong>LLM is used as a dynamic control-flow engine rather than just a text generator.</strong> In traditional software, execution paths are deterministic, dictated by rigid <code>if/else/switch</code> statements or static state machines. In agentic software, the LLM acts as an orchestrator inside a loop (often modeled as a directed graph, like in LangGraph). It evaluates the current state, decides which pre-defined functions (tools/APIs) to invoke, parses the output, and decides the next step until a termination condition is met.</p>
-<p>Your job as an engineer building these systems isn’t writing the AI itself. Your job shifts to defining strict API contracts (tools) for the LLM to call, managing context-window state, handling retry logic when the LLM hallucinates a bad JSON payload, and defining graph boundaries (edges and conditional nodes) to ensure the LLM stays on the rails and doesn’t get stuck in an infinite loop.</p>
+<p>In our <a href="../../L01/01_agents.html">first lesson</a> we built an Agent that returned one search result.</p>
+<p>Your task is to create an agent that: uses the content from the top-3 ranking sites to answer the user’s question.</p>
+<p>Optionally: the agent refines the user’s query before calling <code>internet_search(query)</code>.</p>
+<p>Start by:</p>
+<ol type="1">
+<li>Setup an account at <a href="https://openrouter.ai/">OpenRouter.ai</a></li>
+<li>Set the <code>OPENROUTER_API_KEY</code></li>
+<li>Select an LLM a free model like: <code>"nvidia/nemotron-3-nano-30b-a3b:free"</code> (unless you’re okay with paying $5.00)</li>
+</ol>
+<p>Then, use the <code>create_agent()</code> function with the right parameters:</p>
+<ul>
+<li><code>model</code>: must be an agent that can use tools.</li>
+<li><code>tools</code>: <code>internet_search</code> and <code>fetch_url</code>.</li>
+<li><code>system_prompt</code>: where you give the agent role and instructions to accomplish the task successfully.</li>
+</ul>
+<p>Tip: break-down the problem into smaller problems, and solve it one by one.</p>
+<p>Hint: you can use this as a tool to fetch the content as a piece of text from any website on the specified URL:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> requests</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> langchain.tools <span class="im">import</span> tool</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="at">@tool</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> fetch_url(url: <span class="bu">str</span>) <span class="op">-&gt;</span> <span class="bu">str</span>:</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Fetch text content from a URL"""</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    response <span class="op">=</span> requests.get(url, timeout<span class="op">=</span><span class="fl">10.0</span>)</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    response.raise_for_status()</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> response.text</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 
 
-</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
@@ -581,5 +600,5 @@ ul.task-list li input[type="checkbox"] {
 
 
 
-<script src="../site_libs/quarto-html/zenscroll-min.js"></script>
+<script src="../../site_libs/quarto-html/zenscroll-min.js"></script>
 </body></html>

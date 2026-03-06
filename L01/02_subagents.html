@@ -170,7 +170,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#example-2-complex-multi-domain-request" id="toc-example-2-complex-multi-domain-request" class="nav-link" data-scroll-target="#example-2-complex-multi-domain-request">Example 2: Complex multi-domain request</a></li>
   </ul></li>
   <li><a href="#key-takeaways" id="toc-key-takeaways" class="nav-link" data-scroll-target="#key-takeaways">Key takeaways</a></li>
-  <li><a href="#activity" id="toc-activity" class="nav-link" data-scroll-target="#activity">Activity</a></li>
   </ul></li>
   </ul>
 <div class="quarto-alternate-formats"><h2>Other Formats</h2><ul><li><a href="02_subagents.html"><i class="bi bi-file-slides"></i>RevealJS</a></li></ul></div></nav>
@@ -662,10 +661,6 @@ Tip
 </ul>
 <p>Use the supervisor pattern when you have multiple distinct domains (calendar, email, CRM, database), each domain has multiple tools or complex logic, you want centralized workflow control, and sub-agents don’t need to converse directly with users.</p>
 <p>For simpler cases with just a few tools, use a single agent. When agents need to have conversations with users, use <a href="https://docs.langchain.com/oss/python/langchain/multi-agent/handoffs">handoffs</a> instead. For peer-to-peer collaboration between agents, consider other multi-agent patterns.</p>
-</section>
-<section id="activity" class="level2">
-<h2 class="anchored" data-anchor-id="activity">Activity</h2>
-<p><strong>Over to you:</strong> recreate the supervisor pattern on a different problem domain (other than calendar &amp; emails). You may stub API calls or, better yet, use actual ones!</p>
 
 
 </section>

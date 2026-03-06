@@ -11,14 +11,14 @@
     "href": "L01/00_intro.html#the-evolution-of-agents-from-llms",
     "title": "Introduction: What is Agentic AI?",
     "section": "The Evolution of Agents from LLMs",
-    "text": "The Evolution of Agents from LLMs\nLarge Language Models (LLMs) are deep neural networks trained to model the most likely token given previous tokens.\nFirst application was: Translation. Given an English sentence, the task is to generate the most likely Arabic equivalent. This is done word-by-word, by repeatedly predicting the next Arabic word, the original sentence plus all predicted words thus far.\nThis technique was able to scale thanks to the Transformers architecture which is based on the concept of Attention, which learns the influence each previous token has in generating the next token, in the translation.\n[\n    (\"The meuseum is far to the right\", \"ال\")\n    (\"The meuseum is far to the right\", \"المتحف\")\n    (\"The meuseum is far to the right\", \"المتحف في\")\n    (\"The meuseum is far to the right\", \"المتحف في أقصى\")\n    (\"The meuseum is far to the right\", \"المتحف في أقصى ال\")\n    (\"The meuseum is far to the right\", \"المتحف في أقصى اليمين\")\n]\nSame concept applied more simply in Paraphrasing, Summarization, and even Question-Answering.\nTrained on back-and-forth Chat Conversations, models were able to mimic chat-like interactions.\nA hypothesis was proven at the time that Multi-task Model performs better than a single-task model. A more general idea is to train models to “Follow Instructions”. In which the user Prompts it to do any of the previously mentioned tasks, on-demand. Of course this needed lots of special Data Curation.\nOne task was especially important: JSON mode: in which models produced their output in json format, such that it can be parsed easily by programs.\nFollowing that, an especially key development was the task of Tool Calling: in which a model is required to select from a set of Python funcition signatures (parameters, types, and docstrings) upon instruction. This is where Agents were born.\nAn Agent is based on an LLM in the following sequence:\n\nprogram takes input from user\nprogram feeds this input + available tools, into the LLM\nLLM generates text parsable as a tool call\nprogram parses the tool call\nprogram executes the tool (function)\nprogram feeds the output to the LLM\nLLM generates output\nprogram prints this output to the user\n\n\nChoosing between models\nQuality of models vary.\n\nHumans vote fairly for the best model on websites like Arena.ai.\nYou can also compare pricing, providers, and usage tends on OpenRouter.ai\nAn automatic short list models based on your priorities: Model Recommendation | Artficial Analysis"
+    "text": "The Evolution of Agents from LLMs\nLarge Language Models (LLMs) are deep neural networks trained to model the most likely token given previous tokens.\nFirst application was: Translation. Given an English sentence, the task is to generate the most likely Arabic equivalent. This is done word-by-word, by repeatedly predicting the next Arabic word, the original sentence plus all predicted words thus far.\nThis technique was able to scale thanks to the Transformers architecture which is based on the concept of Attention, which learns the influence each previous token has in generating the next token, in the translation.\n[\n    (\"The meuseum is far to the right\", \"ال\")\n    (\"The meuseum is far to the right\", \"المتحف\")\n    (\"The meuseum is far to the right\", \"المتحف في\")\n    (\"The meuseum is far to the right\", \"المتحف في أقصى\")\n    (\"The meuseum is far to the right\", \"المتحف في أقصى ال\")\n    (\"The meuseum is far to the right\", \"المتحف في أقصى اليمين\")\n]\nSame concept applied more simply in Paraphrasing, Summarization, and even Question-Answering.\nTrained on back-and-forth Chat Conversations, models were able to mimic chat-like interactions.\nA hypothesis was proven at the time that Multi-task Model performs better than a single-task model. A more general idea is to train models to “Follow Instructions”. In which the user Prompts it to do any of the previously mentioned tasks, on-demand. Of course this needed lots of special Data Curation.\nOne task was especially important: JSON mode: in which models produced their output in json format, such that it can be parsed easily by programs.\nFollowing that, an especially key development was the task of Tool Calling: in which a model is required to select from a set of Python funcition signatures (parameters, types, and docstrings) upon instruction. This is where Agents were born.\nAn Agent is based on an LLM in the following sequence:\n\nprogram takes input from user\nprogram feeds this input + available tools, into the LLM\nLLM generates text parsable as a tool call\nprogram parses the tool call\nprogram executes the tool (function)\nprogram feeds the output to the LLM\nLLM generates output\nprogram prints this output to the user\n\n\nChoosing between models\nQuality, latency, price, and performance vary between models. Below are some tools to help you select the best one yourself:\n\nHumans vote for the best model on websites like Arena.ai using a blind approach to maintain fairness.\nYou can also compare pricing, providers, and usage tends on OpenRouter.ai\nAn automatic short list for models based on your priorities: Model Recommendation | Artficial Analysis"
   },
   {
     "objectID": "L01/00_intro.html#applications-of-agentic-ai",
     "href": "L01/00_intro.html#applications-of-agentic-ai",
     "title": "Introduction: What is Agentic AI?",
     "section": "Applications of Agentic AI",
-    "text": "Applications of Agentic AI\nWhat can Agentic AI do in the real-world? This question is best answered by looking at Case Studies.\nAlso, reading the State of Agent Engineering 2026, a survey of 1,300 professionals — from engineers and product managers to business leaders and executives — to uncover the state of AI agents."
+    "text": "Applications of Agentic AI\nWhat can Agentic AI do in the real-world?\nTo answer this question, we have summarized the five things agentic AI is all about, by looking at 30+ case studies from companies of various backgrounds using the LangChain ecosystem. Notably:\n\nDeveloper Productivity (high niche)\nDomain-Specific Copilots (a simplification of an overly complex system)\nDeep Research & Multi-Hop RAG (highly structured intelligence report)\nCustomer Support & Triage (with a hand-off to human-in-the-loop)\nMessy Data Extraction & Browser Automation (reading PDFs and scraping the internet)"
   },
   {
     "objectID": "L01/00_intro.html#agent-framework",
@@ -32,21 +32,21 @@
     "href": "L01/00_intro.html#agent-runtime",
     "title": "Introduction: What is Agentic AI?",
     "section": "Agent Runtime",
-    "text": "Agent Runtime\nRuntimes manage state, and state transitions (orchestration). In other words, building, managing, and deploying long-running, stateful agents. Concretely, things like:\n\nControl-flow: Step by step instructions, conditional execution, and loops.\nPersistence: Thread-level and cross-thread persistence for state management.\nDurable execution: Agents persist through failures and can run for extended periods, resuming from where they left off.\nStreaming: Support for streaming workflows and responses.\nHuman-in-the-loop: Incorporate human oversight by inspecting and modifying agent state.\n\nLangGraph builds and runs the flowchart..\n\nRAG (Retrieval-Augmented generation)\n\n\n\n\n\ngraph LR\n    A[User question] --&gt; B[Retriever]\n    B --&gt; C[Relevant docs]\n    C --&gt; D[Chat model]\n    A --&gt; D\n    D --&gt; E[Informed response]\n\n\n\n\n\n\n\n\nAgent with tools\n\n\n\n\n\ngraph LR\n    A[User request] --&gt; B[Agent]\n    B --&gt; C{Need tool?}\n    C --&gt;|Yes| D[Call tool]\n    D --&gt; E[Tool result]\n    E --&gt; B\n    C --&gt;|No| F[Final answer]\n\n\n\n\n\n\n\n\nMulti-agent system\n\n\n\n\n\ngraph LR\n    A[Complex Task] --&gt; B[Supervisor agent]\n    B --&gt; C[Specialist agent 1]\n    B --&gt; D[Specialist agent 2]\n    C --&gt; E[Results]\n    D --&gt; E\n    E --&gt; B\n    B --&gt; F[Coordinated response]\n\n\n\n\n\n\nOther runtimes:\n\nTemporal\nInngest\n\nNote: for the best DX (Developer Experience), we will be using the Functional API."
+    "text": "Agent Runtime\nRuntimes manage state, and state transitions (orchestration). In other words, building, managing, and deploying long-running, stateful agents. Concretely, things like:\n\nControl-flow: Step by step instructions, conditional execution, and loops.\nPersistence: Thread-level and cross-thread persistence for state management.\nDurable execution: Agents persist through failures and can run for extended periods, resuming from where they left off.\nStreaming: Support for streaming workflows and responses.\nHuman-in-the-loop: Incorporate human oversight by inspecting and modifying agent state.\n\nLangGraph builds and runs the flowchart..\nBelow are common flowcharts that makes software systems, agentic:\n\nRAG (Retrieval-Augmented generation)\n\n\n\n\n\ngraph LR\n    A[User question] --&gt; B[Retriever]\n    B --&gt; C[Relevant docs]\n    C --&gt; D[Chat model]\n    A --&gt; D\n    D --&gt; E[Informed response]\n\n\n\n\n\n\n\n\nAgent with tools\n\n\n\n\n\ngraph LR\n    A[User request] --&gt; B[Agent]\n    B --&gt; C{Need tool?}\n    C --&gt;|Yes| D[Call tool]\n    D --&gt; E[Tool result]\n    E --&gt; B\n    C --&gt;|No| F[Final answer]\n\n\n\n\n\n\n\n\nMulti-agent system\n\n\n\n\n\ngraph LR\n    A[Complex Task] --&gt; B[Supervisor agent]\n    B --&gt; C[Specialist agent 1]\n    B --&gt; D[Specialist agent 2]\n    C --&gt; E[Results]\n    D --&gt; E\n    E --&gt; B\n    B --&gt; F[Coordinated response]\n\n\n\n\n\n\nOther runtimes:\n\nTemporal\nInngest\n\nNote: for the best DX (Developer Experience), we will be using the Functional API."
   },
   {
     "objectID": "L01/00_intro.html#agent-platform",
     "href": "L01/00_intro.html#agent-platform",
     "title": "Introduction: What is Agentic AI?",
     "section": "Agent Platform",
-    "text": "Agent Platform\nLangSmith:\n\nDeployment: localhost -&gt; production server\nObservability: tracing, real-time monitoring, alerting and usage.\nEvaluation: testing versions and providing feedback on traces."
+    "text": "Agent Platform\nLangSmith:\n\nDeployment: from localhost to a production server\nObservability: tracing, real-time monitoring, alerting and usage.\nEvaluation: testing versions and providing feedback on traces."
   },
   {
     "objectID": "L01/00_intro.html#key-takeways",
     "href": "L01/00_intro.html#key-takeways",
     "title": "Introduction: What is Agentic AI?",
     "section": "Key Takeways",
-    "text": "Key Takeways\n\nLangChain is the framework.\nLangGraph is the runtime.\nLangSmith is the platform.\n\n\n\nRead More.\nHelp: Chat with langchain docs"
+    "text": "Key Takeways\nAgents are LLMs. LLMs are undeterministic. Agentic Engineering is about taming its hallucinations and shortcomings to make it actually work like a real piece of software.\nTo do that we will use:\n\nLangChain: the framework.\nLangGraph: the runtime.\nLangSmith: the platform.\n\nOur main source would be the official LangChain docs:\n\nRead More.\nHelp: Chat with langchain docs"
   },
   {
     "objectID": "L01/04_semantic-search.html",
@@ -445,14 +445,14 @@
     "href": "index.html",
     "title": "Index",
     "section": "",
-    "text": "Lesson\nDescription\nMaterials\n\n\n\n\n\nCase Studies\n[summary]\n\n\n\nOverview LangChain, LangGraph, LangSmith.\n[lesson]\n\n\n\nUse Cases\n[lesson]\n\n\n1\nAgentsModels, Messages, Prompts, Structured Output, Tools, and Internet Search.\n[notebook]\n\n\n2\nSub Agents Build a personal assistant with agents as tools.\n[notebook]\n\n\n3\nSemantic SearchLoad, Embed, Store, Retrieve text based on meaning.\n[notebook]\n\n\n4\nRetrieval Augmented Generation (RAG)Answer questions about specific source of information.\n[notebook]\n\n\n5\nRAG in Agentic Systems Ingestion Pipeline, Retrieval, Orchestration, and Generation.\n[lesson]\n\n\n6\nLangGraph Workflow Patterns\n[notebook]\n\n\n7\nMemory Short-term, Long-term memories, and Immutable context.\n[notebook]\n\n\n8\nLangSmith\n[notebook]\n\n\n\n\nGet Help or Ask the docs anything about LangChain, powered by real-time docs."
+    "text": "Day\nDescription\nMaterials\n\n\n\n\n1\nOverviewIntroduction: LangChain, LangGraph, LangSmith.\n[lesson][Case Studies][Assignment 1]\n\n\n\nAgentsModels, Messages, Prompts, Structured Output, Tools, and Internet Search.\n[notebook][Assignment 2]\n\n\n\nSub Agents Build a personal assistant with agents as tools.\n[notebook][Assignment 3]\n\n\n2\nSemantic SearchLoad, Embed, Store, Retrieve text based on meaning.\n[notebook]\n\n\n\nRetrieval Augmented Generation (RAG)Answer questions about specific source of information.\n[notebook]\n\n\n\nRAG in Agentic Systems Ingestion Pipeline, Retrieval, Orchestration, and Generation.\n[lesson]\n\n\n3\nLangGraph Workflow Patterns\n[notebook]\n\n\n\nMemory Short-term, Long-term memories, and Immutable context.\n[notebook]\n\n\n4\nLangSmith\n[notebook]"
   },
   {
     "objectID": "index.html#schedule",
     "href": "index.html#schedule",
     "title": "Index",
     "section": "",
-    "text": "Lesson\nDescription\nMaterials\n\n\n\n\n\nCase Studies\n[summary]\n\n\n\nOverview LangChain, LangGraph, LangSmith.\n[lesson]\n\n\n\nUse Cases\n[lesson]\n\n\n1\nAgentsModels, Messages, Prompts, Structured Output, Tools, and Internet Search.\n[notebook]\n\n\n2\nSub Agents Build a personal assistant with agents as tools.\n[notebook]\n\n\n3\nSemantic SearchLoad, Embed, Store, Retrieve text based on meaning.\n[notebook]\n\n\n4\nRetrieval Augmented Generation (RAG)Answer questions about specific source of information.\n[notebook]\n\n\n5\nRAG in Agentic Systems Ingestion Pipeline, Retrieval, Orchestration, and Generation.\n[lesson]\n\n\n6\nLangGraph Workflow Patterns\n[notebook]\n\n\n7\nMemory Short-term, Long-term memories, and Immutable context.\n[notebook]\n\n\n8\nLangSmith\n[notebook]\n\n\n\n\nGet Help or Ask the docs anything about LangChain, powered by real-time docs."
+    "text": "Day\nDescription\nMaterials\n\n\n\n\n1\nOverviewIntroduction: LangChain, LangGraph, LangSmith.\n[lesson][Case Studies][Assignment 1]\n\n\n\nAgentsModels, Messages, Prompts, Structured Output, Tools, and Internet Search.\n[notebook][Assignment 2]\n\n\n\nSub Agents Build a personal assistant with agents as tools.\n[notebook][Assignment 3]\n\n\n2\nSemantic SearchLoad, Embed, Store, Retrieve text based on meaning.\n[notebook]\n\n\n\nRetrieval Augmented Generation (RAG)Answer questions about specific source of information.\n[notebook]\n\n\n\nRAG in Agentic Systems Ingestion Pipeline, Retrieval, Orchestration, and Generation.\n[lesson]\n\n\n3\nLangGraph Workflow Patterns\n[notebook]\n\n\n\nMemory Short-term, Long-term memories, and Immutable context.\n[notebook]\n\n\n4\nLangSmith\n[notebook]"
   },
   {
     "objectID": "index.html#pre-requisites",
@@ -466,7 +466,7 @@
     "href": "L01/case-studies.html",
     "title": "LangChain Case Studies",
     "section": "",
-    "text": "To strip away the marketing fluff, “Agentic AI” is essentially an architectural pattern where an LLM is used as a dynamic control-flow engine rather than just a text generator. In traditional software, execution paths are deterministic, dictated by rigid if/else/switch statements or static state machines. In agentic software, the LLM acts as an orchestrator inside a loop (often modeled as a directed graph, like in LangGraph). It evaluates the current state, decides which pre-defined functions (tools/APIs) to invoke, parses the output, and decides the next step until a termination condition is met.\nLooking strictly at the real-world case studies from LangGraph’s repository (used by companies like Uber, GitLab, Klarna, and Cisco), here is exactly what engineers are building with this pattern:\n\n1. Autonomous Code Generation & Developer Productivity\nWho is doing it: Uber, GitLab, Replit, LinkedIn.\nWhat it does: Instead of just auto-completing a line of code, the software acts as a background worker. It reads a Jira ticket or GitHub issue, uses tools to grep or search the repository for relevant files, generates a proposed fix, and runs unit tests. If the compiler or tests throw an error, the agent feeds the stack trace back into its own context window, attempts a fix, and iterates until the tests pass before opening a Pull Request.\n\n\n2. Complex API Orchestration (“Domain-Specific Copilots”)\nWho is doing it: J.P. Morgan, BlackRock, Klarna, AppFolio.\nWhat it does: These companies have thousands of internal APIs. Instead of building hundreds of custom UI forms for business users to interact with those systems, engineers expose the APIs to the agent as callable tools. A user types, “Pull the Q3 risk report for Client X, check if they meet compliance rule Y, and email the summary to the legal team.” The agent dynamically chains together the CRM lookup API, the compliance engine API, and the SMTP server payload, passing the JSON outputs of one into the inputs of the next.\n\n\n3. Deep Research & Multi-Hop RAG\nWho is doing it: Morningstar, Athena Intelligence.\nWhat it does: Basic Retrieval-Augmented Generation (RAG) is just vector search + summarization. Agentic research tools perform multi-hop retrieval. The agent writes a SQL query, realizes the returned database table is missing a specific metric, writes a web search query to find that missing metric, scrapes the resulting URL, and merges the data sources into a final, highly structured financial or intelligence report.\n\n\n4. Stateful Customer Support & Triage\nWho is doing it: Cisco TAC, Prosper, Minimal.\nWhat it does: Moving past stateless “chatbots” that just regurgitate FAQ documents. These agents have read/write access to internal systems. When a user submits a support ticket, the agent checks the user’s subscription tier, queries server telemetry logs for recent errors associated with their account, executes safe diagnostic commands, and either resolves the issue autonomously or drafts a highly detailed hand-off summary for a human Tier-2 engineer.\n\n\n5. Messy Data Extraction & Browser Automation\nWho is doing it: AirTop, Captide, WebToon.\nWhat it does: Converting the chaotic, unstructured web into strictly typed JSON or SQL. These agents navigate messy internal portals or scrape complex sites, visually parsing the DOM or dealing with PDFs. Because websites change constantly, brittle traditional scrapers break. The agentic approach uses the LLM to dynamically find the correct data fields on the page, handle pagination or login states, and map the extracted text to a strict schema (like a Pydantic model).\n\n\nThe TL;DR for Software Engineers:\nAgentic AI is not magic; it is non-deterministic orchestration.\nYour job as an engineer building these systems isn’t writing the AI itself. Your job shifts to defining strict API contracts (tools) for the LLM to call, managing context-window state, handling retry logic when the LLM hallucinates a bad JSON payload, and defining graph boundaries (edges and conditional nodes) to ensure the LLM stays on the rails and doesn’t get stuck in an infinite loop."
+    "text": "Looking strictly at the real-world case studies from LangGraph’s repository (used by companies like Uber, GitLab, Klarna, and Cisco), here is exactly what engineers are building with this pattern:"
   },
   {
     "objectID": "L01/notes-case-studies.html",
@@ -614,5 +614,96 @@
     "title": "Initialize the LLM model",
     "section": "When to use a task",
     "text": "When to use a task\nTasks are useful in the following scenarios:\nCheckpointing: When you need to save the result of a long-running operation to a checkpoint, so you don’t need to recompute it when resuming the workflow.\nHuman-in-the-loop: If you’re building a workflow that requires human intervention, you MUST use tasks to encapsulate any randomness (e.g., API calls) to ensure that the workflow can be resumed correctly. See the determinism section for more details.\nParallel Execution: For I/O-bound tasks, tasks enable parallel execution, allowing multiple operations to run concurrently without blocking (e.g., calling multiple APIs).\nObservability: Wrapping operations in tasks provides a way to track the progress of the workflow and monitor the execution of individual operations using LangSmith.\nRetryable Work: When work needs to be retried to handle failures or inconsistencies, tasks provide a way to encapsulate and manage the retry logic."
+  },
+  {
+    "objectID": "L01/00_intro.html#state-of-agentic-ai",
+    "href": "L01/00_intro.html#state-of-agentic-ai",
+    "title": "Introduction: What is Agentic AI?",
+    "section": "State of Agentic AI",
+    "text": "State of Agentic AI\nReading the State of Agent Engineering 2026, “a survey of 1,300 professionals — from engineers and product managers to business leaders and executives — to uncover the state of AI agents.” could give you an idea of what’s going on in 2026 with Agentic AI. Notably:\n\nIt is being used in production by companies of different sizes\nMost usage is: “Customer Service” (26.5%), “Research & Data Analysis” (24.4%), and “Internal Productivity” (17.7%).\nBiggest blockers being: “Quality of Outputs” (32.9%), “Latency / response time” (20.1%), and “Security and compliance” (16.0%)"
+  },
+  {
+    "objectID": "L01/00_intro.html#what-about-deep-agents",
+    "href": "L01/00_intro.html#what-about-deep-agents",
+    "title": "Introduction: What is Agentic AI?",
+    "section": "What about Deep Agents?",
+    "text": "What about Deep Agents?\nDeep Agents is LangChain’s relatively new high-level library that makes it easy to get started, but you quickly run into issues where you need more control.\nThe reason people use frameworks is to control the undeterministic nature of LLMs. Deep Agents doesn’t help with that, it only makes the first 5 minutes easy."
+  },
+  {
+    "objectID": "L01/00_intro.html#use-cases",
+    "href": "L01/00_intro.html#use-cases",
+    "title": "Introduction: What is Agentic AI?",
+    "section": "Use Cases",
+    "text": "Use Cases\nIn this course, we develop our skills to be able to tackle these reference Use Cases:\n\nBuild a personal assistant with subagents\nBuild customer support with handoffs\nBuild a multi-source knowledge base with routing\nBuild a SQL assistant with on-demand skills\n\n\nPatterns\nCommon patterns emerge from these skills; things like:\n\nAgentic RAG"
+  },
+  {
+    "objectID": "index.html#need-help",
+    "href": "index.html#need-help",
+    "title": "Index",
+    "section": "Need Help?",
+    "text": "Need Help?\n\nGet Help or\nAsk the docs anything about LangChain, powered by real-time docs."
+  },
+  {
+    "objectID": "L01/case-studies.html#autonomous-code-generation-developer-productivity",
+    "href": "L01/case-studies.html#autonomous-code-generation-developer-productivity",
+    "title": "LangChain Case Studies",
+    "section": "1. Autonomous Code Generation & Developer Productivity",
+    "text": "1. Autonomous Code Generation & Developer Productivity\nWho is doing it: Uber, GitLab, Replit, LinkedIn.\nWhat it does: Instead of just auto-completing a line of code, the software acts as a background worker. It reads a Jira ticket or GitHub issue, uses tools to grep or search the repository for relevant files, generates a proposed fix, and runs unit tests. If the compiler or tests throw an error, the agent feeds the stack trace back into its own context window, attempts a fix, and iterates until the tests pass before opening a Pull Request."
+  },
+  {
+    "objectID": "L01/case-studies.html#complex-api-orchestration-domain-specific-copilots",
+    "href": "L01/case-studies.html#complex-api-orchestration-domain-specific-copilots",
+    "title": "LangChain Case Studies",
+    "section": "2. Complex API Orchestration (“Domain-Specific Copilots”)",
+    "text": "2. Complex API Orchestration (“Domain-Specific Copilots”)\nWho is doing it: J.P. Morgan, BlackRock, Klarna, AppFolio.\nWhat it does: These companies have thousands of internal APIs. Instead of building hundreds of custom UI forms for business users to interact with those systems, engineers expose the APIs to the agent as callable tools. A user types, “Pull the Q3 risk report for Client X, check if they meet compliance rule Y, and email the summary to the legal team.” The agent dynamically chains together the CRM lookup API, the compliance engine API, and the SMTP server payload, passing the JSON outputs of one into the inputs of the next."
+  },
+  {
+    "objectID": "L01/case-studies.html#deep-research-multi-hop-rag",
+    "href": "L01/case-studies.html#deep-research-multi-hop-rag",
+    "title": "LangChain Case Studies",
+    "section": "3. Deep Research & Multi-Hop RAG",
+    "text": "3. Deep Research & Multi-Hop RAG\nWho is doing it: Morningstar, Athena Intelligence.\nWhat it does: Basic Retrieval-Augmented Generation (RAG) is just vector search + summarization. Agentic research tools perform multi-hop retrieval. The agent writes a SQL query, realizes the returned database table is missing a specific metric, writes a web search query to find that missing metric, scrapes the resulting URL, and merges the data sources into a final, highly structured financial or intelligence report."
+  },
+  {
+    "objectID": "L01/case-studies.html#stateful-customer-support-triage",
+    "href": "L01/case-studies.html#stateful-customer-support-triage",
+    "title": "LangChain Case Studies",
+    "section": "4. Stateful Customer Support & Triage",
+    "text": "4. Stateful Customer Support & Triage\nWho is doing it: Cisco TAC, Prosper, Minimal.\nWhat it does: Moving past stateless “chatbots” that just regurgitate FAQ documents. These agents have read/write access to internal systems. When a user submits a support ticket, the agent checks the user’s subscription tier, queries server telemetry logs for recent errors associated with their account, executes safe diagnostic commands, and either resolves the issue autonomously or drafts a highly detailed hand-off summary for a human Tier-2 engineer."
+  },
+  {
+    "objectID": "L01/case-studies.html#messy-data-extraction-browser-automation",
+    "href": "L01/case-studies.html#messy-data-extraction-browser-automation",
+    "title": "LangChain Case Studies",
+    "section": "5. Messy Data Extraction & Browser Automation",
+    "text": "5. Messy Data Extraction & Browser Automation\nWho is doing it: AirTop, Captide, WebToon.\nWhat it does: Converting the chaotic, unstructured web into strictly typed JSON or SQL. These agents navigate messy internal portals or scrape complex sites, visually parsing the DOM or dealing with PDFs. Because websites change constantly, brittle traditional scrapers break. The agentic approach uses the LLM to dynamically find the correct data fields on the page, handle pagination or login states, and map the extracted text to a strict schema (like a Pydantic model)."
+  },
+  {
+    "objectID": "L01/case-studies.html#the-tldr-for-software-engineers",
+    "href": "L01/case-studies.html#the-tldr-for-software-engineers",
+    "title": "LangChain Case Studies",
+    "section": "The TL;DR for Software Engineers:",
+    "text": "The TL;DR for Software Engineers:\nTo strip away the marketing fluff, “Agentic AI” is essentially an architectural pattern where an LLM is used as a dynamic control-flow engine rather than just a text generator. In traditional software, execution paths are deterministic, dictated by rigid if/else/switch statements or static state machines. In agentic software, the LLM acts as an orchestrator inside a loop (often modeled as a directed graph, like in LangGraph). It evaluates the current state, decides which pre-defined functions (tools/APIs) to invoke, parses the output, and decides the next step until a termination condition is met.\nYour job as an engineer building these systems isn’t writing the AI itself. Your job shifts to defining strict API contracts (tools) for the LLM to call, managing context-window state, handling retry logic when the LLM hallucinates a bad JSON payload, and defining graph boundaries (edges and conditional nodes) to ensure the LLM stays on the rails and doesn’t get stuck in an infinite loop."
+  },
+  {
+    "objectID": "L01/assignment/01_case_studies_ex.html",
+    "href": "L01/assignment/01_case_studies_ex.html",
+    "title": "Assignment 1: Present a Case Study",
+    "section": "",
+    "text": "Pick a Case Study from the LangChain Docs read it, understand it, and prepare a presentation to inform other students and the instructor. Most importantly, you should show what is “Agentic” about it and what is not; i.e., a software component (non-LLM). Include: Company, Industry, Use case, Reference in your first slide, and Your Name and University / Major / Department."
+  },
+  {
+    "objectID": "L01/assignment/02_create_agent.html",
+    "href": "L01/assignment/02_create_agent.html",
+    "title": "Assignment 2: Create an Agent",
+    "section": "",
+    "text": "In our first lesson we built an Agent that returned one search result.\nYour task is to create an agent that: uses the content from the top-3 ranking sites to answer the user’s question.\nOptionally: the agent refines the user’s query before calling internet_search(query).\nStart by:\n\nSetup an account at OpenRouter.ai\nSet the OPENROUTER_API_KEY\nSelect an LLM a free model like: \"nvidia/nemotron-3-nano-30b-a3b:free\" (unless you’re okay with paying $5.00)\n\nThen, use the create_agent() function with the right parameters:\n\nmodel: must be an agent that can use tools.\ntools: internet_search and fetch_url.\nsystem_prompt: where you give the agent role and instructions to accomplish the task successfully.\n\nTip: break-down the problem into smaller problems, and solve it one by one.\nHint: you can use this as a tool to fetch the content as a piece of text from any website on the specified URL:\nimport requests\nfrom langchain.tools import tool\n\n@tool\ndef fetch_url(url: str) -&gt; str:\n    \"\"\"Fetch text content from a URL\"\"\"\n    response = requests.get(url, timeout=10.0)\n    response.raise_for_status()\n    return response.text"
+  },
+  {
+    "objectID": "L01/assignment/03_subagents.html",
+    "href": "L01/assignment/03_subagents.html",
+    "title": "Assignment 3: Use Cases for the Supervisor Pattern",
+    "section": "",
+    "text": "Your task is to come up with a different use case for the supervisor pattern (other than calendar & email used in the lesson) and justify why one agent wouldn’t be enough to accomplish the task alone."
   }
 ]

@@ -119,6 +119,7 @@ ul.task-list li input[type="checkbox"] {
   <li><a href="#choosing-between-models" id="toc-choosing-between-models" class="nav-link" data-scroll-target="#choosing-between-models">Choosing between models</a></li>
   </ul></li>
   <li><a href="#applications-of-agentic-ai" id="toc-applications-of-agentic-ai" class="nav-link" data-scroll-target="#applications-of-agentic-ai">Applications of Agentic AI</a></li>
+  <li><a href="#state-of-agentic-ai" id="toc-state-of-agentic-ai" class="nav-link" data-scroll-target="#state-of-agentic-ai">State of Agentic AI</a></li>
   <li><a href="#agent-framework" id="toc-agent-framework" class="nav-link" data-scroll-target="#agent-framework">Agent Framework</a></li>
   <li><a href="#agent-runtime" id="toc-agent-runtime" class="nav-link" data-scroll-target="#agent-runtime">Agent Runtime</a>
   <ul class="collapse">
@@ -127,6 +128,11 @@ ul.task-list li input[type="checkbox"] {
   <li><a href="#multi-agent-system" id="toc-multi-agent-system" class="nav-link" data-scroll-target="#multi-agent-system">Multi-agent system</a></li>
   </ul></li>
   <li><a href="#agent-platform" id="toc-agent-platform" class="nav-link" data-scroll-target="#agent-platform">Agent Platform</a></li>
+  <li><a href="#what-about-deep-agents" id="toc-what-about-deep-agents" class="nav-link" data-scroll-target="#what-about-deep-agents">What about Deep Agents?</a></li>
+  <li><a href="#use-cases" id="toc-use-cases" class="nav-link" data-scroll-target="#use-cases">Use Cases</a>
+  <ul class="collapse">
+  <li><a href="#patterns" id="toc-patterns" class="nav-link" data-scroll-target="#patterns">Patterns</a></li>
+  </ul></li>
   <li><a href="#key-takeways" id="toc-key-takeways" class="nav-link" data-scroll-target="#key-takeways">Key Takeways</a></li>
   </ul>
 </nav>
@@ -187,18 +193,34 @@ ul.task-list li input[type="checkbox"] {
 </ul>
 <section id="choosing-between-models" class="level3">
 <h3 class="anchored" data-anchor-id="choosing-between-models">Choosing between models</h3>
-<p>Quality of models vary.</p>
+<p>Quality, latency, price, and performance vary between models. Below are some tools to help you select the best one yourself:</p>
 <ul>
-<li>Humans vote fairly for the best model on websites like <a href="https://arena.ai/">Arena.ai</a>.</li>
+<li>Humans vote for the best model on websites like <a href="https://arena.ai/">Arena.ai</a> using a blind approach to maintain fairness.</li>
 <li>You can also compare pricing, providers, and usage tends on <a href="https://openrouter.ai/models">OpenRouter.ai</a></li>
-<li>An automatic short list models based on your priorities: <a href="https://artificialanalysis.ai/models/recommend">Model Recommendation | Artficial Analysis</a></li>
+<li>An automatic short list for models based on your priorities: <a href="https://artificialanalysis.ai/models/recommend">Model Recommendation | Artficial Analysis</a></li>
 </ul>
 </section>
 </section>
 <section id="applications-of-agentic-ai" class="level2">
 <h2 class="anchored" data-anchor-id="applications-of-agentic-ai">Applications of Agentic AI</h2>
-<p>What can Agentic AI do in the real-world? This question is best answered by looking at <a href="https://docs.langchain.com/oss/python/langgraph/case-studies">Case Studies</a>.</p>
-<p>Also, reading the <a href="https://www.langchain.com/state-of-agent-engineering">State of Agent Engineering 2026</a>, a survey of 1,300 professionals — from engineers and product managers to business leaders and executives — to uncover the state of AI agents.</p>
+<p>What can Agentic AI do in the real-world?</p>
+<p>To answer this question, <a href="../L01/case-studies.html">we have summarized the five things agentic AI is all about</a>, by looking at 30+ case studies from companies of various backgrounds using the LangChain ecosystem. Notably:</p>
+<ol type="1">
+<li>Developer Productivity (high niche)</li>
+<li>Domain-Specific Copilots (a simplification of an overly complex system)</li>
+<li>Deep Research &amp; Multi-Hop RAG (highly structured intelligence report)</li>
+<li>Customer Support &amp; Triage (with a hand-off to human-in-the-loop)</li>
+<li>Messy Data Extraction &amp; Browser Automation (reading PDFs and scraping the internet)</li>
+</ol>
+</section>
+<section id="state-of-agentic-ai" class="level2">
+<h2 class="anchored" data-anchor-id="state-of-agentic-ai">State of Agentic AI</h2>
+<p>Reading the <a href="https://www.langchain.com/state-of-agent-engineering">State of Agent Engineering 2026</a>, “a survey of 1,300 professionals — from engineers and product managers to business leaders and executives — to uncover the state of AI agents.” could give you an idea of what’s going on in 2026 with Agentic AI. Notably:</p>
+<ol type="1">
+<li>It is being used in production by companies of different sizes</li>
+<li>Most usage is: “Customer Service” (26.5%), “Research &amp; Data Analysis” (24.4%), and “Internal Productivity” (17.7%).</li>
+<li>Biggest blockers being: “Quality of Outputs” (32.9%), “Latency / response time” (20.1%), and “Security and compliance” (16.0%)</li>
+</ol>
 </section>
 <section id="agent-framework" class="level2">
 <h2 class="anchored" data-anchor-id="agent-framework">Agent Framework</h2>
@@ -277,6 +299,7 @@ ul.task-list li input[type="checkbox"] {
 <li><strong>Human-in-the-loop</strong>: Incorporate human oversight by inspecting and modifying agent state.</li>
 </ul>
 <p><a href="https://docs.langchain.com/oss/python/langgraph/overview">LangGraph</a> builds and runs the flowchart..</p>
+<p>Below are common flowcharts that makes software systems, agentic:</p>
 <section id="rag-retrieval-augmented-generation" class="level3">
 <h3 class="anchored" data-anchor-id="rag-retrieval-augmented-generation">RAG (Retrieval-Augmented generation)</h3>
 <div class="cell" data-layout-align="default">
@@ -351,19 +374,43 @@ ul.task-list li input[type="checkbox"] {
 <h2 class="anchored" data-anchor-id="agent-platform">Agent Platform</h2>
 <p><strong>LangSmith</strong>:</p>
 <ul>
-<li><strong>Deployment</strong>: <code>localhost</code> -&gt; production server</li>
+<li><strong>Deployment</strong>: from <code>localhost</code> to a production server</li>
 <li><strong>Observability</strong>: tracing, real-time monitoring, alerting and usage.</li>
 <li><strong>Evaluation</strong>: testing versions and providing feedback on traces.</li>
 </ul>
 </section>
+<section id="what-about-deep-agents" class="level2">
+<h2 class="anchored" data-anchor-id="what-about-deep-agents">What about Deep Agents?</h2>
+<p>Deep Agents is LangChain’s relatively new high-level library that makes it easy to get started, but you quickly run into issues where you need more control.</p>
+<p>The reason people use frameworks is to control the undeterministic nature of LLMs. Deep Agents doesn’t help with that, it only makes the first 5 minutes easy.</p>
+</section>
+<section id="use-cases" class="level2">
+<h2 class="anchored" data-anchor-id="use-cases">Use Cases</h2>
+<p>In this course, we develop our skills to be able to tackle these reference Use Cases:</p>
+<ul>
+<li><a href="https://docs.langchain.com/oss/python/langchain/multi-agent/subagents-personal-assistant">Build a <strong>personal assistant</strong> with subagents</a></li>
+<li><a href="https://docs.langchain.com/oss/python/langchain/multi-agent/handoffs-customer-support">Build <strong>customer support</strong> with handoffs</a></li>
+<li><a href="https://docs.langchain.com/oss/python/langchain/multi-agent/router-knowledge-base">Build a <strong>multi-source knowledge base</strong> with routing</a></li>
+<li><a href="https://docs.langchain.com/oss/python/langchain/multi-agent/skills-sql-assistant">Build a <strong>SQL assistant</strong> with on-demand skills</a></li>
+</ul>
+<section id="patterns" class="level3">
+<h3 class="anchored" data-anchor-id="patterns">Patterns</h3>
+<p>Common patterns emerge from these skills; things like:</p>
+<ul>
+<li><a href="https://docs.langchain.com/oss/python/langgraph/agentic-rag">Agentic RAG</a></li>
+</ul>
+</section>
+</section>
 <section id="key-takeways" class="level2">
 <h2 class="anchored" data-anchor-id="key-takeways">Key Takeways</h2>
+<p>Agents are LLMs. LLMs are undeterministic. Agentic Engineering is about taming its hallucinations and shortcomings to make it actually work like a real piece of software.</p>
+<p>To do that we will use:</p>
 <ul>
-<li>LangChain is the framework.</li>
-<li>LangGraph is the runtime.</li>
-<li>LangSmith is the platform.</li>
+<li>LangChain: the framework.</li>
+<li>LangGraph: the runtime.</li>
+<li>LangSmith: the platform.</li>
 </ul>
-<hr>
+<p>Our main source would be the official LangChain docs:</p>
 <ul>
 <li><a href="https://docs.langchain.com/oss/python/concepts/products">Read More</a>.</li>
 <li><a href="https://chat.langchain.com/">Help: Chat with langchain docs</a></li>
