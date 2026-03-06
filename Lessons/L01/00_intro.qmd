@@ -51,17 +51,31 @@ An **Agent** is based on an LLM in the following sequence:
 
 ### Choosing between models
 
-Quality of models vary.
+Quality, latency, price, and performance vary between models. Below are some tools to help you select the best one yourself:
 
-- Humans vote fairly for the best model on websites like [Arena.ai](https://arena.ai/).
+- Humans vote for the best model on websites like [Arena.ai](https://arena.ai/) using a blind approach to maintain fairness.
 - You can also compare pricing, providers, and usage tends on [OpenRouter.ai](https://openrouter.ai/models)
-- An automatic short list models based on your priorities: [Model Recommendation | Artficial Analysis](https://artificialanalysis.ai/models/recommend)
+- An automatic short list for models based on your priorities: [Model Recommendation | Artficial Analysis](https://artificialanalysis.ai/models/recommend)
 
 ## Applications of Agentic AI
 
-What can Agentic AI do in the real-world? This question is best answered by looking at [Case Studies](https://docs.langchain.com/oss/python/langgraph/case-studies).
+What can Agentic AI do in the real-world?
 
-Also, reading the [State of Agent Engineering 2026](https://www.langchain.com/state-of-agent-engineering), a survey of 1,300 professionals — from engineers and product managers to business leaders and executives — to uncover the state of AI agents.
+To answer this question, [we have summarized the five things agentic AI is all about](./case-studies.qmd), by looking at 30+ case studies from companies of various backgrounds using the LangChain ecosystem. Notably:
+
+1. Developer Productivity (high niche)
+2. Domain-Specific Copilots (a simplification of an overly complex system)
+3. Deep Research & Multi-Hop RAG (highly structured intelligence report)
+4. Customer Support & Triage (with a hand-off to human-in-the-loop)
+5. Messy Data Extraction & Browser Automation (reading PDFs and scraping the internet)
+
+## State of Agentic AI
+
+Reading the [State of Agent Engineering 2026](https://www.langchain.com/state-of-agent-engineering), "a survey of 1,300 professionals — from engineers and product managers to business leaders and executives — to uncover the state of AI agents." could give you an idea of what's going on in 2026 with Agentic AI. Notably:
+
+1. It is being used in production by companies of different sizes
+2. Most usage is: "Customer Service" (26.5%), "Research & Data Analysis" (24.4%), and "Internal Productivity" (17.7%).
+3. Biggest blockers being: "Quality of Outputs" (32.9%), "Latency / response time" (20.1%), and "Security and compliance" (16.0%)
 
 ## Agent Framework
 
@@ -96,6 +110,8 @@ Runtimes manage state, and state transitions (orchestration). In other words, bu
 * **Human-in-the-loop**: Incorporate human oversight by inspecting and modifying agent state.
 
 [LangGraph](https://docs.langchain.com/oss/python/langgraph/overview) builds and runs the flowchart..
+
+Below are common flowcharts that makes software systems, agentic:
 
 ### RAG (Retrieval-Augmented generation)
 
@@ -144,17 +160,42 @@ Note: for the best DX (Developer Experience), we will be using the **Functional 
 
 **LangSmith**:
 
-* **Deployment**: `localhost` -> production server
+* **Deployment**: from `localhost` to a production server
 * **Observability**: tracing, real-time monitoring, alerting and usage.
 * **Evaluation**: testing versions and providing feedback on traces.
 
+## What about Deep Agents?
+
+Deep Agents is LangChain's relatively new high-level library that makes it easy to get started, but you quickly run into issues where you need more control.
+
+The reason people use frameworks is to control the undeterministic nature of LLMs. Deep Agents doesn't help with that, it only makes the first 5 minutes easy.
+
+## Use Cases
+
+In this course, we develop our skills to be able to tackle these reference Use Cases:
+
+- [Build a **personal assistant** with subagents](https://docs.langchain.com/oss/python/langchain/multi-agent/subagents-personal-assistant)
+- [Build **customer support** with handoffs](https://docs.langchain.com/oss/python/langchain/multi-agent/handoffs-customer-support)
+- [Build a **multi-source knowledge base** with routing](https://docs.langchain.com/oss/python/langchain/multi-agent/router-knowledge-base)
+- [Build a **SQL assistant** with on-demand skills](https://docs.langchain.com/oss/python/langchain/multi-agent/skills-sql-assistant)
+
+### Patterns
+
+Common patterns emerge from these skills; things like:
+
+- [Agentic RAG](https://docs.langchain.com/oss/python/langgraph/agentic-rag)
+
 ## Key Takeways
 
-- LangChain is the framework.
-- LangGraph is the runtime.
-- LangSmith is the platform.
+Agents are LLMs. LLMs are undeterministic. Agentic Engineering is about taming its hallucinations and shortcomings to make it actually work like a real piece of software.
 
----
+To do that we will use:
+
+- LangChain: the framework.
+- LangGraph: the runtime.
+- LangSmith: the platform.
+
+Our main source would be the official LangChain docs:
 
 - [Read More](https://docs.langchain.com/oss/python/concepts/products).
 - [Help: Chat with langchain docs](https://chat.langchain.com/)

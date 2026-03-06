@@ -5,21 +5,22 @@ format: "html"
 
 ## Schedule
 
-| Lesson | Description | Materials |
+| Day | Description | Materials |
 | --- | ----------- | --------- |
-|     | **Case Studies**<br/> | [[summary](./L01/case-studies.qmd)] |
-|     | **Overview**<br/> LangChain, LangGraph, LangSmith. | [[lesson](./L01/00_intro.qmd)] |
-|     | **Use Cases**</br/> | [[lesson](./L01/use-cases.qmd)] |
-|  1  | **Agents**<br/>Models, Messages, Prompts, Structured Output, Tools, and Internet Search. | [[notebook](./L01/01_agents.ipynb)] |
-|  2  | **Sub Agents**<br/> Build a personal assistant with agents as tools. | [[notebook](./L01/02_subagents.ipynb)] |
-|  3  | **Semantic Search**<br/>Load, Embed, Store, Retrieve text based on meaning. | [[notebook](./L01/04_semantic-search.ipynb)] |
-|  4  | **Retrieval Augmented Generation (RAG)**<br/>Answer questions about specific source of information. | [[notebook](./L01/05_RAG_agent.ipynb)] |
-|  5  | **RAG in Agentic Systems**<br/> Ingestion Pipeline, Retrieval, Orchestration, and Generation. | [[lesson](./L01/06_RAG_agentic_systems.qmd)] |
-|  6  | **LangGraph Workflow Patterns**<br/> | [[notebook](./L01/08_workflow_patterns.ipynb)] |
-|  7  | **Memory**<br/> Short-term, Long-term memories, and Immutable context. | [[notebook](./L01/09_memory.qmd)] |
-|  8  | **LangSmith**<br/> | [[notebook](./L01/10_langsmith.qmd)] |
+|  1  | **Overview**<br/>Introduction: LangChain, LangGraph, LangSmith. | [[lesson](./L01/00_intro.qmd)]<br/>[[Case Studies](./L01/case-studies.qmd)]<br/>[[Assignment 1](./L01/assignment/01_case_studies_ex.qmd)] |
+|     | **Agents**<br/>Models, Messages, Prompts, Structured Output, Tools, and Internet Search. | [[notebook](./L01/01_agents.ipynb)] |
+|     | **Sub Agents**<br/> Build a personal assistant with agents as tools. | [[notebook](./L01/02_subagents.ipynb)] |
+|  2  | **Semantic Search**<br/>Load, Embed, Store, Retrieve text based on meaning. | [[notebook](./L01/04_semantic-search.ipynb)] |
+|     | **Retrieval Augmented Generation (RAG)**<br/>Answer questions about specific source of information. | [[notebook](./L01/05_RAG_agent.ipynb)] |
+|     | **RAG in Agentic Systems**<br/> Ingestion Pipeline, Retrieval, Orchestration, and Generation. | [[lesson](./L01/06_RAG_agentic_systems.qmd)] |
+|  3  | **LangGraph Workflow Patterns**<br/> | [[notebook](./L01/08_workflow_patterns.ipynb)] |
+|     | **Memory**<br/> Short-term, Long-term memories, and Immutable context. | [[notebook](./L01/09_memory.qmd)] |
+|  4  | **LangSmith**<br/> | [[notebook](./L01/10_langsmith.qmd)] |
 
-> [Get Help](https://docs.langchain.com/oss/python/langchain/get-help) or [Ask the docs anything about LangChain, powered by real-time docs](https://chat.langchain.com/).
+## Need Help?
+
+- [Get Help](https://docs.langchain.com/oss/python/langchain/get-help) or
+- [Ask the docs anything about LangChain, powered by real-time docs](https://chat.langchain.com/).
 
 ## Pre-requisites
 

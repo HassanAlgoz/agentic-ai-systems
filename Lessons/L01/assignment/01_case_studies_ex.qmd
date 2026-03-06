@@ -1,0 +1,6 @@
+---
+title: "Assignment 1: Present a Case Study"
+format: html
+---
+
+Pick a [Case Study from the LangChain Docs](https://docs.langchain.com/oss/python/langgraph/case-studies) read it, understand it, and prepare a presentation to inform other students and the instructor. Most importantly, you should show what is "Agentic" about it and what is not; i.e., a software component (non-LLM). Include: Company, Industry, Use case, Reference in your first slide, and Your Name and University / Major / Department.
