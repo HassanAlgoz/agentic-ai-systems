@@ -1,0 +1,38 @@
+---
+title: "Assignment 2: Create an Agent"
+format: html
+---
+
+In our [first lesson](../01_agents.ipynb) we built an Agent that returned one search result.
+
+Your task is to create an agent that: uses the content from the top-3 ranking sites to answer the user's question.
+
+Optionally: the agent refines the user's query before calling `internet_search(query)`.
+
+Start by:
+
+1. Setup an account at [OpenRouter.ai](https://openrouter.ai/)
+2. Set the `OPENROUTER_API_KEY`
+3. Select an LLM a free model like: `"nvidia/nemotron-3-nano-30b-a3b:free"` (unless you're okay with paying $5.00)
+
+Then, use the `create_agent()` function with the right parameters:
+
+- `model`: must be an agent that can use tools.
+- `tools`: `internet_search` and `fetch_url`.
+- `system_prompt`: where you give the agent role and instructions to accomplish the task successfully.
+
+Tip: break-down the problem into smaller problems, and solve it one by one.
+
+Hint: you can use this as a tool to fetch the content as a piece of text from any website on the specified URL:
+
+```python
+import requests
+from langchain.tools import tool
+
+@tool
+def fetch_url(url: str) -> str:
+    """Fetch text content from a URL"""
+    response = requests.get(url, timeout=10.0)
+    response.raise_for_status()
+    return response.text
+```

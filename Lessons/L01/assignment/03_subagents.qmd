@@ -1,0 +1,6 @@
+---
+title: "Assignment 3: Use Cases for the Supervisor Pattern"
+format: html
+---
+
+Your task is to come up with a different use case for the supervisor pattern (other than calendar & email used in [the lesson](../02_subagents.ipynb)) and justify why one agent wouldn't be enough to accomplish the task alone.
