@@ -147,10 +147,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <ul>
   <li><a href="#build-a-semantic-search-engine-with-langchain" id="toc-build-a-semantic-search-engine-with-langchain" class="nav-link active" data-scroll-target="#build-a-semantic-search-engine-with-langchain">Build a semantic search engine with LangChain</a>
   <ul class="collapse">
-  <li><a href="#overview" id="toc-overview" class="nav-link" data-scroll-target="#overview">Overview</a>
-  <ul class="collapse">
-  <li><a href="#concepts" id="toc-concepts" class="nav-link" data-scroll-target="#concepts">Concepts</a></li>
-  </ul></li>
+  <li><a href="#overview" id="toc-overview" class="nav-link" data-scroll-target="#overview">Overview</a></li>
   <li><a href="#setup" id="toc-setup" class="nav-link" data-scroll-target="#setup">Setup</a>
   <ul class="collapse">
   <li><a href="#installation" id="toc-installation" class="nav-link" data-scroll-target="#installation">Installation</a></li>
@@ -179,25 +176,30 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h1>Build a semantic search engine with LangChain</h1>
 <section id="overview" class="level2">
 <h2 class="anchored" data-anchor-id="overview">Overview</h2>
-<p>This tutorial will familiarize you with LangChain’s <a href="https://docs.langchain.com/oss/python/langchain/retrieval#document-loaders">document loader</a>, <a href="https://docs.langchain.com/oss/python/langchain/retrieval#embedding-models">embedding</a>, and <a href="https://docs.langchain.com/oss/python/langchain/retrieval#vector-store">vector store</a> abstractions. These abstractions are designed to support retrieval of data– from (vector) databases and other sources – for integration with LLM workflows. They are important for applications that fetch data to be reasoned over as part of model inference, as in the case of retrieval-augmented generation, or <a href="https://docs.langchain.com/oss/python/langchain/retrieval">RAG</a>.</p>
-<p>Here we will build a search engine over a PDF document. This will allow us to retrieve passages in the PDF that are similar to an input query. The guide also includes a minimal RAG implementation on top of the search engine.</p>
-<section id="concepts" class="level3">
-<h3 class="anchored" data-anchor-id="concepts">Concepts</h3>
-<p>This guide focuses on retrieval of text data. We will cover the following concepts:</p>
+<p>Here we will build a search engine over a PDF document. This will allow us to retrieve passages in the PDF that are similar to an input query.</p>
+<p>This guide focuses on LangChain’s abstractions related to retrieval of text data:</p>
 <ul>
 <li><a href="https://docs.langchain.com/oss/python/integrations/document_loaders">Documents and document loaders</a>;</li>
 <li><a href="https://docs.langchain.com/oss/python/integrations/splitters">Text splitters</a>;</li>
 <li><a href="https://docs.langchain.com/oss/python/integrations/text_embedding">Embeddings</a>;</li>
 <li><a href="https://docs.langchain.com/oss/python/integrations/vectorstores">Vector stores</a> and <a href="https://docs.langchain.com/oss/python/integrations/retrievers">retrievers</a>.</li>
 </ul>
-</section>
+<ol type="1">
+<li><strong>Indexing</strong>
+<ol type="1">
+<li><strong>Input processing</strong> – Transform raw data into structured documents</li>
+<li><strong>Embedding &amp; storage</strong> – Convert text into searchable vector representations</li>
+</ol></li>
+<li><strong>Retrieval</strong> – Find relevant information based on user queries</li>
+</ol>
+<p>This <em>Relevant context</em> would later be augmented (added) into an LLM’s context window, allowing the LLM to answer questions based on data. The term for this kind of interaction is called: <strong>Retrieval Augmented Generation (RAG)</strong>.</p>
 </section>
 <section id="setup" class="level2">
 <h2 class="anchored" data-anchor-id="setup">Setup</h2>
 <section id="installation" class="level3">
 <h3 class="anchored" data-anchor-id="installation">Installation</h3>
 <p>This tutorial requires the <code>langchain-community</code> and <code>pypdf</code> packages. Using <a href="https://docs.astral.sh/uv/">uv</a>:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">!pip</span> install langchain-community pypdf</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">%pip</span> install langchain-community pypdf</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>For more details, see our <a href="https://docs.langchain.com/oss/python/langchain/install">Installation guide</a>.</p>
 </section>
 </section>
@@ -267,7 +269,7 @@ Attention Is All You Need
 <h3 class="anchored" data-anchor-id="splitting">Splitting</h3>
 <p>For both information retrieval and downstream question-answering purposes, a page may be too coarse a representation. Our goal in the end will be to retrieve <a href="https://reference.langchain.com/python/langchain_core/documents/#langchain_core.documents.base.Document"><code>Document</code></a> objects that answer an input query, and further splitting our PDF will help ensure that the meanings of relevant portions of the document are not “washed out” by surrounding text.</p>
 <p>We can use <a href="https://docs.langchain.com/oss/python/langchain/retrieval#text_splitters">text splitters</a> for this purpose. Here we will use a simple text splitter that partitions based on characters. We will split our documents into chunks of 1000 characters with 200 characters of overlap between chunks. The overlap helps mitigate the possibility of separating a statement from important context related to it. We use the <code>RecursiveCharacterTextSplitter</code>, which will recursively split the document using common separators like new lines until each chunk is the appropriate size. This is the recommended text splitter for generic text use cases.</p>
-<p>We set <code>add_start_index=True</code> so that the character index where each split Document starts within the initial Document is preserved as metadata attribute “start_index”.</p>
+<p>We set <code>add_start_index=True</code> so that the character index where each split Document starts within the initial Document is preserved as metadata attribute <code>start_index</code>.</p>
 <div id="037e89c6" class="cell" data-execution_count="5">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> langchain_text_splitters <span class="im">import</span> RecursiveCharacterTextSplitter</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>

@@ -1,0 +1,973 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.8.26">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Retrieval – Building Agentic AI Systems</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-587c61ba64f3a5504c4d52d930310e48.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-7dc3907ddb6ec99bf1b87f80a83abe8b.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<style>html{ scroll-behavior: smooth; }</style>
+<meta name="mermaid-theme" content="default">
+<script src="../site_libs/quarto-diagram/mermaid.min.js"></script>
+<script src="../site_libs/quarto-diagram/mermaid-init.js"></script>
+<link href="../site_libs/quarto-diagram/mermaid.css" rel="stylesheet">
+
+
+</head>
+
+<body class="nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">Building Agentic AI Systems</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../index.html"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Contents</h2>
+   
+  <ul>
+  <li><a href="#building-a-knowledge-base" id="toc-building-a-knowledge-base" class="nav-link active" data-scroll-target="#building-a-knowledge-base">Building a knowledge base</a></li>
+  <li><a href="#retrieval-pipeline" id="toc-retrieval-pipeline" class="nav-link" data-scroll-target="#retrieval-pipeline">Retrieval pipeline</a></li>
+  <li><a href="#building-blocks" id="toc-building-blocks" class="nav-link" data-scroll-target="#building-blocks">Building blocks</a>
+  <ul class="collapse">
+  <li><a href="#load" id="toc-load" class="nav-link" data-scroll-target="#load">1. Load</a></li>
+  <li><a href="#split" id="toc-split" class="nav-link" data-scroll-target="#split">2. Split</a></li>
+  <li><a href="#embed" id="toc-embed" class="nav-link" data-scroll-target="#embed">3. Embed</a></li>
+  <li><a href="#store" id="toc-store" class="nav-link" data-scroll-target="#store">4. Store</a></li>
+  <li><a href="#retrieve" id="toc-retrieve" class="nav-link" data-scroll-target="#retrieve">5. Retrieve</a></li>
+  </ul></li>
+  <li><a href="#rag-architectures" id="toc-rag-architectures" class="nav-link" data-scroll-target="#rag-architectures">RAG architectures</a>
+  <ul class="collapse">
+  <li><a href="#a.-2-step-rag" id="toc-a.-2-step-rag" class="nav-link" data-scroll-target="#a.-2-step-rag">A. 2-step RAG</a></li>
+  <li><a href="#b.-agentic-rag" id="toc-b.-agentic-rag" class="nav-link" data-scroll-target="#b.-agentic-rag">B. Agentic RAG</a></li>
+  <li><a href="#c.-hybrid-rag" id="toc-c.-hybrid-rag" class="nav-link" data-scroll-target="#c.-hybrid-rag">C. Hybrid RAG</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Retrieval</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p><a href="https://docs.langchain.com/oss/python/langchain/retrieval">Source: https://docs.langchain.com/oss/python/langchain/retrieval</a>.</p>
+<p>Large Language Models (LLMs) are powerful, but they have two key limitations:</p>
+<ul>
+<li><strong>Static knowledge</strong> — their training data is frozen at a point in time.</li>
+<li><strong>Finite context</strong> — they can’t ingest entire corpora at once.</li>
+</ul>
+<p>Retrieval addresses these problems by fetching relevant external knowledge at query time. This is the foundation of <strong>Retrieval-Augmented Generation (RAG)</strong>: enhancing an LLM’s answers with context-specific information.</p>
+<section id="building-a-knowledge-base" class="level2">
+<h2 class="anchored" data-anchor-id="building-a-knowledge-base">Building a knowledge base</h2>
+<p>A <strong>knowledge base</strong> is a repository of documents or structured data used during retrieval.</p>
+<p>If you already have a knowledge base (e.g., a SQL database, CRM, or internal documentation system), you do <strong>not</strong> need to rebuild it. You can either make:</p>
+<ol type="1">
+<li>An <a href="https://docs.langchain.com/oss/python/langgraph/agentic-rag">Agentic RAG</a>: make it a <strong>tool</strong> (the agent gets to decide whether to retrieve)</li>
+<li>A 2-Step RAG: query it and supply the retrieved content as context to the LLM (the agent doesn’t get to decide) If you need a custom knowledge base, you can use LangChain’s document loaders and vector stores to build one from your own data.</li>
+</ol>
+</section>
+<section id="retrieval-pipeline" class="level2">
+<h2 class="anchored" data-anchor-id="retrieval-pipeline">Retrieval pipeline</h2>
+<p>A typical retrieval workflow looks like this:</p>
+<div class="cell" data-layout-align="default">
+<div class="cell-output-display">
+<div>
+<p></p><figure class="figure"><p></p>
+<div>
+<pre class="mermaid mermaid-js">graph TD
+    %% Input processing
+    subgraph "📥 Input processing"
+        A[/Raw Data/] --&gt; B[Loaders]
+        B --&gt; B2[/Documents/]
+        B2 --&gt; C[Splitters]
+        C --&gt; D[/Chunks/]
+    end
+
+    %% Embedding &amp; storage
+    subgraph "🔢 Embedding &amp; storage"
+        D --&gt; E[Embedding models]
+        E --&gt; F[/Vectors/]
+        F --&gt; G[(Vector stores)]
+    end
+
+    %% Retrieval
+    subgraph "🔍 Retrieval"
+        H[/User Query/] --&gt; I["Embedding models (same)"]
+        I --&gt; J[/Vector/]
+        J --&gt; K[Retrievers]
+        K --&gt; G
+        G --&gt; K
+        K --&gt; L[/Relevant context/]
+    end
+
+    %% Generation
+    subgraph "Generation"
+        L -- Augment --&gt; O[LLM]
+        O --&gt; P[/Answer/]
+    end
+</pre>
+</div>
+<p></p></figure><p></p>
+</div>
+</div>
+</div>
+<p>Each component is modular: you can swap loaders, splitters, embeddings, or vector stores without rewriting the app’s logic.</p>
+</section>
+<section id="building-blocks" class="level2">
+<h2 class="anchored" data-anchor-id="building-blocks">Building blocks</h2>
+<section id="load" class="level3">
+<h3 class="anchored" data-anchor-id="load">1. Load</h3>
+<p><a href="https://docs.langchain.com/oss/python/integrations/document_loaders">Document loaders</a> Ingest data from external sources (Google Drive, Slack, Notion, etc.), returning standardized <a href="https://reference.langchain.com/python/langchain-core/documents/base/Document"><code>Document</code></a> objects.</p>
+<div class="cell" data-layout-align="default">
+<div class="cell-output-display">
+<div>
+<p></p><figure class="figure"><p></p>
+<div>
+<pre class="mermaid mermaid-js">flowchart LR
+  S[/"Sources&lt;br&gt;(Google Drive, Slack, Notion, etc.)"/] --&gt; L[Document Loaders]
+  L --&gt; A[/Documents/]
+</pre>
+</div>
+<p></p></figure><p></p>
+</div>
+</div>
+</div>
+</section>
+<section id="split" class="level3">
+<h3 class="anchored" data-anchor-id="split">2. Split</h3>
+<p><a href="https://docs.langchain.com/oss/python/integrations/splitters">Text splitters</a> Break large docs into smaller chunks that will be retrievable individually.</p>
+<div class="cell" data-layout-align="default">
+<div class="cell-output-display">
+<div>
+<p></p><figure class="figure"><p></p>
+<div>
+<pre class="mermaid mermaid-js">flowchart LR
+  A[/Documents/] --&gt; B[Splitter]
+  B --&gt; C1[/Chunk 1/]
+  B --&gt; C2[/Chunk 2/]
+  B --&gt; C3[/Chunk 3/]
+</pre>
+</div>
+<p></p></figure><p></p>
+</div>
+</div>
+</div>
+<p><strong>Why do we split?..</strong></p>
+<section id="a.-navigating-context-window-limits" class="level4">
+<h4 class="anchored" data-anchor-id="a.-navigating-context-window-limits">A. Navigating Context Window Limits</h4>
+<p>Even the most advanced Large Language Models (LLMs) have a <strong>context window</strong>—a maximum number of tokens (words/characters) they can “see” at one time.</p>
+<ul>
+<li><strong>The Problem:</strong> Many documents (legal contracts, technical manuals, books) are significantly larger than an LLM’s context window.</li>
+<li><strong>The Solution:</strong> By splitting a 500-page manual into 500-word chunks, an agent can “pull” only the relevant pieces into its memory to answer a specific query without hitting a technical ceiling.</li>
+</ul>
+</section>
+<section id="b.-reducing-lost-in-the-middle-phenomena" class="level4">
+<h4 class="anchored" data-anchor-id="b.-reducing-lost-in-the-middle-phenomena">B. Reducing “Lost in the Middle” Phenomena</h4>
+<p><a href="https://www.amazon.science/publications/context-length-alone-hurts-llm-performance-despite-perfect-retrieval">Research shows</a> that LLMs are best at recalling information located at the <strong>very beginning or the very end of a prompt</strong>. Information buried in the middle of a massive block of text is often ignored.</p>
+<p>By providing the agent with several <strong>small, concise chunks</strong>, you ensure the relevant information stays at the “top of mind” for the model, leading to <strong>higher reasoning accuracy</strong>.</p>
+</section>
+<section id="c.-cost-and-latency" class="level4">
+<h4 class="anchored" data-anchor-id="c.-cost-and-latency">C. Cost and Latency</h4>
+<p>Every token sent to an LLM costs money and takes time to process.</p>
+<ul>
+<li><strong>Efficiency:</strong> If an agent needs to know a specific date in a 100MB file, sending the whole file is expensive and slow.</li>
+<li><strong>Speed:</strong> Sending three 500-token chunks is nearly instantaneous and costs a fraction of the price, allowing the agent to move through its task pipeline much faster.</li>
+</ul>
+</section>
+</section>
+<section id="embed" class="level3">
+<h3 class="anchored" data-anchor-id="embed">3. Embed</h3>
+<p><a href="https://docs.langchain.com/oss/python/integrations/text_embedding">Embedding models</a> An embedding model turns text into a vector of numbers so that texts with similar meaning land close together in that vector space.</p>
+<div class="cell" data-layout-align="default">
+<div class="cell-output-display">
+<div>
+<p></p><figure class="figure"><p></p>
+<div>
+<pre class="mermaid mermaid-js">flowchart LR
+  D[Embedding Model]
+  C1[/Chunk 1/] --&gt; D --&gt; E1[/Vector 1/]
+  C2[/Chunk 2/] --&gt; D --&gt; E2[/Vector 2/]
+  C3[/Chunk 3/] --&gt; D --&gt; E3[/Vector 3/]
+</pre>
+</div>
+<p></p></figure><p></p>
+</div>
+</div>
+</div>
+</section>
+<section id="store" class="level3">
+<h3 class="anchored" data-anchor-id="store">4. Store</h3>
+<p><a href="https://docs.langchain.com/oss/python/integrations/vectorstores/">Vector stores</a> Specialized databases for storing and searching embeddings.</p>
+<div class="cell" data-layout-align="default">
+<div class="cell-output-display">
+<div>
+<p></p><figure class="figure"><p></p>
+<div>
+<pre class="mermaid mermaid-js">flowchart LR
+    S[(Vector Store)]
+    E1[/Vector 1/] --&gt; S
+    E2[/Vector 2/] --&gt; S
+    E3[/Vector 3/] --&gt; S
+</pre>
+</div>
+<p></p></figure><p></p>
+</div>
+</div>
+</div>
+</section>
+<section id="retrieve" class="level3">
+<h3 class="anchored" data-anchor-id="retrieve">5. Retrieve</h3>
+<p><a href="https://docs.langchain.com/oss/python/integrations/retrievers/">Retrievers</a> A retriever is an interface that returns documents given an unstructured query.</p>
+<div class="cell" data-layout-align="default">
+<div class="cell-output-display">
+<div>
+<p></p><figure class="figure"><p></p>
+<div>
+<pre class="mermaid mermaid-js">flowchart LR
+    R[Retriever] --&gt; S[(Vector Store)]
+    S --&gt; R
+    R --&gt; C1[/Chunk 14/]
+    R --&gt; C2[/Chunk 8/]
+    R --&gt; C3[/Chunk 62/]
+</pre>
+</div>
+<p></p></figure><p></p>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="rag-architectures" class="level2">
+<h2 class="anchored" data-anchor-id="rag-architectures">RAG architectures</h2>
+<p>RAG can be implemented in multiple ways, depending on your system’s needs. We outline each type in the sections below.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 8%">
+<col style="width: 44%">
+<col style="width: 5%">
+<col style="width: 6%">
+<col style="width: 5%">
+<col style="width: 29%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Architecture</th>
+<th>Description</th>
+<th>Control</th>
+<th>Flexibility</th>
+<th>Latency</th>
+<th>Example Use Case</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>2-Step RAG</strong></td>
+<td>Retrieval always happens before generation. Simple and predictable</td>
+<td>✅ High</td>
+<td>❌ Low</td>
+<td>⚡ Fast</td>
+<td>FAQs, documentation bots</td>
+</tr>
+<tr class="even">
+<td><strong>Agentic RAG</strong></td>
+<td>An LLM-powered agent decides <em>when</em> and <em>how</em> to retrieve during reasoning</td>
+<td>❌ Low</td>
+<td>✅ High</td>
+<td>⏳ Variable</td>
+<td>Research assistants with access to multiple tools</td>
+</tr>
+<tr class="odd">
+<td><strong>Hybrid</strong></td>
+<td>Combines characteristics of both approaches with validation steps</td>
+<td>⚖️ Medium</td>
+<td>⚖️ Medium</td>
+<td>⏳ Variable</td>
+<td>Domain-specific Q&amp;A with quality validation</td>
+</tr>
+</tbody>
+</table>
+<p>Note 1: <strong>Latency</strong>: Latency is generally more <strong>predictable</strong> in <strong>2-Step RAG</strong>, as the maximum number of LLM calls is known and capped.</p>
+<p>Note 2: real-world latency may also be <strong>affected by the performance of retrieval steps</strong>—such as API response times, network delays, or database queries—which can vary based on the tools and infrastructure in use.</p>
+<section id="a.-2-step-rag" class="level3">
+<h3 class="anchored" data-anchor-id="a.-2-step-rag">A. 2-step RAG</h3>
+<p>In <strong>2-Step RAG</strong>, the retrieval step is always executed before the generation step. This architecture is straightforward and predictable, making it suitable for many applications where the retrieval of relevant documents is a clear prerequisite for generating an answer.</p>
+<div class="cell" data-layout-align="default">
+<div class="cell-output-display">
+<div>
+<p></p><figure class="figure"><p></p>
+<div>
+<pre class="mermaid mermaid-js">graph LR
+    A[User Question] --&gt; B["Retrieve Relevant Documents"]
+    B --&gt; C["Generate Answer"]
+    C --&gt; D[Return Answer to User]
+
+    %% Styling
+    classDef startend fill:#2e7d32,stroke:#1b5e20,stroke-width:2px,color:#fff
+    classDef process fill:#1976d2,stroke:#0d47a1,stroke-width:1.5px,color:#fff
+
+    class A,D startend
+    class B,C process
+</pre>
+</div>
+<p></p></figure><p></p>
+</div>
+</div>
+</div>
+</section>
+<section id="b.-agentic-rag" class="level3">
+<h3 class="anchored" data-anchor-id="b.-agentic-rag">B. Agentic RAG</h3>
+<p><strong>Agentic Retrieval-Augmented Generation (RAG)</strong> combines the strengths of Retrieval-Augmented Generation with agent-based reasoning. Instead of retrieving documents before answering, an agent (powered by an LLM) reasons step-by-step and decides <strong>when</strong> and <strong>how</strong> to retrieve information during the interaction.</p>
+<div class="cell" data-layout-align="default">
+<div class="cell-output-display">
+<div>
+<p></p><figure class="figure"><p></p>
+<div>
+<pre class="mermaid mermaid-js">graph TD
+    A[User Input / Question] --&gt; B["Agent (LLM)"]
+    B --&gt; C{Need external info?}
+    C -- Yes --&gt; D["Search using tool(s)"]
+    D --&gt; H{Enough to answer?}
+    H -- No --&gt; B
+    H -- Yes --&gt; I[Generate final answer]
+    C -- No --&gt; I
+    I --&gt; J[Return to user]
+
+    %% Dark-mode friendly styling
+    classDef startend fill:#2e7d32,stroke:#1b5e20,stroke-width:2px,color:#fff
+    classDef decision fill:#f9a825,stroke:#f57f17,stroke-width:2px,color:#000
+    classDef process fill:#1976d2,stroke:#0d47a1,stroke-width:1.5px,color:#fff
+
+    class A,J startend
+    class B,D,I process
+    class C,H decision
+</pre>
+</div>
+<p></p></figure><p></p>
+</div>
+</div>
+</div>
+<p>The only thing an agent needs to enable RAG behavior is access to one or more <strong>tools</strong> that can fetch external knowledge — such as documentation loaders, web APIs, or database queries.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> requests</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> langchain.tools <span class="im">import</span> tool</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> langchain.chat_models <span class="im">import</span> init_chat_model</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> langchain.agents <span class="im">import</span> create_agent</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="at">@tool</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> fetch_url(url: <span class="bu">str</span>) <span class="op">-&gt;</span> <span class="bu">str</span>:</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Fetch text content from a URL"""</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>    response <span class="op">=</span> requests.get(url, timeout<span class="op">=</span><span class="fl">10.0</span>)</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>    response.raise_for_status()</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> response.text</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>system_prompt <span class="op">=</span> <span class="st">"""</span><span class="op">\</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="st">Use fetch_url when you need to fetch information from a web-page; quote relevant snippets.</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="st">"""</span></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>agent <span class="op">=</span> create_agent(</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>    model<span class="op">=</span><span class="st">"claude-sonnet-4-5-20250929"</span>,</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>    tools<span class="op">=</span>[fetch_url], <span class="co"># A tool for retrieval</span></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>    system_prompt<span class="op">=</span>system_prompt,</span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section id="c.-hybrid-rag" class="level3">
+<h3 class="anchored" data-anchor-id="c.-hybrid-rag">C. Hybrid RAG</h3>
+<p>Hybrid RAG combines characteristics of both 2-Step and Agentic RAG. It introduces intermediate steps such as query preprocessing, retrieval validation, and post-generation checks. These systems offer more flexibility than fixed pipelines while maintaining some control over execution.</p>
+<p>Typical components include:</p>
+<ul>
+<li><strong>Query enhancement</strong>: Modify the input question to improve retrieval quality. This can involve rewriting unclear queries, generating multiple variations, or expanding queries with additional context.</li>
+<li><strong>Retrieval validation</strong>: Evaluate whether retrieved documents are relevant and sufficient. If not, the system may refine the query and retrieve again.</li>
+<li><strong>Answer validation</strong>: Check the generated answer for accuracy, completeness, and alignment with source content. If needed, the system can regenerate or revise the answer.</li>
+</ul>
+<p>The architecture often supports multiple iterations between these steps:</p>
+<div class="cell" data-layout-align="default">
+<div class="cell-output-display">
+<div>
+<p></p><figure class="figure"><p></p>
+<div>
+<pre class="mermaid mermaid-js">graph TD
+    A[User Question] --&gt; B[Query Enhancement]
+    B --&gt; C[Retrieve Documents]
+    C --&gt; D{Sufficient Info?}
+    D -- No --&gt; E[Refine Query]
+    E --&gt; C
+    D -- Yes --&gt; F[Generate Answer]
+    F --&gt; G{Answer Quality OK?}
+    G -- No --&gt; H{Try Different Approach?}
+    H -- Yes --&gt; E
+    H -- No --&gt; I[Return Best Answer]
+    G -- Yes --&gt; I
+    I --&gt; J[Return to User]
+
+    classDef startend fill:#2e7d32,stroke:#1b5e20,stroke-width:2px,color:#fff
+    classDef decision fill:#f9a825,stroke:#f57f17,stroke-width:2px,color:#000
+    classDef process fill:#1976d2,stroke:#0d47a1,stroke-width:1.5px,color:#fff
+
+    class A,J startend
+    class B,C,E,F,I process
+    class D,G,H decision
+</pre>
+</div>
+<p></p></figure><p></p>
+</div>
+</div>
+</div>
+<p>This architecture is suitable for:</p>
+<ul>
+<li>Applications with ambiguous or underspecified queries</li>
+<li>Systems that require validation or quality control steps</li>
+<li>Workflows involving multiple sources or iterative refinement</li>
+</ul>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+<script src="../site_libs/quarto-html/zenscroll-min.js"></script>
+</body></html>

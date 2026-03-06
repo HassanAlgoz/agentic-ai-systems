@@ -242,36 +242,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="split" class="level3">
 <h3 class="anchored" data-anchor-id="split">2. Split</h3>
 <p><a href="https://docs.langchain.com/oss/python/integrations/splitters">Text splitters</a> Break large docs into smaller chunks that will be retrievable individually.</p>
-<p>Why do we split? ..</p>
-<section id="a.-navigating-context-window-limits" class="level4">
-<h4 class="anchored" data-anchor-id="a.-navigating-context-window-limits">A. Navigating Context Window Limits</h4>
-<p>Even the most advanced Large Language Models (LLMs) have a <strong>context window</strong>—a maximum number of tokens (words/characters) they can “see” at one time.</p>
-<ul>
-<li><strong>The Problem:</strong> Many documents (legal contracts, technical manuals, books) are significantly larger than an LLM’s context window.</li>
-<li><strong>The Solution:</strong> By splitting a 500-page manual into 500-word chunks, an agent can “pull” only the relevant pieces into its memory to answer a specific query without hitting a technical ceiling.</li>
-</ul>
-</section>
-<section id="b.-improving-retrieval-accuracy-rag" class="level4">
-<h4 class="anchored" data-anchor-id="b.-improving-retrieval-accuracy-rag">B. Improving Retrieval Accuracy (RAG)</h4>
-<p>Most agentic systems use <strong>Retrieval-Augmented Generation (RAG)</strong>. This process relies on converting text into “embeddings” (mathematical vectors) to find similarities.</p>
-<ul>
-<li><strong>Semantic Density:</strong> A 50-page document covers many different topics. If you turn that entire document into one vector, the “meaning” becomes diluted and fuzzy.</li>
-<li><strong>Precision:</strong> Chunking allows the agent to find the <em>exact</em> paragraph that answers a question. It’s easier for a system to match the query “What is the refund policy?” to a specific 200-word chunk about refunds than to a 10,000-word general Terms of Service document.</li>
-</ul>
-</section>
-<section id="c.-reducing-lost-in-the-middle-phenomena" class="level4">
-<h4 class="anchored" data-anchor-id="c.-reducing-lost-in-the-middle-phenomena">C. Reducing “Lost in the Middle” Phenomena</h4>
-<p><a href="https://www.amazon.science/publications/context-length-alone-hurts-llm-performance-despite-perfect-retrieval">Research shows</a> that LLMs are best at recalling information located at the very beginning or the very end of a prompt. Information buried in the middle of a massive block of text is often ignored or “hallucinated” away.</p>
-<p>By providing the agent with several <strong>small, concise chunks</strong>, you ensure the relevant information stays at the “top of mind” for the model, leading to higher reasoning accuracy.</p>
-</section>
-<section id="d.-cost-and-latency-optimization" class="level4">
-<h4 class="anchored" data-anchor-id="d.-cost-and-latency-optimization">D. Cost and Latency Optimization</h4>
-<p>Every token sent to an LLM costs money and takes time to process.</p>
-<ul>
-<li><strong>Efficiency:</strong> If an agent needs to know a specific date in a 100MB file, sending the whole file is expensive and slow.</li>
-<li><strong>Speed:</strong> Sending three 500-token chunks is nearly instantaneous and costs a fraction of the price, allowing the agent to move through its task pipeline much faster.</li>
-</ul>
-</section>
 </section>
 <section id="embed" class="level3">
 <h3 class="anchored" data-anchor-id="embed">3. Embed</h3>
