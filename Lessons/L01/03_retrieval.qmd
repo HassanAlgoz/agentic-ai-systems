@@ -116,10 +116,12 @@ Every token sent to an LLM costs money and takes time to process.
 
 ```{mermaid}
 flowchart LR
-  D[Embedding Model]
-  C1[/Chunk 1/] --> D --> E1[/Vector 1/]
-  C2[/Chunk 2/] --> D --> E2[/Vector 2/]
-  C3[/Chunk 3/] --> D --> E3[/Vector 3/]
+  D1[Embedding Model]
+  D2[Embedding Model]
+  D3[Embedding Model]
+  C1[/Chunk 1/] --> D1 --> E1[/Vector 1/]
+  C2[/Chunk 2/] --> D2 --> E2[/Vector 2/]
+  C3[/Chunk 3/] --> D3 --> E3[/Vector 3/]
 ```
 
 ### 4. Store
