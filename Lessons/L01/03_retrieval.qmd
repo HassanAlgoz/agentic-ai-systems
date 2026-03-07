@@ -20,6 +20,7 @@ If you already have a knowledge base (e.g., a SQL database, CRM, or internal doc
 
 1. An [Agentic RAG](https://docs.langchain.com/oss/python/langgraph/agentic-rag): make it a **tool** (the agent gets to decide whether to retrieve)
 2. A 2-Step RAG: query it and supply the retrieved content as context to the LLM (the agent doesn't get to decide)
+
 If you need a custom knowledge base, you can use LangChain’s document loaders and vector stores to build one from your own data.
 
 ## Retrieval pipeline
@@ -124,6 +125,7 @@ flowchart LR
 ### 4. Store
 
 [Vector stores](https://docs.langchain.com/oss/python/integrations/vectorstores/) Specialized databases for storing and searching embeddings.
+
 ```{mermaid}
 flowchart LR
     S[(Vector Store)]
@@ -155,6 +157,7 @@ RAG can be implemented in multiple ways, depending on your system's needs. We ou
 | **2-Step RAG**  | Retrieval always happens before generation. Simple and predictable         | ✅ High    | ❌ Low       | ⚡ Fast     | FAQs, documentation bots                          |
 | **Agentic RAG** | An LLM-powered agent decides *when* and *how* to retrieve during reasoning | ❌ Low     | ✅ High      | ⏳ Variable | Research assistants with access to multiple tools |
 | **Hybrid**      | Combines characteristics of both approaches with validation steps          | ⚖️ Medium | ⚖️ Medium   | ⏳ Variable | Domain-specific Q\&A with quality validation      |
+
 Note 1: **Latency**: Latency is generally more **predictable** in **2-Step RAG**, as the maximum number of LLM calls is known and capped.
 
 Note 2: real-world latency may also be **affected by the performance of retrieval steps**—such as API response times, network delays, or database queries—which can vary based on the tools and infrastructure in use.
@@ -201,6 +204,7 @@ graph TD
     class B,D,I process
     class C,H decision
 ```
+
 The only thing an agent needs to enable RAG behavior is access to one or more **tools** that can fetch external knowledge — such as documentation loaders, web APIs, or database queries.
 
 ```python
