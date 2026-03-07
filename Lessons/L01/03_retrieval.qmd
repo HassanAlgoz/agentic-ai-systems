@@ -238,9 +238,12 @@ Hybrid RAG combines characteristics of both 2-Step and Agentic RAG. It introduce
 
 Typical components include:
 
-* **Query enhancement**: Modify the input question to improve retrieval quality. This can involve rewriting unclear queries, generating multiple variations, or expanding queries with additional context.
-* **Retrieval validation**: Evaluate whether retrieved documents are relevant and sufficient. If not, the system may refine the query and retrieve again.
-* **Answer validation**: Check the generated answer for accuracy, completeness, and alignment with source content. If needed, the system can regenerate or revise the answer.
+* **Query enhancement**: Modify the input question to improve retrieval quality.
+  - Rewrite unclear queries, generate multiple variations, or expand queries with additional context.
+* **Retrieval validation**: Evaluate whether retrieved documents are relevant and sufficient.
+  - If not, the system may refine the query and retrieve again.
+* **Answer validation**: Check the generated answer for accuracy, completeness, and alignment with source content.
+  - If needed, the system can regenerate or revise the answer.
 
 The architecture often supports multiple iterations between these steps:
 
@@ -273,3 +276,23 @@ This architecture is suitable for:
 * Applications with ambiguous or underspecified queries
 * Systems that require validation or quality control steps
 * Workflows involving multiple sources or iterative refinement
+
+## Key Takeaways
+
+* **Retrieval solves two LLM limits**:
+  - Static (frozen) knowledge and finite context.
+  - Fetching relevant external information at query time is the foundation of **RAG** (Retrieval-Augmented Generation).
+* **You don't always need a new knowledge base**:
+  - If you already have one (SQL, CRM, docs), use it as a **tool** (Agentic RAG) or as fixed context (2-Step RAG).
+  - For custom data, use loaders and vector stores.
+* **The retrieval pipeline is modular**:
+  - **Load** (document loaders) → **Split** (text splitters) → **Embed** (embedding models) → **Store** (vector stores) → **Retrieve** (retrievers).
+  - You can swap any component without changing the rest of the app.
+* **Splitting matters** for:
+  - Staying within context windows.
+  - Avoiding "lost in the middle" (LLMs recall start/end of input better).
+  - Lowering cost and latency.
+* **RAG comes in three main forms**:
+  - **2-Step RAG**: always retrieve then generate; high control, fast, predictable.
+  - **Agentic RAG**: the agent decides when and how to retrieve; high flexibility, variable latency.
+  - **Hybrid RAG**: query enhancement, retrieval validation, answer validation; balanced control and flexibility.
