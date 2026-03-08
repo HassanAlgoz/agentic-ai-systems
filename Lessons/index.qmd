@@ -11,17 +11,17 @@ format:
 
 | Day | Description | Materials | Assignment |
 | --- | ----------- | --------- | ---------- |
-|  1  | **Overview**<br/>Introduction: LangChain, LangGraph, LangSmith. | [[lesson](./L01/00_intro.qmd)]<br/>[[Case Studies](./L01/case-studies.qmd)] | [[Assignment 1](./L01/assignment/01_case_studies_ex.qmd)] |
-|     | **Agents**<br/>Models, Messages, Prompts, Structured Output, Tools, and Internet Search. | [[notebook](./L01/01_agents.ipynb)] | [[Assignment 2](./L01/assignment/02_create_agent.qmd)] |
-|     | **Sub Agents**<br/> Build a personal assistant with agents as tools. | [[notebook](./L01/02_subagents.ipynb)] | [[Assignment 3](./L01/assignment/03_subagents.qmd)] |
-|  2  | **RAG Overview**<br/>Building a knowledge base. Retrieval pipeline and building blocks. RAG Architectures. | [[notebook](./L01/03_retrieval.qmd)] |  |
-|     | **Embeddings**<br/>What are embeddings and how do they compare similarity? | [[notebook](./L01/04_embeddings.ipynb)] |  |
-|     | **Semantic Search**<br/>Indexing and retrival of documents based on meaning. | [[notebook](./L01/05_semantic_search.ipynb)] | [[Assignment 4](./L01/assignment/04_semantic_search.qmd)] |
-|     | **RAG Chain and RAG Agent**<br/>Answer questions based on specific sources of information. | [[lesson](./L01/06_RAG_agent.ipynb)] | [[Assignment 5](./L01/assignment/05_rag_agent.qmd)] |
-|  3  | **Context and State**<br/>Short-term, long-term memory and context. | [[notebook](./L01/07_context_and_state.ipynb)] |  |
-|     | **Customer Support Agent**<br/>Apply the State Machine pattern to resolve customer issues. | [[notebook](./L01/08_customer_support_agent.ipynb)] |  |
-|     | **LangGraph Workflow Patterns**<br/> | [[notebook](./L01/10_workflow_patterns.ipynb)] |  |
-|  4  | **LangSmith**<br/> | [[notebook](./L01/10_langsmith.qmd)] |  |
+|  1  | **Overview**<br/>Introduction: LangChain, LangGraph, LangSmith. | [[Lesson](./L01/00_intro.qmd)]<br/>[[Case Studies](./L01/case-studies.qmd)] | [[Assignment 1](./L01/assignment/01_case_studies_ex.qmd)] |
+|     | **Agents**<br/>Models, Messages, Prompts, Structured Output, Tools, and Internet Search. | [[Notebook](./L01/01_agents.ipynb)] | [[Assignment 2](./L01/assignment/02_create_agent.qmd)] |
+|     | **Sub Agents**<br/> Build a personal assistant with agents as tools. | [[Notebook](./L01/02_subagents.ipynb)] | [[Assignment 3](./L01/assignment/03_subagents.qmd)] |
+|  2  | **RAG Overview**<br/>Building a knowledge base. Retrieval pipeline and building blocks. RAG Architectures. | [[Lesson](./L01/03_retrieval.qmd)] |  |
+|     | **Embeddings**<br/>What are embeddings and how do they compare similarity? | [[Notebook](./L01/04_embeddings.ipynb)] |  |
+|     | **Semantic Search**<br/>Indexing and retrival of documents based on meaning. | [[Notebook](./L01/05_semantic_search.ipynb)] | [[Assignment 4](./L01/assignment/04_semantic_search.qmd)] |
+|     | **RAG Chain and RAG Agent**<br/>Answer questions based on specific sources of information. | [[Notebook](./L01/06_RAG_agent.ipynb)] | [[Assignment 5](./L01/assignment/05_rag_agent.qmd)] |
+|  3  | **Context and State**<br/>Short-term, long-term memory and context. | [[Notebook](./L01/07_context_and_state.ipynb)] |  |
+|     | **Customer Support Agent**<br/>Apply the State Machine pattern to resolve customer issues. | [[Notebook](./L01/08_customer_support_agent.ipynb)] |  |
+|     | **LangGraph Workflow Patterns**<br/> | [[Notebook](./L01/10_workflow_patterns.ipynb)] |  |
+|  4  | **LangSmith**<br/> | [[Lesson](./L01/10_langsmith.qmd)] |  |
 
 
 ## Need Help?
