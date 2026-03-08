@@ -1,6 +1,9 @@
 ---
 title: "Index"
-format: "html"
+format: 
+  html:
+    page-layout: full
+    toc: false
 ---
 
 
