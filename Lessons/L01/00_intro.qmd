@@ -154,8 +154,6 @@ Other runtimes:
 - Temporal
 - Inngest
 
-Note: for the best DX (Developer Experience), we will be using the **Functional API**.
-
 ## Agent Platform
 
 **LangSmith**:
