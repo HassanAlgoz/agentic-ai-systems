@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>semantic-search – Building Agentic AI Systems</title>
+<title>semantic_search – Building Agentic AI Systems</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -145,9 +145,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">Contents</h2>
    
   <ul>
-  <li><a href="#build-a-semantic-search-engine-with-langchain" id="toc-build-a-semantic-search-engine-with-langchain" class="nav-link active" data-scroll-target="#build-a-semantic-search-engine-with-langchain">Build a semantic search engine with LangChain</a>
+  <li><a href="#semantic-search-indexing-and-retrieval" id="toc-semantic-search-indexing-and-retrieval" class="nav-link active" data-scroll-target="#semantic-search-indexing-and-retrieval">Semantic Search: Indexing and Retrieval</a>
   <ul class="collapse">
-  <li><a href="#overview" id="toc-overview" class="nav-link" data-scroll-target="#overview">Overview</a></li>
   <li><a href="#setup" id="toc-setup" class="nav-link" data-scroll-target="#setup">Setup</a>
   <ul class="collapse">
   <li><a href="#installation" id="toc-installation" class="nav-link" data-scroll-target="#installation">Installation</a></li>
@@ -160,10 +159,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#embeddings" id="toc-embeddings" class="nav-link" data-scroll-target="#embeddings">2. Embeddings</a></li>
   <li><a href="#vector-stores" id="toc-vector-stores" class="nav-link" data-scroll-target="#vector-stores">3. Vector stores</a></li>
   <li><a href="#retrievers" id="toc-retrievers" class="nav-link" data-scroll-target="#retrievers">4. Retrievers</a></li>
-  <li><a href="#next-steps" id="toc-next-steps" class="nav-link" data-scroll-target="#next-steps">Next steps</a></li>
   </ul></li>
   </ul>
-<div class="quarto-alternate-formats"><h2>Other Formats</h2><ul><li><a href="04_semantic-search.html"><i class="bi bi-file-slides"></i>RevealJS</a></li></ul></div></nav>
+<div class="quarto-alternate-formats"><h2>Other Formats</h2><ul><li><a href="05_semantic_search.html"><i class="bi bi-file-slides"></i>RevealJS</a></li></ul></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block"></header>
@@ -171,13 +169,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 
-<p><a href="https://colab.research.google.com/github/HassanAlgoz/agentic-ai-systems/blob/main/Lessons/L01/04_semantic-search.ipynb"><strong>Open In Colab</strong></a></p>
-<section id="build-a-semantic-search-engine-with-langchain" class="level1">
-<h1>Build a semantic search engine with LangChain</h1>
-<section id="overview" class="level2">
-<h2 class="anchored" data-anchor-id="overview">Overview</h2>
+<p><a href="https://colab.research.google.com/github/HassanAlgoz/agentic-ai-systems/blob/main/Lessons/L01/05_semantic_search.ipynb"><strong>Open In Colab</strong></a></p>
+<section id="semantic-search-indexing-and-retrieval" class="level1">
+<h1>Semantic Search: Indexing and Retrieval</h1>
+<p><a href="https://docs.langchain.com/oss/python/langchain/knowledge-base">Source: Build a semantic search engine with LangChain | LangChain</a>.</p>
 <p>Here we will build a search engine over a PDF document. This will allow us to retrieve passages in the PDF that are similar to an input query.</p>
-<p>This guide focuses on LangChain’s abstractions related to retrieval of text data:</p>
+<p>This guide focuses on LangChain’s abstractions related to indexing and retrieval of text data:</p>
 <ul>
 <li><a href="https://docs.langchain.com/oss/python/integrations/document_loaders">Documents and document loaders</a>;</li>
 <li><a href="https://docs.langchain.com/oss/python/integrations/splitters">Text splitters</a>;</li>
@@ -193,7 +190,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li><strong>Retrieval</strong> – Find relevant information based on user queries</li>
 </ol>
 <p>This <em>Relevant context</em> would later be augmented (added) into an LLM’s context window, allowing the LLM to answer questions based on data. The term for this kind of interaction is called: <strong>Retrieval Augmented Generation (RAG)</strong>.</p>
-</section>
 <section id="setup" class="level2">
 <h2 class="anchored" data-anchor-id="setup">Setup</h2>
 <section id="installation" class="level3">
@@ -289,7 +285,7 @@ Attention Is All You Need
 <h2 class="anchored" data-anchor-id="embeddings">2. Embeddings</h2>
 <p>Vector search is a common way to store and search over unstructured data (such as unstructured text). The idea is to store numeric vectors that are associated with the text. Given a query, we can <a href="https://docs.langchain.com/oss/python/langchain/retrieval#embedding_models">embed</a> it as a vector of the same dimension and use vector similarity metrics (such as cosine similarity) to identify related text.</p>
 <p>LangChain supports embeddings from <a href="https://docs.langchain.com/oss/python/integrations/text_embedding/">dozens of providers</a>. These models specify how text should be converted into a numeric vector. We use HuggingFace with the <code>all-mpnet-base-v2</code> sentence transformer:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="ex">!pip</span> install langchain-huggingface sentence-transformers</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="ex">%pip</span> install langchain-huggingface sentence-transformers</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div id="711c624b" class="cell" data-execution_count="8">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> langchain_huggingface <span class="im">import</span> HuggingFaceEmbeddings</span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a></span>
@@ -464,30 +460,6 @@ development set, newstest2013. We used beam search as described in the previous 
 </div>
 </div>
 <p><code>VectorStoreRetriever</code> supports search types of <code>"similarity"</code> (default), <code>"mmr"</code> (maximum marginal relevance, described above), and <code>"similarity_score_threshold"</code>. We can use the latter to threshold documents output by the retriever by similarity score.</p>
-<p>Retrievers can easily be incorporated into more complex applications, such as <a href="https://docs.langchain.com/oss/python/langchain/retrieval">retrieval-augmented generation (RAG)</a> applications that combine a given question with retrieved context into a prompt for a LLM. To learn more about building such an application, check out the <a href="https://docs.langchain.com/oss/python/langchain/rag">RAG tutorial</a> tutorial.</p>
-</section>
-<section id="next-steps" class="level2">
-<h2 class="anchored" data-anchor-id="next-steps">Next steps</h2>
-<p>You’ve now seen how to build a semantic search engine over a PDF document.</p>
-<p>For more on document loaders:</p>
-<ul>
-<li><a href="https://docs.langchain.com/oss/python/langchain/retrieval#document_loaders">Overview</a></li>
-<li><a href="https://docs.langchain.com/oss/python/integrations/document_loaders/">Available integrations</a></li>
-</ul>
-<p>For more on embeddings:</p>
-<ul>
-<li><a href="https://docs.langchain.com/oss/python/langchain/retrieval#embedding_models/">Overview</a></li>
-<li><a href="https://docs.langchain.com/oss/python/integrations/text_embedding/">Available integrations</a></li>
-</ul>
-<p>For more on vector stores:</p>
-<ul>
-<li><a href="https://docs.langchain.com/oss/python/langchain/retrieval#vectorstores/">Overview</a></li>
-<li><a href="https://docs.langchain.com/oss/python/integrations/vectorstores/">Available integrations</a></li>
-</ul>
-<p>For more on RAG, see:</p>
-<ul>
-<li><a href="https://docs.langchain.com/oss/python/langchain/rag/">Build a Retrieval Augmented Generation (RAG) App</a></li>
-</ul>
 
 
 </section>

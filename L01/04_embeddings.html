@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Embeddings – Building Agentic AI Systems</title>
+<title>embeddings – Building Agentic AI Systems</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -177,57 +177,40 @@ window.Quarto = {
     <h2 id="toc-title">Contents</h2>
    
   <ul>
-  <li><a href="#embeddings-and-similarity-scores" id="toc-embeddings-and-similarity-scores" class="nav-link active" data-scroll-target="#embeddings-and-similarity-scores">Embeddings and Similarity Scores</a>
+  <li><a href="#embeddings" id="toc-embeddings" class="nav-link active" data-scroll-target="#embeddings">Embeddings</a></li>
+  <li><a href="#play-around-with-embeddings" id="toc-play-around-with-embeddings" class="nav-link" data-scroll-target="#play-around-with-embeddings">Play around with embeddings</a>
   <ul class="collapse">
-  <li><a href="#setup" id="toc-setup" class="nav-link" data-scroll-target="#setup">Setup</a>
-  <ul class="collapse">
+  <li><a href="#setup" id="toc-setup" class="nav-link" data-scroll-target="#setup">Setup</a></li>
   <li><a href="#set-up-your-api-key" id="toc-set-up-your-api-key" class="nav-link" data-scroll-target="#set-up-your-api-key">Set up your API key</a></li>
-  </ul></li>
   <li><a href="#calculate-similarity-scores" id="toc-calculate-similarity-scores" class="nav-link" data-scroll-target="#calculate-similarity-scores">Calculate similarity scores</a></li>
   <li><a href="#further-reading" id="toc-further-reading" class="nav-link" data-scroll-target="#further-reading">Further reading</a></li>
   </ul></li>
   </ul>
-<div class="quarto-alternate-formats"><h2>Other Formats</h2><ul><li><a href="xx_embeddings.html"><i class="bi bi-file-slides"></i>RevealJS</a></li></ul></div></nav>
+<div class="quarto-alternate-formats"><h2>Other Formats</h2><ul><li><a href="04_embeddings.html"><i class="bi bi-file-slides"></i>RevealJS</a></li></ul></div></nav>
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content">
-
-<header id="title-block-header" class="quarto-title-block default">
-<div class="quarto-title">
-<h1 class="title">Embeddings</h1>
-</div>
+<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block"></header>
 
 
 
-<div class="quarto-title-meta">
 
-    
-  
-    
-  </div>
-  
-
-
-</header>
-
-
-<p>Let’s start with the fundamental question: what are embeddings?</p>
-<ul>
-<li>Embeddings are numerical representations of real-world data - text, images, audio, videos, anything</li>
-<li>For example, <strong>BERT</strong> is an embedding model: you input a text and out comes a vector of 768 numbers</li>
-<li>The name comes from mathematics, where one space can be mapped, or embedded, into another space</li>
-</ul>
+<p><a href="https://colab.research.google.com/github/HassanAlgoz/agentic-ai-systems/blob/main/Lessons/L01/04_embeddings.ipynb"><strong>Open In Colab</strong></a></p>
+<section id="embeddings" class="level1">
+<h1>Embeddings</h1>
+<p><strong>Embeddings</strong> are numerical representations of real-world data - text, images, audio, videos, anything; usually learned via deep learning models trained using self-supervised methods.</p>
+<p>For example, <strong>BERT</strong> is an embedding model: you input a text and out comes a vector of 768 numbers; representing the “meaning” of this text, as learned by BERT.</p>
+<p>It is helpful to visualize embeddings as a 2D or 3D vector geometrically as in the figure below, where if two vectors (points) are close; then, the objects they represent are similar in meaining:</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><a href="./assets/multi-modal_embedding.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="Multi-modal vectors sharing the same embedding space"><img src="./assets/multi-modal_embedding.png" class="img-fluid figure-img" alt="Multi-modal vectors sharing the same embedding space"></a></p>
 <figcaption>Multi-modal vectors sharing the same embedding space</figcaption>
 </figure>
 </div>
-<ul>
-<li>The geometric distance between two vectors reflects the semantic similarity between the real-world objects they represent.</li>
-<li>If two vectors are close in the embedding space, the objects they represent are semantically similar.</li>
-<li>Another similarity metric is based on the angle between them: cosine similariy; ranging between -1 and 1 where 0 indicates no unrelated objects.</li>
-</ul>
+<p>In reality, similarity metrics can be:</p>
+<ol type="1">
+<li><strong>Eucledian Distance</strong> measured by the straight line between the two points</li>
+<li><strong>Cosine of the Angle</strong> between the two vectors, when they are imagined as pointed lines from the origin onto the points in the space</li>
+</ol>
 <p>Embeddings are commonly used for:</p>
 <ul>
 <li><strong>Search</strong> (where results are ranked by relevance to a query string)</li>
@@ -238,12 +221,13 @@ window.Quarto = {
 <li><strong>Classification</strong> (where text strings are classified by their most similar label)</li>
 </ul>
 <p>See: <a href="https://openrouter.ai/docs/api-reference/embeddings">Embeddings | OpenRouter</a> and <a href="https://developers.openai.com/api/docs/guides/embeddings">Guides &gt; Embeddings | OpenAI</a></p>
-<section id="embeddings-and-similarity-scores" class="level1">
-<h1>Embeddings and Similarity Scores</h1>
+</section>
+<section id="play-around-with-embeddings" class="level1">
+<h1>Play around with embeddings</h1>
 <p>In this tutorial, you will use the OpenRouter API’s embedding endpoint (OpenAI-compatible) to explore similarity scores.</p>
 <p><strong>Prerequisites</strong>: - You need an OpenRouter API key stored in the <code>OPENROUTER_API_KEY</code> environment variable. Get your key at <a href="https://openrouter.ai/keys">openrouter.ai/keys</a>.</p>
-<section id="setup" class="level2">
-<h2 class="anchored" data-anchor-id="setup">Setup</h2>
+<section id="setup" class="level3">
+<h3 class="anchored" data-anchor-id="setup">Setup</h3>
 <p>First, we’ll install the necessary libraries.</p>
 <div id="96e2bb75" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># %pip install -U -q "openai" pandas seaborn matplotlib</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -255,6 +239,7 @@ window.Quarto = {
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
 <span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="co"># from openai import OpenAI</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
+</section>
 <section id="set-up-your-api-key" class="level3">
 <h3 class="anchored" data-anchor-id="set-up-your-api-key">Set up your API key</h3>
 <p>Ensure your <code>OPENROUTER_API_KEY</code> is set in your environment variables (e.g.&nbsp;in a <code>.env</code> file).</p>
@@ -281,7 +266,6 @@ window.Quarto = {
 <span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>    data <span class="op">=</span> response.json()</span>
 <span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> data[<span class="st">"data"</span>]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-</section>
 </section>
 <section id="calculate-similarity-scores" class="level2">
 <h2 class="anchored" data-anchor-id="calculate-similarity-scores">Calculate similarity scores</h2>
@@ -322,7 +306,7 @@ Dimensions (Size): 2048</code></pre>
 <span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>truncated_texts <span class="op">=</span> [truncate(t) <span class="cf">for</span> t <span class="kw">in</span> texts]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<p>A similarity score of two embedding vectors can be obtained by calculating their inner product. If <span class="math inline">\(\mathbf{u}\)</span> is the first embedding vector, and <span class="math inline">\(\mathbf{v}\)</span> the second, this is <span class="math inline">\(\mathbf{u}^T \mathbf{v}\)</span>. As the API provides embedding vectors that are normalised to unit length, this is also the cosine similarity.</p>
+<p>A similarity score of two embedding vectors can be obtained by calculating their inner product. If <span class="math inline">\(\mathbf{u}\)</span> is the first embedding vector, and <span class="math inline">\(\mathbf{v}\)</span> the second, this is <span class="math inline">\(\mathbf{u}^T \mathbf{v}\)</span>. As the API provides embedding vectors that are normalised to unit length, this is also the <strong>cosine similarity</strong>.</p>
 <p>This score can be computed across all embeddings through the matrix self-multiplication: <code>df @ df.T</code>.</p>
 <p>Note that the range from 0.0 (completely dissimilar) to 1.0 (completely similar) is depicted in the heatmap from light (0.0) to dark (1.0).</p>
 <div id="aebf1ea9" class="cell" data-execution_count="25">
@@ -341,7 +325,7 @@ Dimensions (Size): 2048</code></pre>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><a href="xx_embeddings_files/figure-html/cell-11-output-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2"><img src="xx_embeddings_files/figure-html/cell-11-output-1.png" class="img-fluid figure-img"></a></p>
+<p><a href="04_embeddings_files/figure-html/cell-11-output-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2"><img src="04_embeddings_files/figure-html/cell-11-output-1.png" class="img-fluid figure-img"></a></p>
 </figure>
 </div>
 </div>

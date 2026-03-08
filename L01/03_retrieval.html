@@ -165,6 +165,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#b.-agentic-rag" id="toc-b.-agentic-rag" class="nav-link" data-scroll-target="#b.-agentic-rag">B. Agentic RAG</a></li>
   <li><a href="#c.-hybrid-rag" id="toc-c.-hybrid-rag" class="nav-link" data-scroll-target="#c.-hybrid-rag">C. Hybrid RAG</a></li>
   </ul></li>
+  <li><a href="#key-takeaways" id="toc-key-takeaways" class="nav-link" data-scroll-target="#key-takeaways">Key Takeaways</a></li>
   </ul>
 </nav>
     </div>
@@ -203,8 +204,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>If you already have a knowledge base (e.g., a SQL database, CRM, or internal documentation system), you do <strong>not</strong> need to rebuild it. You can either make:</p>
 <ol type="1">
 <li>An <a href="https://docs.langchain.com/oss/python/langgraph/agentic-rag">Agentic RAG</a>: make it a <strong>tool</strong> (the agent gets to decide whether to retrieve)</li>
-<li>A 2-Step RAG: query it and supply the retrieved content as context to the LLM (the agent doesn’t get to decide) If you need a custom knowledge base, you can use LangChain’s document loaders and vector stores to build one from your own data.</li>
+<li>A 2-Step RAG: query it and supply the retrieved content as context to the LLM (the agent doesn’t get to decide)</li>
 </ol>
+<p>If you need a custom knowledge base, you can use LangChain’s document loaders and vector stores to build one from your own data.</p>
 </section>
 <section id="retrieval-pipeline" class="level2">
 <h2 class="anchored" data-anchor-id="retrieval-pipeline">Retrieval pipeline</h2>
@@ -324,10 +326,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p></p><figure class="figure"><p></p>
 <div>
 <pre class="mermaid mermaid-js">flowchart LR
-  D[Embedding Model]
-  C1[/Chunk 1/] --&gt; D --&gt; E1[/Vector 1/]
-  C2[/Chunk 2/] --&gt; D --&gt; E2[/Vector 2/]
-  C3[/Chunk 3/] --&gt; D --&gt; E3[/Vector 3/]
+  D1[Embedding Model]
+  D2[Embedding Model]
+  D3[Embedding Model]
+  C1[/Chunk 1/] --&gt; D1 --&gt; E1[/Vector 1/]
+  C2[/Chunk 2/] --&gt; D2 --&gt; E2[/Vector 2/]
+  C3[/Chunk 3/] --&gt; D3 --&gt; E3[/Vector 3/]
 </pre>
 </div>
 <p></p></figure><p></p>
@@ -515,9 +519,18 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Hybrid RAG combines characteristics of both 2-Step and Agentic RAG. It introduces intermediate steps such as query preprocessing, retrieval validation, and post-generation checks. These systems offer more flexibility than fixed pipelines while maintaining some control over execution.</p>
 <p>Typical components include:</p>
 <ul>
-<li><strong>Query enhancement</strong>: Modify the input question to improve retrieval quality. This can involve rewriting unclear queries, generating multiple variations, or expanding queries with additional context.</li>
-<li><strong>Retrieval validation</strong>: Evaluate whether retrieved documents are relevant and sufficient. If not, the system may refine the query and retrieve again.</li>
-<li><strong>Answer validation</strong>: Check the generated answer for accuracy, completeness, and alignment with source content. If needed, the system can regenerate or revise the answer.</li>
+<li><strong>Query enhancement</strong>: Modify the input question to improve retrieval quality.
+<ul>
+<li>Rewrite unclear queries, generate multiple variations, or expand queries with additional context.</li>
+</ul></li>
+<li><strong>Retrieval validation</strong>: Evaluate whether retrieved documents are relevant and sufficient.
+<ul>
+<li>If not, the system may refine the query and retrieve again.</li>
+</ul></li>
+<li><strong>Answer validation</strong>: Check the generated answer for accuracy, completeness, and alignment with source content.
+<ul>
+<li>If needed, the system can regenerate or revise the answer.</li>
+</ul></li>
 </ul>
 <p>The architecture often supports multiple iterations between these steps:</p>
 <div class="cell" data-layout-align="default">
@@ -558,9 +571,41 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li>Systems that require validation or quality control steps</li>
 <li>Workflows involving multiple sources or iterative refinement</li>
 </ul>
-
-
 </section>
+</section>
+<section id="key-takeaways" class="level2">
+<h2 class="anchored" data-anchor-id="key-takeaways">Key Takeaways</h2>
+<ul>
+<li><strong>Retrieval solves two LLM limits</strong>:
+<ul>
+<li>Static (frozen) knowledge and finite context.</li>
+<li>Fetching relevant external information at query time is the foundation of <strong>RAG</strong> (Retrieval-Augmented Generation).</li>
+</ul></li>
+<li><strong>You don’t always need a new knowledge base</strong>:
+<ul>
+<li>If you already have one (SQL, CRM, docs), use it as a <strong>tool</strong> (Agentic RAG) or as fixed context (2-Step RAG).</li>
+<li>For custom data, use loaders and vector stores.</li>
+</ul></li>
+<li><strong>The retrieval pipeline is modular</strong>:
+<ul>
+<li><strong>Load</strong> (document loaders) → <strong>Split</strong> (text splitters) → <strong>Embed</strong> (embedding models) → <strong>Store</strong> (vector stores) → <strong>Retrieve</strong> (retrievers).</li>
+<li>You can swap any component without changing the rest of the app.</li>
+</ul></li>
+<li><strong>Splitting matters</strong> for:
+<ul>
+<li>Staying within context windows.</li>
+<li>Avoiding “lost in the middle” (LLMs recall start/end of input better).</li>
+<li>Lowering cost and latency.</li>
+</ul></li>
+<li><strong>RAG comes in three main forms</strong>:
+<ul>
+<li><strong>2-Step RAG</strong>: always retrieve then generate; high control, fast, predictable.</li>
+<li><strong>Agentic RAG</strong>: the agent decides when and how to retrieve; high flexibility, variable latency.</li>
+<li><strong>Hybrid RAG</strong>: query enhancement, retrieval validation, answer validation; balanced control and flexibility.</li>
+</ul></li>
+</ul>
+
+
 </section>
 
 </main> <!-- /main -->
