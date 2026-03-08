@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Index – Building Agentic AI Systems</title>
+<title>Assignment 5: RAG Agent – Building Agentic AI Systems</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -23,24 +23,24 @@ ul.task-list li input[type="checkbox"] {
 </style>
 
 
-<script src="site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="site_libs/quarto-nav/headroom.min.js"></script>
-<script src="site_libs/clipboard/clipboard.min.js"></script>
-<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="site_libs/quarto-search/fuse.min.js"></script>
-<script src="site_libs/quarto-search/quarto-search.js"></script>
-<meta name="quarto:offset" content="./">
-<script src="site_libs/quarto-html/quarto.js" type="module"></script>
-<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="site_libs/quarto-html/axe/axe-check.js" type="module"></script>
-<script src="site_libs/quarto-html/popper.min.js"></script>
-<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="site_libs/quarto-html/anchor.min.js"></script>
-<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-587c61ba64f3a5504c4d52d930310e48.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-7dc3907ddb6ec99bf1b87f80a83abe8b.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-587c61ba64f3a5504c4d52d930310e48.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-7dc3907ddb6ec99bf1b87f80a83abe8b.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -80,7 +80,7 @@ ul.task-list li input[type="checkbox"] {
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
-    <a class="navbar-brand" href="./index.html">
+    <a class="navbar-brand" href="../../index.html">
     <span class="navbar-title">Building Agentic AI Systems</span>
     </a>
   </div>
@@ -91,7 +91,7 @@ ul.task-list li input[type="checkbox"] {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link active" href="./index.html" aria-current="page"> 
+    <a class="nav-link" href="../../index.html"> 
 <span class="menu-text">Home</span></a>
   </li>  
 </ul>
@@ -102,21 +102,23 @@ ul.task-list li input[type="checkbox"] {
     </nav>
 </header>
 <!-- content -->
-<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full page-navbar">
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
-    
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
+        
+    </div>
 <!-- main -->
-<main class="content column-page" id="quarto-document-content">
+<main class="content" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Index</h1>
+<h1 class="title">Assignment 5: RAG Agent</h1>
 </div>
 
 
 
-<div class="quarto-title-meta column-page">
+<div class="quarto-title-meta">
 
     
   
@@ -128,102 +130,9 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<section id="schedule" class="level2">
-<h2 class="anchored" data-anchor-id="schedule">Schedule</h2>
-<table class="caption-top table">
-<thead>
-<tr class="header">
-<th>Day</th>
-<th>Description</th>
-<th>Materials</th>
-<th>Assignment</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>1</td>
-<td><strong>Overview</strong><br>Introduction: LangChain, LangGraph, LangSmith.</td>
-<td>[<a href="./L01/00_intro.html">Lesson</a>]<br>[<a href="./L01/case-studies.html">Case Studies</a>]</td>
-<td>[<a href="./L01/assignment/01_case_studies_ex.html">Assignment 1</a>]</td>
-</tr>
-<tr class="even">
-<td></td>
-<td><strong>Agents</strong><br>Models, Messages, Prompts, Structured Output, Tools, and Internet Search.</td>
-<td>[<a href="./L01/01_agents.html">Notebook</a>]</td>
-<td>[<a href="./L01/assignment/02_create_agent.html">Assignment 2</a>]</td>
-</tr>
-<tr class="odd">
-<td></td>
-<td><strong>Sub Agents</strong><br> Build a personal assistant with agents as tools.</td>
-<td>[<a href="./L01/02_subagents.html">Notebook</a>]</td>
-<td>[<a href="./L01/assignment/03_subagents.html">Assignment 3</a>]</td>
-</tr>
-<tr class="even">
-<td>2</td>
-<td><strong>RAG Overview</strong><br>Building a knowledge base. Retrieval pipeline and building blocks. RAG Architectures.</td>
-<td>[<a href="./L01/03_retrieval.html">Lesson</a>]</td>
-<td></td>
-</tr>
-<tr class="odd">
-<td></td>
-<td><strong>Embeddings</strong><br>What are embeddings and how do they compare similarity?</td>
-<td>[<a href="./L01/04_embeddings.html">Notebook</a>]</td>
-<td></td>
-</tr>
-<tr class="even">
-<td></td>
-<td><strong>Semantic Search</strong><br>Indexing and retrival of documents based on meaning.</td>
-<td>[<a href="./L01/05_semantic_search.html">Notebook</a>]</td>
-<td>[<a href="./L01/assignment/04_semantic_search.html">Assignment 4</a>]</td>
-</tr>
-<tr class="odd">
-<td></td>
-<td><strong>RAG Chain and RAG Agent</strong><br>Answer questions based on specific sources of information.</td>
-<td>[<a href="./L01/06_RAG_agent.html">Notebook</a>]</td>
-<td>[<a href="./L01/assignment/05_rag_agent.html">Assignment 5</a>]</td>
-</tr>
-<tr class="even">
-<td>3</td>
-<td><strong>Context and State</strong><br>Short-term, long-term memory and context.</td>
-<td>[<a href="./L01/07_context_and_state.html">Notebook</a>]</td>
-<td></td>
-</tr>
-<tr class="odd">
-<td></td>
-<td><strong>Customer Support Agent</strong><br>Apply the State Machine pattern to resolve customer issues.</td>
-<td>[<a href="./L01/08_customer_support_agent.html">Notebook</a>]</td>
-<td></td>
-</tr>
-<tr class="even">
-<td></td>
-<td><strong>LangGraph Workflow Patterns</strong><br></td>
-<td>[<a href="./L01/10_workflow_patterns.html">Notebook</a>]</td>
-<td></td>
-</tr>
-<tr class="odd">
-<td>4</td>
-<td><strong>LangSmith</strong><br></td>
-<td>[<a href="./L01/10_langsmith.html">Lesson</a>]</td>
-<td></td>
-</tr>
-</tbody>
-</table>
-</section>
-<section id="need-help" class="level2">
-<h2 class="anchored" data-anchor-id="need-help">Need Help?</h2>
-<ul>
-<li><a href="https://docs.langchain.com/oss/python/langchain/get-help">Get Help</a> or</li>
-<li><a href="https://chat.langchain.com/">Ask the docs anything about LangChain, powered by real-time docs</a>.</li>
-</ul>
-</section>
-<section id="pre-requisites" class="level2">
-<h2 class="anchored" data-anchor-id="pre-requisites">Pre-requisites</h2>
-<ul>
-<li>Python Basics. To prepare or refresh: <a href="https://halgoz.quarto.pub/pythonia/">المقدمة البايثونية للبرمجة باللغة العربية</a></li>
-</ul>
+<p>Your task is to: implement a RAG Agent that can answer multi-step questions as in <a href="../../L01/06_RAG_agent.html">the lesson</a>. Use a different data source than used in the previous assignment, and in any previous notebook.</p>
 
 
-</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
@@ -631,5 +540,5 @@ ul.task-list li input[type="checkbox"] {
 
 
 
-<script src="site_libs/quarto-html/zenscroll-min.js"></script>
+<script src="../../site_libs/quarto-html/zenscroll-min.js"></script>
 </body></html>

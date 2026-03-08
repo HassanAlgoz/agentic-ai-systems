@@ -159,6 +159,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#embeddings" id="toc-embeddings" class="nav-link" data-scroll-target="#embeddings">2. Embeddings</a></li>
   <li><a href="#vector-stores" id="toc-vector-stores" class="nav-link" data-scroll-target="#vector-stores">3. Vector stores</a></li>
   <li><a href="#retrievers" id="toc-retrievers" class="nav-link" data-scroll-target="#retrievers">4. Retrievers</a></li>
+  <li><a href="#key-takeaways" id="toc-key-takeaways" class="nav-link" data-scroll-target="#key-takeaways">Key Takeaways</a></li>
   </ul></li>
   </ul>
 <div class="quarto-alternate-formats"><h2>Other Formats</h2><ul><li><a href="05_semantic_search.html"><i class="bi bi-file-slides"></i>RevealJS</a></li></ul></div></nav>
@@ -290,7 +291,7 @@ Attention Is All You Need
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> langchain_huggingface <span class="im">import</span> HuggingFaceEmbeddings</span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>embeddings <span class="op">=</span> HuggingFaceEmbeddings(model_name<span class="op">=</span><span class="st">"sentence-transformers/all-mpnet-base-v2"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stderr">
+<div class="cell-output cell-output-stdout">
 <pre><code>/home/halgoz/work/ai-agents/content/.venv/lib/python3.12/site-packages/tqdm/auto.py:21: TqdmWarning: IProgress not found. Please update jupyter and ipywidgets. See https://ipywidgets.readthedocs.io/en/stable/user_install.html
   from .autonotebook import tqdm as notebook_tqdm</code></pre>
 </div>
@@ -460,6 +461,17 @@ development set, newstest2013. We used beam search as described in the previous 
 </div>
 </div>
 <p><code>VectorStoreRetriever</code> supports search types of <code>"similarity"</code> (default), <code>"mmr"</code> (maximum marginal relevance, described above), and <code>"similarity_score_threshold"</code>. We can use the latter to threshold documents output by the retriever by similarity score.</p>
+</section>
+<section id="key-takeaways" class="level2">
+<h2 class="anchored" data-anchor-id="key-takeaways">Key Takeaways</h2>
+<ul>
+<li><strong>Indexing vs.&nbsp;retrieval</strong> – Indexing turns raw data into structured documents and embeds them for search; retrieval finds relevant passages for a query. Together they form the basis of <strong>RAG (Retrieval Augmented Generation)</strong>.</li>
+<li><strong>Documents</strong> – LangChain’s <code>Document</code> has <code>page_content</code>, <code>metadata</code>, and optional <code>id</code>. Use <strong>document loaders</strong> (e.g.&nbsp;<code>PyPDFLoader</code>) to load from PDFs and other sources.</li>
+<li><strong>Chunking</strong> – Split documents into smaller chunks (e.g.&nbsp;with <code>RecursiveCharacterTextSplitter</code>) so retrieval returns focused passages; use <strong>overlap</strong> to avoid cutting off context.</li>
+<li><strong>Embeddings</strong> – Text is turned into dense vectors (e.g.&nbsp;via HuggingFace <code>all-mpnet-base-v2</code>); similar meaning → similar vectors, enabling <strong>semantic</strong> (meaning-based) search instead of keyword match.</li>
+<li><strong>Vector stores</strong> – Store and query embeddings (e.g.&nbsp;<code>InMemoryVectorStore</code>); support sync/async, by query or by vector, with or without scores, and <strong>MMR</strong> for diversity.</li>
+<li><strong>Retrievers</strong> – Use <code>vector_store.as_retriever()</code> with <code>search_type</code> (<code>"similarity"</code>, <code>"mmr"</code>, <code>"similarity_score_threshold"</code>) and <code>search_kwargs</code> (e.g.&nbsp;<code>k</code>) for easy integration into chains and RAG pipelines.</li>
+</ul>
 
 
 </section>

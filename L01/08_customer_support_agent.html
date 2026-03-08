@@ -165,6 +165,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#manage-message-history" id="toc-manage-message-history" class="nav-link" data-scroll-target="#manage-message-history">8. Manage message history</a></li>
   <li><a href="#add-flexibility-go-back" id="toc-add-flexibility-go-back" class="nav-link" data-scroll-target="#add-flexibility-go-back">9. Add flexibility: Go back</a></li>
   <li><a href="#complete-example" id="toc-complete-example" class="nav-link" data-scroll-target="#complete-example">Complete example</a></li>
+  <li><a href="#key-takeaways" id="toc-key-takeaways" class="nav-link" data-scroll-target="#key-takeaways">Key Takeaways</a></li>
   <li><a href="#next-steps" id="toc-next-steps" class="nav-link" data-scroll-target="#next-steps">Next steps</a></li>
   </ul>
 </nav>
@@ -239,6 +240,36 @@ flowchart TD
     class Warranty,IssueType,OutOfWarranty decisionNode
     class Repair,Troubleshoot actionNode
     class Escalate escalateNode
+</pre>
+</div>
+<p></p></figure><p></p>
+</div>
+</div>
+</div>
+<p>And this is how the conversation would typically happen:</p>
+<div class="cell" data-layout-align="default">
+<div class="cell-output-display">
+<div>
+<p></p><figure class="figure"><p></p>
+<div>
+<pre class="mermaid mermaid-js">sequenceDiagram
+    participant User
+    participant Agent
+    participant Workflow State
+
+    User-&gt;&gt;Agent: "My phone is broken"
+    Note over Agent,Workflow State: Step: Get warranty status&lt;br/&gt;Tools: record_warranty_status
+    Agent--&gt;&gt;User: "Is your device under warranty?"
+
+    User-&gt;&gt;Agent: "Yes, it's still under warranty"
+    Agent-&gt;&gt;Workflow State: record_warranty_status("in_warranty")
+    Note over Agent,Workflow State: Step: Classify issue&lt;br/&gt;Tools: record_issue_type
+    Agent--&gt;&gt;User: "Can you describe the issue?"
+
+    User-&gt;&gt;Agent: "The screen is cracked"
+    Agent-&gt;&gt;Workflow State: record_issue_type("hardware")
+    Note over Agent,Workflow State: Step: Provide resolution&lt;br/&gt;Tools: provide_solution, escalate_to_human
+    Agent--&gt;&gt;User: "Here's the warranty repair process..."
 </pre>
 </div>
 <p></p></figure><p></p>
@@ -1289,7 +1320,18 @@ Tip
 </section>
 <section id="complete-example" class="level2">
 <h2 class="anchored" data-anchor-id="complete-example">Complete example</h2>
-<p><a href="https://docs.langchain.comhttps://docs.langchain.com/oss/python/langchain/multi-agent/handoffs-customer-support#complete-example">Here’s everything together in a runnable script</a>.</p>
+<p><a href="https://docs.langchain.com/oss/python/langchain/multi-agent/handoffs-customer-support#complete-example">Here’s everything together in a runnable script</a>.</p>
+</section>
+<section id="key-takeaways" class="level2">
+<h2 class="anchored" data-anchor-id="key-takeaways">Key Takeaways</h2>
+<ul>
+<li><strong>State machine vs subagents</strong>: Use a single agent whose configuration (system prompt + tools) changes by step. Each step is a different configuration selected from state—no separate sub-agents.</li>
+<li><strong>Custom state drives the workflow</strong>: Define a state schema (e.g.&nbsp;<code>SupportState</code>) with <code>current_step</code> and any workflow data. <code>current_step</code> determines which prompt and tools are active.</li>
+<li><strong>Tools advance the workflow</strong>: Tools can return a <code>Command</code> to update state (e.g.&nbsp;set <code>warranty_status</code>, <code>issue_type</code>) and <strong>transition</strong> by setting <code>current_step</code>. That’s how the state machine moves between steps.</li>
+<li><strong>Step config as a dictionary</strong>: Map step names to <code>{ prompt, tools, requires }</code>. Use prompt templates with state variables (e.g.&nbsp;<code>{warranty_status}</code>) and declare which state fields must be set before a step runs.</li>
+<li><strong>Middleware applies step config</strong>: Use <code>@wrap_model_call</code> to read <code>current_step</code>, look up config, validate <code>requires</code>, format the prompt with state, and call <code>request.override(system_prompt=..., tools=...)</code> so the same agent behaves differently per step.</li>
+<li><strong>Checkpointer is required</strong>: Persist state (e.g.&nbsp;with <code>InMemorySaver()</code>) so <code>current_step</code> and other fields survive across turns. Without a checkpointer, the workflow would reset every message.</li>
+</ul>
 </section>
 <section id="next-steps" class="level2">
 <h2 class="anchored" data-anchor-id="next-steps">Next steps</h2>
