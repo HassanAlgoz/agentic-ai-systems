@@ -1,0 +1,144 @@
+---
+title: FAQ
+format: html
+toc: true
+toc-depth: 2
+---
+
+## Q1: what is the meaning of the @ symbol? {#decorator}
+
+In Python, the `@` symbol is the syntax for a **decorator**.
+
+To understand it without the "magic" or buzzwords, you have to treat it as a functional wrapper. It is a piece of code that sits "on top" of a function to modify its behavior without you having to manually rewrite the function's internal logic.
+
+---
+
+### 1. The Pure Python Context
+
+At its core, a decorator is **syntactic sugar**. It is a shorthand way of passing one function into another.
+
+When you write:
+
+```python
+@my_decorator
+def my_function():
+    pass
+
+```
+
+The Python interpreter internally executes this as:
+
+```python
+my_function = my_decorator(my_function)
+
+```
+
+The `@` symbol tells Python to take the function defined immediately below it, pass it as an argument to the decorator function, and then replace the original function name with the "wrapped" version returned by the decorator.
+
+**Why use it?**
+It allows for **Separation of Concerns**. You can handle logging, access control, or timing in a decorator so that your actual function only contains the core business logic.
+
+---
+
+### 2. The LangChain Context (`@tool`)
+
+In the specific case of `langchain.tools`, the `@tool` decorator performs several heavy-lifting tasks that turn a standard Python function into a structured **LangChain Tool object**.
+
+When you apply `@tool` to your `multiply` function, LangChain does the following:
+
+#### A. Metadata Extraction (Introspection)
+
+LangChain uses Python's `inspect` module to look at your function. It extracts:
+
+* **The Function Name:** `multiply` becomes the name the LLM (Large Language Model) uses to call the tool.
+* **The Docstring:** `"""Multiplies two numbers."""` is extracted and used as the "description." This is critical because this description is what is sent to the LLM so it knows *when* to use this tool.
+* **Type Hints:** It looks at `a: int, b: int` to understand what data types the tool expects.
+
+#### B. Pydantic Schema Generation
+
+The decorator automatically generates a **Pydantic model** (a data validation schema) based on your arguments. This schema is converted into a JSON format that APIs (like OpenAI's tool-calling API) can understand. This ensures that if an LLM tries to pass a string to your `multiply` function, LangChain can catch the error before it even hits your code.
+
+#### C. Object Transformation
+
+The original `multiply` function is wrapped into a class instance (usually a `BaseTool` subclass). This object now has extra methods required by the LangChain ecosystem, such as:
+
+* `.invoke()`: For running the tool synchronously.
+* `.ainvoke()`: For running the tool asynchronously.
+* `.args_schema`: To view the JSON schema of the inputs.
+
+### Summary Table
+
+| Feature | Standard Python `@` | LangChain `@tool` |
+| --- | --- | --- |
+| **Primary Goal** | Function wrapping/modification | Turning a function into an LLM-compatible interface |
+| **Result** | A modified function | A `StructuredTool` object |
+| **Key Metadata** | None required | Uses docstrings and type hints as API documentation |
+| **Logic** | Manual (user-defined) | Automated (Schema generation & validation) |
+
+
+## Q2: What does the `**` operator do? {#star_star}
+
+In the context of Python, the `**` operator used in a function call is known as **dictionary unpacking** (or more formally, **mapping unpacking**).
+
+When you place `**` before an object (like `request.state`), Python takes that mapping and expands its key-value pairs into individual **keyword arguments**.
+
+### How it Works Mechanically
+
+Instead of passing a single dictionary object to the method, the `**` operator "unwraps" the dictionary so that every key becomes an argument name and every value becomes the value assigned to that argument.
+
+For example, if `request.state` is:
+
+```python
+{"user": "Alice", "id": 42}
+
+```
+
+The line:
+
+```python
+"Hello {user}".format(**request.state)
+
+```
+
+Is interpreted by Python exactly as if you had typed:
+
+```python
+"Hello {user}".format(user="Alice", id=42)
+
+```
+
+---
+
+### Interaction with `.format()`
+
+The `str.format()` method expects keyword arguments to fill placeholders that contain names. When you use `**`, it allows for a dynamic exchange:
+
+1. **The Unpacking:** `**request.state` turns dictionary keys into named parameters.
+2. **The Matching:** The `.format()` method looks at the string (the `system_prompt`) and finds placeholders like `{user}` or `{date}`.
+3. **The Insertion:** It matches those placeholder names against the keyword arguments provided by the unpacking.
+
+### A Concrete Example
+
+```python
+# The mapping (dictionary)
+request_state = {
+    "model_name": "GPT-4",
+    "version": "2.0"
+}
+
+# The template string
+prompt_template = "System Status: {model_name} version {version}"
+
+# Unpacking the dictionary into the format method
+result = prompt_template.format(**request_state)
+
+print(result) 
+# Output: System Status: GPT-4 version 2.0
+
+```
+
+### Key Constraints
+
+* **Keys must be strings:** Since keyword argument names in Python must be valid identifiers, the keys in your dictionary must be strings.
+* **Exact match required:** If the string contains a placeholder like `{timestamp}` but `request.state` does not have a `"timestamp"` key, Python will raise a `KeyError`.
+* **No duplicates:** You cannot pass a keyword argument manually if it is already present in the unpacked dictionary (e.g., `.format(user="Bob", **request.state)` would fail if `request.state` also contains a `user` key).
