@@ -19,7 +19,7 @@ format:
 |     | **Semantic Search**<br/>Indexing and retrival of documents based on meaning. | [[Notebook](./L01/05_semantic_search.ipynb)] | [[Assignment 4](./L01/assignment/04_semantic_search.qmd)] |
 |     | **RAG Chain and RAG Agent**<br/>Answer questions based on specific sources of information. | [[Notebook](./L01/06_RAG_agent.ipynb)] | [[Assignment 5](./L01/assignment/05_rag_agent.qmd)] |
 |  3  | **Context and State**<br/>Short-term, long-term memory and context. | [[Notebook](./L01/07_context_and_state.ipynb)] |  |
-|     | **Customer Support Agent**<br/>Apply the State Machine pattern to resolve customer issues. | [[Notebook](./L01/08_customer_support_agent.ipynb)] |  |
+|     | **Customer Support Agent**<br/>Apply the State Machine pattern to resolve customer issues and escalate to humans when necessary. | [[Notebook](./L01/08_customer_support_agent.ipynb)] |  |
 |     | **LangGraph Workflow Patterns**<br/> | [[Notebook](./L01/10_workflow_patterns.ipynb)] |  |
 |  4  | **LangSmith**<br/> | [[Lesson](./L01/10_langsmith.qmd)] |  |
 
