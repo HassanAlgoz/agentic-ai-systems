@@ -1,0 +1,6 @@
+---
+title: "Assignment 5: RAG Agent"
+format: html
+---
+
+Your task is to: implement a RAG Agent that can answer multi-step questions as in [the lesson](../06_RAG_agent.ipynb). Use a different data source than used in the previous assignment, and in any previous notebook.

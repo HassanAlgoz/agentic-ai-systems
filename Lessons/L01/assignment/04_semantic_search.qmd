@@ -3,4 +3,4 @@ title: "Assignment 4: Semantic Search"
 format: html
 ---
 
-Your task is to: apply the Load, Embed, Store, and Retrieve, just like [the lesson](../04_semantic_search.ipynb), but using other documents of your choice.
+Your task is to: apply the Load, Embed, Store, and Retrieve, just like [the lesson](../05_semantic_search.ipynb), but using other documents of your choice.
