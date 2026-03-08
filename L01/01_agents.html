@@ -649,7 +649,7 @@ justification: The user wants to understand how a coronary artery calcium (CAC) 
 <li>A function or coroutine to execute.</li>
 </ol>
 <p>Note: A <em>coroutine</em> is a method that can suspend execution and resume at a later time</p>
-<div id="fc180bd3" class="cell" data-execution_count="79">
+<div id="fc180bd3" class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb42"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> langchain.tools <span class="im">import</span> tool</span>
 <span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Define a tool</span></span>
@@ -658,6 +658,7 @@ justification: The user wants to understand how a coronary artery calcium (CAC) 
 <span id="cb42-6"><a href="#cb42-6" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Multiplies two numbers."""</span></span>
 <span id="cb42-7"><a href="#cb42-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> a <span class="op">*</span> b</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
+<p><a href="../L01/faq.html#decorator">FAQ: what is the meaning of the @ symbol?</a></p>
 <div id="7451c7e0" class="cell" data-execution_count="80">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb43"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Bind tools to the model</span></span>
 <span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a>llm_with_tools <span class="op">=</span> model_nemotron3_nano.bind_tools([multiply])</span>

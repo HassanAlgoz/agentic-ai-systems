@@ -149,9 +149,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">Contents</h2>
    
   <ul>
-  <li><a href="#select-an-llm" id="toc-select-an-llm" class="nav-link active" data-scroll-target="#select-an-llm">Select an LLM</a></li>
+  <li><a href="#select-brains-llms" id="toc-select-brains-llms" class="nav-link active" data-scroll-target="#select-brains-llms">Select brains (LLMs)</a></li>
   <li><a href="#define-custom-state" id="toc-define-custom-state" class="nav-link" data-scroll-target="#define-custom-state">1. Define custom state</a></li>
-  <li><a href="#create-tools-that-manage-workflow-state" id="toc-create-tools-that-manage-workflow-state" class="nav-link" data-scroll-target="#create-tools-that-manage-workflow-state">2. Create tools that manage workflow state</a></li>
+  <li><a href="#create-tools-that-manage-workflow-state" id="toc-create-tools-that-manage-workflow-state" class="nav-link" data-scroll-target="#create-tools-that-manage-workflow-state">2. Create tools that manage workflow state</a>
+  <ul class="collapse">
+  <li><a href="#human-in-the-loop" id="toc-human-in-the-loop" class="nav-link" data-scroll-target="#human-in-the-loop">Human-in-the-loop</a></li>
+  <li><a href="#generation" id="toc-generation" class="nav-link" data-scroll-target="#generation">Generation</a></li>
+  </ul></li>
   <li><a href="#define-step-configurations" id="toc-define-step-configurations" class="nav-link" data-scroll-target="#define-step-configurations">3. Define step configurations</a></li>
   <li><a href="#create-step-based-middleware" id="toc-create-step-based-middleware" class="nav-link" data-scroll-target="#create-step-based-middleware">4. Create step-based middleware</a></li>
   <li><a href="#create-the-agent" id="toc-create-the-agent" class="nav-link" data-scroll-target="#create-the-agent">5. Create the agent</a></li>
@@ -163,7 +167,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#turn-3-after-issue-classified" id="toc-turn-3-after-issue-classified" class="nav-link" data-scroll-target="#turn-3-after-issue-classified">Turn 3: After issue classified</a></li>
   </ul></li>
   <li><a href="#manage-message-history" id="toc-manage-message-history" class="nav-link" data-scroll-target="#manage-message-history">8. Manage message history</a></li>
-  <li><a href="#add-flexibility-go-back" id="toc-add-flexibility-go-back" class="nav-link" data-scroll-target="#add-flexibility-go-back">9. Add flexibility: Go back</a></li>
+  <li><a href="#add-the-flexibility-to-go-back-and-correct-things" id="toc-add-the-flexibility-to-go-back-and-correct-things" class="nav-link" data-scroll-target="#add-the-flexibility-to-go-back-and-correct-things">9. Add the flexibility to go back and correct things</a></li>
   <li><a href="#complete-example" id="toc-complete-example" class="nav-link" data-scroll-target="#complete-example">Complete example</a></li>
   <li><a href="#key-takeaways" id="toc-key-takeaways" class="nav-link" data-scroll-target="#key-takeaways">Key Takeaways</a></li>
   <li><a href="#next-steps" id="toc-next-steps" class="nav-link" data-scroll-target="#next-steps">Next steps</a></li>
@@ -199,9 +203,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li>Classifies issues as hardware or software.</li>
 <li>Provides solutions or escalates to human support.</li>
 <li>Maintains conversation state across multiple turns.</li>
+<li><strong>Human-in-the-loop: Escalate to a human when necessary</strong>.</li>
 </ul>
 <p>Unlike the <a href="https://docs.langchain.com/oss/python/langchain/multi-agent/subagents-personal-assistant">subagents pattern</a> where sub-agents are called as tools, the <strong>state machine pattern</strong> uses a single agent whose configuration changes based on workflow progress. Each “step” is just a different configuration (system prompt + tools) of the same underlying agent, selected dynamically based on state.</p>
-<p>The state can be determined from multiple sources: the agent’s past actions (tool calls), external state (such as API call results), or even initial user input (for example, by running a classifier to determine user intent).</p>
+<p>The state can be determined from multiple sources:</p>
+<ol type="1">
+<li>the agent’s past actions (tool calls)</li>
+<li>external state (such as API call results)</li>
+<li>or even initial user input (for example, by running a classifier to determine user intent)</li>
+</ol>
 <p>Here’s the workflow we’ll build:</p>
 <div class="cell" data-layout-align="default">
 <div class="cell-output-display">
@@ -253,33 +263,39 @@ flowchart TD
 <p></p><figure class="figure"><p></p>
 <div>
 <pre class="mermaid mermaid-js">sequenceDiagram
-    participant User
+    participant Customer
     participant Agent
     participant Workflow State
+    participant Human
 
-    User-&gt;&gt;Agent: "My phone is broken"
+    Customer-&gt;&gt;Agent: "My phone is broken"
     Note over Agent,Workflow State: Step: Get warranty status&lt;br/&gt;Tools: record_warranty_status
-    Agent--&gt;&gt;User: "Is your device under warranty?"
+    Agent--&gt;&gt;Customer: "Is your device under warranty?"
 
-    User-&gt;&gt;Agent: "Yes, it's still under warranty"
+    Customer-&gt;&gt;Agent: "Yes, it's still under warranty"
     Agent-&gt;&gt;Workflow State: record_warranty_status("in_warranty")
     Note over Agent,Workflow State: Step: Classify issue&lt;br/&gt;Tools: record_issue_type
-    Agent--&gt;&gt;User: "Can you describe the issue?"
+    Agent--&gt;&gt;Customer: "Can you describe the issue?"
 
-    User-&gt;&gt;Agent: "The screen is cracked"
+    Customer-&gt;&gt;Agent: "The screen is cracked"
     Agent-&gt;&gt;Workflow State: record_issue_type("hardware")
     Note over Agent,Workflow State: Step: Provide resolution&lt;br/&gt;Tools: provide_solution, escalate_to_human
-    Agent--&gt;&gt;User: "Here's the warranty repair process..."
+    Agent--&gt;&gt;Customer: "Here's the warranty repair process..."
+
+    Customer-&gt;&gt;Agent: "WHERE IS THE HUMAN MANAGER!"
+    Agent-&gt;&gt;Human: escalate_to_human("customer is angry")
+    Human-&gt;&gt;Agent: "Tell them the issue is fixed, and their ticket number is 123456. End the conversation there."
+    Agent--&gt;&gt;Customer: "Issue is fixed! Your ticket number is 123456. Have a nice day!"
 </pre>
 </div>
 <p></p></figure><p></p>
 </div>
 </div>
 </div>
-<section id="select-an-llm" class="level3">
-<h3 class="anchored" data-anchor-id="select-an-llm">Select an LLM</h3>
+<section id="select-brains-llms" class="level3">
+<h3 class="anchored" data-anchor-id="select-brains-llms">Select brains (LLMs)</h3>
 <p>Select a chat model from LangChain’s suite of integrations:</p>
-<div id="187a1d45" class="cell" data-execution_count="28">
+<div id="187a1d45" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> langchain_openai <span class="im">import</span> ChatOpenAI</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> langchain.agents <span class="im">import</span> create_agent</span>
@@ -295,158 +311,197 @@ flowchart TD
 <span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>    base_url<span class="op">=</span><span class="st">"https://openrouter.ai/api/v1"</span>,</span>
 <span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>    api_key<span class="op">=</span>os.environ.get(<span class="st">"OPENROUTER_API_KEY"</span>),</span>
 <span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>/home/halgoz/work/ai-agents/content/.venv/lib/python3.12/site-packages/tqdm/auto.py:21: TqdmWarning: IProgress not found. Please update jupyter and ipywidgets. See https://ipywidgets.readthedocs.io/en/stable/user_install.html
+  from .autonotebook import tqdm as notebook_tqdm</code></pre>
+</div>
 </div>
 </section>
 <section id="define-custom-state" class="level2">
 <h2 class="anchored" data-anchor-id="define-custom-state">1. Define custom state</h2>
 <p>First, define a custom state schema that tracks which step is currently active:</p>
-<div id="eeb2bb75" class="cell" data-execution_count="29">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> langchain.agents <span class="im">import</span> AgentState</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> typing_extensions <span class="im">import</span> NotRequired</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> typing <span class="im">import</span> Literal</span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Define the possible workflow steps</span></span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>SupportStep <span class="op">=</span> Literal[</span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">"warranty_collector"</span>,</span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">"issue_classifier"</span>,</span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>    <span class="st">"resolution_specialist"</span></span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>]</span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> SupportState(AgentState):</span>
-<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""State for customer support workflow."""</span></span>
-<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>    current_step: NotRequired[SupportStep]</span>
-<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>    warranty_status: NotRequired[Literal[<span class="st">"in_warranty"</span>, <span class="st">"out_of_warranty"</span>]]</span>
-<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>    issue_type: NotRequired[Literal[<span class="st">"hardware"</span>, <span class="st">"software"</span>]]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="eeb2bb75" class="cell" data-execution_count="3">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> langchain.agents <span class="im">import</span> AgentState</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> typing_extensions <span class="im">import</span> NotRequired</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> typing <span class="im">import</span> Literal</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Define the possible workflow steps</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>SupportStep <span class="op">=</span> Literal[</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">"warranty_collector"</span>,</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">"issue_classifier"</span>,</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    <span class="st">"resolution_specialist"</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>]</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> SupportState(AgentState):</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""State for customer support workflow."""</span></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>    current_step: NotRequired[SupportStep]</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>    warranty_status: NotRequired[Literal[<span class="st">"in_warranty"</span>, <span class="st">"out_of_warranty"</span>]]</span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>    issue_type: NotRequired[Literal[<span class="st">"hardware"</span>, <span class="st">"software"</span>]]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<p>The <code>current_step</code> field is the core of the state machine pattern - it determines which configuration (prompt + tools) is loaded on each turn.</p>
+<p>The <code>current_step</code> field is <strong>the core of the state machine pattern</strong> - it determines which configuration (prompt + tools) is loaded on each turn.</p>
 </section>
 <section id="create-tools-that-manage-workflow-state" class="level2">
 <h2 class="anchored" data-anchor-id="create-tools-that-manage-workflow-state">2. Create tools that manage workflow state</h2>
-<p>Create tools that update the workflow state. These tools allow the agent to record information and transition to the next step.</p>
-<p>The key is using <code>Command</code> to update state, including the <code>current_step</code> field:</p>
-<div id="03bfa397" class="cell" data-execution_count="30">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> langchain.tools <span class="im">import</span> tool, ToolRuntime</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> langchain.messages <span class="im">import</span> ToolMessage</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> langgraph.types <span class="im">import</span> Command</span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="at">@tool</span></span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> record_warranty_status(</span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    status: Literal[<span class="st">"in_warranty"</span>, <span class="st">"out_of_warranty"</span>],</span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    runtime: ToolRuntime[<span class="va">None</span>, SupportState],</span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>) <span class="op">-&gt;</span> Command:</span>
-<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Record the customer's warranty status and transition to issue classification."""</span></span>
-<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> Command(</span>
-<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>        update<span class="op">=</span>{</span>
-<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>            <span class="st">"warranty_status"</span>: status,</span>
-<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>            <span class="st">"current_step"</span>: <span class="st">"issue_classifier"</span>,</span>
-<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>            <span class="st">"messages"</span>: [</span>
-<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>                ToolMessage(</span>
-<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>                    content<span class="op">=</span><span class="ss">f"Warranty status recorded as: </span><span class="sc">{</span>status<span class="sc">}</span><span class="ss">"</span>,</span>
-<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>                    tool_call_id<span class="op">=</span>runtime.tool_call_id,</span>
-<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>                )</span>
-<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>            ],</span>
-<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>        }</span>
-<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a><span class="at">@tool</span></span>
-<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> record_issue_type(</span>
-<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a>    issue_type: Literal[<span class="st">"hardware"</span>, <span class="st">"software"</span>],</span>
-<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a>    runtime: ToolRuntime[<span class="va">None</span>, SupportState],</span>
-<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a>) <span class="op">-&gt;</span> Command:</span>
-<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Record the type of issue and transition to resolution specialist."""</span></span>
-<span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> Command(</span>
-<span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a>        update<span class="op">=</span>{</span>
-<span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a>            <span class="st">"issue_type"</span>: issue_type,</span>
-<span id="cb3-34"><a href="#cb3-34" aria-hidden="true" tabindex="-1"></a>            <span class="st">"current_step"</span>: <span class="st">"resolution_specialist"</span>,</span>
-<span id="cb3-35"><a href="#cb3-35" aria-hidden="true" tabindex="-1"></a>            <span class="st">"messages"</span>: [</span>
-<span id="cb3-36"><a href="#cb3-36" aria-hidden="true" tabindex="-1"></a>                ToolMessage(</span>
-<span id="cb3-37"><a href="#cb3-37" aria-hidden="true" tabindex="-1"></a>                    content<span class="op">=</span><span class="ss">f"Issue type recorded as: </span><span class="sc">{</span>issue_type<span class="sc">}</span><span class="ss">"</span>,</span>
-<span id="cb3-38"><a href="#cb3-38" aria-hidden="true" tabindex="-1"></a>                    tool_call_id<span class="op">=</span>runtime.tool_call_id,</span>
-<span id="cb3-39"><a href="#cb3-39" aria-hidden="true" tabindex="-1"></a>                )</span>
-<span id="cb3-40"><a href="#cb3-40" aria-hidden="true" tabindex="-1"></a>            ],</span>
-<span id="cb3-41"><a href="#cb3-41" aria-hidden="true" tabindex="-1"></a>        }</span>
-<span id="cb3-42"><a href="#cb3-42" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb3-43"><a href="#cb3-43" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-44"><a href="#cb3-44" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-45"><a href="#cb3-45" aria-hidden="true" tabindex="-1"></a><span class="at">@tool</span></span>
-<span id="cb3-46"><a href="#cb3-46" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> escalate_to_human(reason: <span class="bu">str</span>) <span class="op">-&gt;</span> <span class="bu">str</span>:</span>
-<span id="cb3-47"><a href="#cb3-47" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Escalate the case to a human support specialist."""</span></span>
-<span id="cb3-48"><a href="#cb3-48" aria-hidden="true" tabindex="-1"></a>    <span class="co"># In a real system, this would create a ticket, notify staff, etc.</span></span>
-<span id="cb3-49"><a href="#cb3-49" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="ss">f"Escalating to human support. Reason: </span><span class="sc">{</span>reason<span class="sc">}</span><span class="ss">"</span></span>
-<span id="cb3-50"><a href="#cb3-50" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-51"><a href="#cb3-51" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-52"><a href="#cb3-52" aria-hidden="true" tabindex="-1"></a><span class="at">@tool</span></span>
-<span id="cb3-53"><a href="#cb3-53" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> provide_solution(solution: <span class="bu">str</span>) <span class="op">-&gt;</span> <span class="bu">str</span>:</span>
-<span id="cb3-54"><a href="#cb3-54" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Provide a solution to the customer's issue."""</span></span>
-<span id="cb3-55"><a href="#cb3-55" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="ss">f"Solution provided: </span><span class="sc">{</span>solution<span class="sc">}</span><span class="ss">"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>For an LLM, <strong>tools are just a list of possible actions</strong>. We want to enable two things for the LLM:</p>
+<ol type="1">
+<li>LLM can record information and</li>
+<li>can transition to the next step</li>
+</ol>
+<p>To do this in LangChan, the tool needs to return a <code>Command</code> with an <code>update</code> argument that sets 3 things:</p>
+<ol type="1">
+<li>updade information state: <code>warranty_status</code> or <code>issue_type</code></li>
+<li>update the state machine: <code>current_step</code>, that it will transition to</li>
+<li>Lastly, the framework requires us to update the <code>messages</code> state with a <code>ToolMessage</code></li>
+</ol>
+<div id="03bfa397" class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> langchain.tools <span class="im">import</span> tool, ToolRuntime</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> langchain.messages <span class="im">import</span> ToolMessage</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> langgraph.types <span class="im">import</span> Command</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="at">@tool</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> record_warranty_status(</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>    status: Literal[<span class="st">"in_warranty"</span>, <span class="st">"out_of_warranty"</span>],</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>    runtime: ToolRuntime[<span class="va">None</span>, SupportState],</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>) <span class="op">-&gt;</span> Command:</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Record the customer's warranty status and transition to issue classification."""</span></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> Command(</span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>        update<span class="op">=</span>{</span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>            <span class="st">"warranty_status"</span>: status,</span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>            <span class="st">"current_step"</span>: <span class="st">"issue_classifier"</span>,</span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>            <span class="st">"messages"</span>: [</span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>                ToolMessage(</span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>                    content<span class="op">=</span><span class="ss">f"Warranty status recorded as: </span><span class="sc">{</span>status<span class="sc">}</span><span class="ss">"</span>,</span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>                    tool_call_id<span class="op">=</span>runtime.tool_call_id,</span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>                )</span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>            ],</span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a>        }</span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a><span class="at">@tool</span></span>
+<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> record_issue_type(</span>
+<span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a>    issue_type: Literal[<span class="st">"hardware"</span>, <span class="st">"software"</span>],</span>
+<span id="cb4-29"><a href="#cb4-29" aria-hidden="true" tabindex="-1"></a>    runtime: ToolRuntime[<span class="va">None</span>, SupportState],</span>
+<span id="cb4-30"><a href="#cb4-30" aria-hidden="true" tabindex="-1"></a>) <span class="op">-&gt;</span> Command:</span>
+<span id="cb4-31"><a href="#cb4-31" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Record the type of issue and transition to resolution specialist."""</span></span>
+<span id="cb4-32"><a href="#cb4-32" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> Command(</span>
+<span id="cb4-33"><a href="#cb4-33" aria-hidden="true" tabindex="-1"></a>        update<span class="op">=</span>{</span>
+<span id="cb4-34"><a href="#cb4-34" aria-hidden="true" tabindex="-1"></a>            <span class="st">"issue_type"</span>: issue_type,</span>
+<span id="cb4-35"><a href="#cb4-35" aria-hidden="true" tabindex="-1"></a>            <span class="st">"current_step"</span>: <span class="st">"resolution_specialist"</span>,</span>
+<span id="cb4-36"><a href="#cb4-36" aria-hidden="true" tabindex="-1"></a>            <span class="st">"messages"</span>: [</span>
+<span id="cb4-37"><a href="#cb4-37" aria-hidden="true" tabindex="-1"></a>                ToolMessage(</span>
+<span id="cb4-38"><a href="#cb4-38" aria-hidden="true" tabindex="-1"></a>                    content<span class="op">=</span><span class="ss">f"Issue type recorded as: </span><span class="sc">{</span>issue_type<span class="sc">}</span><span class="ss">"</span>,</span>
+<span id="cb4-39"><a href="#cb4-39" aria-hidden="true" tabindex="-1"></a>                    tool_call_id<span class="op">=</span>runtime.tool_call_id,</span>
+<span id="cb4-40"><a href="#cb4-40" aria-hidden="true" tabindex="-1"></a>                )</span>
+<span id="cb4-41"><a href="#cb4-41" aria-hidden="true" tabindex="-1"></a>            ],</span>
+<span id="cb4-42"><a href="#cb4-42" aria-hidden="true" tabindex="-1"></a>        }</span>
+<span id="cb4-43"><a href="#cb4-43" aria-hidden="true" tabindex="-1"></a>    )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Notice how <code>record_warranty_status</code> and <code>record_issue_type</code> return <code>Command</code> objects that update both the data (<code>warranty_status</code>, <code>issue_type</code>) AND the <code>current_step</code>. This is how the state machine works - tools control workflow progression.</p>
+<section id="human-in-the-loop" class="level3">
+<h3 class="anchored" data-anchor-id="human-in-the-loop">Human-in-the-loop</h3>
+<p>Controlling when the escalation happens can be done in the agent’s prompt. Although that might not be necessary.</p>
+<p><strong>Mechanism</strong>: give the agent an <code>escalate_to_human</code> tool that calls <a href="https://langchain-ai.github.io/langgraph/concepts/human_in_the_loop/"><code>interrupt()</code></a>; this pauses the graph and waits for a <code>Command(resume)</code> invokation.</p>
+<div id="bf5784ac" class="cell" data-execution_count="5">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> langchain.tools <span class="im">import</span> tool, ToolRuntime</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> langgraph.types <span class="im">import</span> interrupt</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="at">@tool</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> escalate_to_human(reason: <span class="bu">str</span>, summary: <span class="bu">str</span>, runtime: ToolRuntime) <span class="op">-&gt;</span> <span class="bu">str</span>:</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Escalate this case to a human. Use when the customer needs a human (complaint, exception, or you cannot resolve)."""</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Pause the graph; payload appears in result["__interrupt__"] for the caller to show to a human</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>    payload <span class="op">=</span> {</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>        <span class="st">"action"</span>: <span class="st">"escalate"</span>,</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>        <span class="st">"reason"</span>: reason,</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>        <span class="st">"summary"</span>: summary,</span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>        <span class="st">"message"</span>: <span class="st">"Human input required."</span>,</span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>    human_response <span class="op">=</span> interrupt(payload)</span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>    <span class="co"># After resume, human_response is the value passed to Command(resume=...); return it as tool result</span></span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="bu">isinstance</span>(human_response, <span class="bu">str</span>):</span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> human_response</span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>    <span class="co"># If the human passed a dict (e.g. {"action": "approved", "reply": "..."}), format it</span></span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="bu">str</span>(human_response)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="generation" class="level3">
+<h3 class="anchored" data-anchor-id="generation">Generation</h3>
+<p>This is not strictly required, but it seems that the original tutorial puts it for a good reason. I suppose to make it less likely to hallucinate.</p>
+<p>The <code>provide_solution</code> tool becomes one of the actions an LLM may choose from; i.e., which is high likley to trigger the final output generation and ends the workflow:</p>
+<div id="36b7931d" class="cell" data-execution_count="6">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="at">@tool</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> provide_solution(solution: <span class="bu">str</span>) <span class="op">-&gt;</span> <span class="bu">str</span>:</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Provide a solution to the customer's issue."""</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="ss">f"Solution provided: </span><span class="sc">{</span>solution<span class="sc">}</span><span class="ss">"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
 </section>
 <section id="define-step-configurations" class="level2">
 <h2 class="anchored" data-anchor-id="define-step-configurations">3. Define step configurations</h2>
 <p>Define prompts and tools for each step. First, define the prompts for each step:</p>
-<div id="a928196f" class="cell" data-execution_count="31">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Define prompts as constants for easy reference</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>WARRANTY_COLLECTOR_PROMPT <span class="op">=</span> <span class="st">"""You are a customer support agent helping with device issues.</span></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="st">CURRENT STAGE: Warranty verification</span></span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="st">At this step, you need to:</span></span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="st">1. Greet the customer warmly</span></span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="st">2. Ask if their device is under warranty</span></span>
-<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="st">3. Use record_warranty_status to record their response and move to the next step</span></span>
-<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a><span class="st">Be conversational and friendly. Don't ask multiple questions at once."""</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="a928196f" class="cell" data-execution_count="7">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Define prompts as constants for easy reference</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>WARRANTY_COLLECTOR_PROMPT <span class="op">=</span> <span class="st">"""You are a customer support agent helping with device issues.</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="st">CURRENT STAGE: Warranty verification</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="st">At this step, you need to:</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="st">1. Greet the customer warmly</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="st">2. Ask if their device is under warranty</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a><span class="st">3. Use record_warranty_status to record their response and move to the next step</span></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a><span class="st">Be conversational and friendly. Don't ask multiple questions at once."""</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<div id="24eba3b0" class="cell" data-execution_count="32">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>ISSUE_CLASSIFIER_PROMPT <span class="op">=</span> <span class="st">"""You are a customer support agent helping with device issues.</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="st">CURRENT STAGE: Issue classification</span></span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="st">CUSTOMER INFO: Warranty status is </span><span class="sc">{warranty_status}</span></span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="st">At this step, you need to:</span></span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="st">1. Ask the customer to describe their issue</span></span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="st">2. Determine if it's a hardware issue (physical damage, broken parts) or software issue (app crashes, performance)</span></span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="st">3. Use record_issue_type to record the classification and move to the next step</span></span>
-<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="st">If unclear, ask clarifying questions before classifying."""</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="24eba3b0" class="cell" data-execution_count="8">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>ISSUE_CLASSIFIER_PROMPT <span class="op">=</span> <span class="st">"""You are a customer support agent helping with device issues.</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="st">CURRENT STAGE: Issue classification</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="st">CUSTOMER INFO: Warranty status is </span><span class="sc">{warranty_status}</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="st">At this step, you need to:</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="st">1. Ask the customer to describe their issue</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="st">2. Determine if it's a hardware issue (physical damage, broken parts) or software issue (app crashes, performance)</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a><span class="st">3. Use record_issue_type to record the classification and move to the next step</span></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a><span class="st">If unclear, ask clarifying questions before classifying."""</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<div id="0d884fcb" class="cell" data-execution_count="33">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>RESOLUTION_SPECIALIST_PROMPT <span class="op">=</span> <span class="st">"""You are a customer support agent helping with device issues.</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="st">CURRENT STAGE: Resolution</span></span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="st">CUSTOMER INFO: Warranty status is </span><span class="sc">{warranty_status}</span><span class="st">, issue type is </span><span class="sc">{issue_type}</span></span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="st">At this step, you need to:</span></span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="st">1. For SOFTWARE issues: provide troubleshooting steps using provide_solution</span></span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="st">2. For HARDWARE issues:</span></span>
-<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="st">    - If IN WARRANTY: explain warranty repair process using provide_solution</span></span>
-<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a><span class="st">    - If OUT OF WARRANTY: escalate_to_human for paid repair options</span></span>
-<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a><span class="st">Be specific and helpful in your solutions."""</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="0d884fcb" class="cell" data-execution_count="9">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>RESOLUTION_SPECIALIST_PROMPT <span class="op">=</span> <span class="st">"""You are a customer support agent helping with device issues.</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="st">CURRENT STAGE: Resolution</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="st">CUSTOMER INFO: Warranty status is </span><span class="sc">{warranty_status}</span><span class="st">, issue type is </span><span class="sc">{issue_type}</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="st">At this step, you need to:</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a><span class="st">1. For SOFTWARE issues: provide troubleshooting steps using provide_solution</span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a><span class="st">2. For HARDWARE issues:</span></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a><span class="st">    - If IN WARRANTY: explain warranty repair process using provide_solution</span></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a><span class="st">    - If OUT OF WARRANTY: escalate_to_human for paid repair options</span></span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a><span class="st">Be specific and helpful in your solutions."""</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Then map step names to their configurations using a dictionary:</p>
-<div id="bc72f3f5" class="cell" data-execution_count="34">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Step configuration: maps step name to (prompt, tools, required_state)</span></span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>STEP_CONFIG <span class="op">=</span> {</span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">"warranty_collector"</span>: {</span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>        <span class="st">"prompt"</span>: WARRANTY_COLLECTOR_PROMPT,</span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>        <span class="st">"tools"</span>: [record_warranty_status],</span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>        <span class="st">"requires"</span>: [],</span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>    },</span>
-<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">"issue_classifier"</span>: {</span>
-<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>        <span class="st">"prompt"</span>: ISSUE_CLASSIFIER_PROMPT,</span>
-<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>        <span class="st">"tools"</span>: [record_issue_type],</span>
-<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>        <span class="st">"requires"</span>: [<span class="st">"warranty_status"</span>],</span>
-<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>    },</span>
-<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>    <span class="st">"resolution_specialist"</span>: {</span>
-<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>        <span class="st">"prompt"</span>: RESOLUTION_SPECIALIST_PROMPT,</span>
-<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>        <span class="st">"tools"</span>: [provide_solution, escalate_to_human],</span>
-<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>        <span class="st">"requires"</span>: [<span class="st">"warranty_status"</span>, <span class="st">"issue_type"</span>],</span>
-<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>    },</span>
-<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="bc72f3f5" class="cell" data-execution_count="10">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Step configuration: maps step name to (prompt, tools, required_state)</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>STEP_CONFIG <span class="op">=</span> {</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">"warranty_collector"</span>: {</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>        <span class="st">"prompt"</span>: WARRANTY_COLLECTOR_PROMPT,</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>        <span class="st">"tools"</span>: [record_warranty_status],</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>        <span class="st">"requires"</span>: [],</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>    },</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">"issue_classifier"</span>: {</span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>        <span class="st">"prompt"</span>: ISSUE_CLASSIFIER_PROMPT,</span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>        <span class="st">"tools"</span>: [record_issue_type],</span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>        <span class="st">"requires"</span>: [<span class="st">"warranty_status"</span>],</span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>    },</span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>    <span class="st">"resolution_specialist"</span>: {</span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>        <span class="st">"prompt"</span>: RESOLUTION_SPECIALIST_PROMPT,</span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>        <span class="st">"tools"</span>: [provide_solution, escalate_to_human],</span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a>        <span class="st">"requires"</span>: [<span class="st">"warranty_status"</span>, <span class="st">"issue_type"</span>],</span>
+<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a>    },</span>
+<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>This dictionary-based configuration makes it easy to:</p>
 <ul>
@@ -458,41 +513,52 @@ flowchart TD
 </section>
 <section id="create-step-based-middleware" class="level2">
 <h2 class="anchored" data-anchor-id="create-step-based-middleware">4. Create step-based middleware</h2>
+<p><a href="https://docs.langchain.com/oss/python/langchain/middleware/overview"><strong>Middleware</strong></a> allows registering code to be executed in-between steps:</p>
+<ul>
+<li>before/after agent call</li>
+<li>before/after model call</li>
+<li>before/after tool call</li>
+</ul>
 <p>Create middleware that reads <code>current_step</code> from state and applies the appropriate configuration. We’ll use the <code>@wrap_model_call</code> decorator for a clean implementation:</p>
-<div id="e18d59c9" class="cell" data-execution_count="35">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> langchain.agents.middleware <span class="im">import</span> wrap_model_call, ModelRequest, ModelResponse</span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> typing <span class="im">import</span> Callable</span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="at">@wrap_model_call</span></span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> apply_step_config(</span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>    request: ModelRequest,</span>
-<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>    handler: Callable[[ModelRequest], ModelResponse],</span>
-<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>) <span class="op">-&gt;</span> ModelResponse:</span>
-<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Configure agent behavior based on the current step."""</span></span>
-<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Get current step (defaults to warranty_collector for first interaction)</span></span>
-<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>    current_step <span class="op">=</span> request.state.get(<span class="st">"current_step"</span>, <span class="st">"warranty_collector"</span>)</span>
-<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Look up step configuration</span></span>
-<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>    stage_config <span class="op">=</span> STEP_CONFIG[current_step]</span>
-<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Validate required state exists</span></span>
-<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> key <span class="kw">in</span> stage_config[<span class="st">"requires"</span>]:</span>
-<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> request.state.get(key) <span class="kw">is</span> <span class="va">None</span>:</span>
-<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a>            <span class="cf">raise</span> <span class="pp">ValueError</span>(<span class="ss">f"</span><span class="sc">{</span>key<span class="sc">}</span><span class="ss"> must be set before reaching </span><span class="sc">{</span>current_step<span class="sc">}</span><span class="ss">"</span>)</span>
-<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Format prompt with state values</span></span>
-<span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a>    <span class="co"># (supports {warranty_status}, {issue_type}, etc.)</span></span>
-<span id="cb8-24"><a href="#cb8-24" aria-hidden="true" tabindex="-1"></a>    system_prompt <span class="op">=</span> stage_config[<span class="st">"prompt"</span>].<span class="bu">format</span>(<span class="op">**</span>request.state)</span>
-<span id="cb8-25"><a href="#cb8-25" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-26"><a href="#cb8-26" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Inject system prompt and step-specific tools</span></span>
-<span id="cb8-27"><a href="#cb8-27" aria-hidden="true" tabindex="-1"></a>    request <span class="op">=</span> request.override(</span>
-<span id="cb8-28"><a href="#cb8-28" aria-hidden="true" tabindex="-1"></a>        system_prompt<span class="op">=</span>system_prompt,</span>
-<span id="cb8-29"><a href="#cb8-29" aria-hidden="true" tabindex="-1"></a>        tools<span class="op">=</span>stage_config[<span class="st">"tools"</span>],</span>
-<span id="cb8-30"><a href="#cb8-30" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb8-31"><a href="#cb8-31" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-32"><a href="#cb8-32" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> handler(request)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="e18d59c9" class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> langchain.agents.middleware <span class="im">import</span> (</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>    wrap_model_call,</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>    ModelRequest,</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>    ModelResponse,</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> typing <span class="im">import</span> Callable</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a><span class="at">@wrap_model_call</span></span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> apply_step_config(</span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>    request: ModelRequest,</span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>    handler: Callable[[ModelRequest], ModelResponse],</span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>) <span class="op">-&gt;</span> ModelResponse:</span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Configure agent behavior based on the current step."""</span></span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Get current step (defaults to warranty_collector for first interaction)</span></span>
+<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a>    current_step <span class="op">=</span> request.state.get(<span class="st">"current_step"</span>, <span class="st">"warranty_collector"</span>)</span>
+<span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-18"><a href="#cb11-18" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Look up step configuration</span></span>
+<span id="cb11-19"><a href="#cb11-19" aria-hidden="true" tabindex="-1"></a>    stage_config <span class="op">=</span> STEP_CONFIG[current_step]</span>
+<span id="cb11-20"><a href="#cb11-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-21"><a href="#cb11-21" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Validate required state exists</span></span>
+<span id="cb11-22"><a href="#cb11-22" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> key <span class="kw">in</span> stage_config[<span class="st">"requires"</span>]:</span>
+<span id="cb11-23"><a href="#cb11-23" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> request.state.get(key) <span class="kw">is</span> <span class="va">None</span>:</span>
+<span id="cb11-24"><a href="#cb11-24" aria-hidden="true" tabindex="-1"></a>            <span class="cf">raise</span> <span class="pp">ValueError</span>(<span class="ss">f"</span><span class="sc">{</span>key<span class="sc">}</span><span class="ss"> must be set before reaching </span><span class="sc">{</span>current_step<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb11-25"><a href="#cb11-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-26"><a href="#cb11-26" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Format prompt with state values</span></span>
+<span id="cb11-27"><a href="#cb11-27" aria-hidden="true" tabindex="-1"></a>    <span class="co"># (supports {warranty_status}, {issue_type}, etc.)</span></span>
+<span id="cb11-28"><a href="#cb11-28" aria-hidden="true" tabindex="-1"></a>    system_prompt <span class="op">=</span> stage_config[<span class="st">"prompt"</span>].<span class="bu">format</span>(<span class="op">**</span>request.state)</span>
+<span id="cb11-29"><a href="#cb11-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-30"><a href="#cb11-30" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Inject system prompt and step-specific tools</span></span>
+<span id="cb11-31"><a href="#cb11-31" aria-hidden="true" tabindex="-1"></a>    request <span class="op">=</span> request.override(</span>
+<span id="cb11-32"><a href="#cb11-32" aria-hidden="true" tabindex="-1"></a>        system_prompt<span class="op">=</span>system_prompt,</span>
+<span id="cb11-33"><a href="#cb11-33" aria-hidden="true" tabindex="-1"></a>        tools<span class="op">=</span>stage_config[<span class="st">"tools"</span>],</span>
+<span id="cb11-34"><a href="#cb11-34" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb11-35"><a href="#cb11-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-36"><a href="#cb11-36" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> handler(request)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
+<p><a href="../L01/faq.html#star_star">FAQ: What does the <code>**</code> operator does?</a>.</p>
 <p>This middleware:</p>
 <ol type="1">
 <li><strong>Reads current step</strong>: Gets <code>current_step</code> from state (defaults to “warranty_collector”).</li>
@@ -505,27 +571,27 @@ flowchart TD
 </section>
 <section id="create-the-agent" class="level2">
 <h2 class="anchored" data-anchor-id="create-the-agent">5. Create the agent</h2>
-<p>Now create the agent with the step-based middleware and a checkpointer for state persistence:</p>
-<div id="00019b73" class="cell" data-execution_count="36">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> langchain.agents <span class="im">import</span> create_agent</span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> langgraph.checkpoint.memory <span class="im">import</span> InMemorySaver</span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Collect all tools from all step configurations</span></span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>all_tools <span class="op">=</span> [</span>
-<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>    record_warranty_status,</span>
-<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>    record_issue_type,</span>
-<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>    provide_solution,</span>
-<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>    escalate_to_human,</span>
-<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>]</span>
-<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Create the agent with step-based configuration</span></span>
-<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>agent <span class="op">=</span> create_agent(</span>
-<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>    model<span class="op">=</span>model_nemotron3_nano,</span>
-<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>    tools<span class="op">=</span>all_tools,</span>
-<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>    state_schema<span class="op">=</span>SupportState,</span>
-<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a>    middleware<span class="op">=</span>[apply_step_config],</span>
-<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a>    checkpointer<span class="op">=</span>InMemorySaver(),</span>
-<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Now create the agent with the step-based middleware and a <code>checkpointer</code> for state persistence:</p>
+<div id="00019b73" class="cell" data-execution_count="12">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> langchain.agents <span class="im">import</span> create_agent</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> langgraph.checkpoint.memory <span class="im">import</span> InMemorySaver</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Collect all tools from all step configurations</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>all_tools <span class="op">=</span> [</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>    record_warranty_status,</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>    record_issue_type,</span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>    provide_solution,</span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>    escalate_to_human,</span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>]</span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Create the agent with step-based configuration</span></span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>agent <span class="op">=</span> create_agent(</span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a>    model<span class="op">=</span>model_nemotron3_nano,</span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a>    tools<span class="op">=</span>all_tools,</span>
+<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a>    state_schema<span class="op">=</span>SupportState,</span>
+<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a>    middleware<span class="op">=</span>[apply_step_config],</span>
+<span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a>    checkpointer<span class="op">=</span>InMemorySaver(),</span>
+<span id="cb12-19"><a href="#cb12-19" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
@@ -544,28 +610,36 @@ Note
 <section id="test-the-workflow" class="level2">
 <h2 class="anchored" data-anchor-id="test-the-workflow">6. Test the workflow</h2>
 <p>Test the complete workflow.</p>
-<div id="ffdd8695" class="cell" data-execution_count="37">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> langchain.messages <span class="im">import</span> HumanMessage</span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> uuid</span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Configuration for this conversation thread</span></span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>thread_id <span class="op">=</span> <span class="bu">str</span>(uuid.uuid4())</span>
-<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>config <span class="op">=</span> {<span class="st">"configurable"</span>: {<span class="st">"thread_id"</span>: thread_id}}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="ffdd8695" class="cell" data-execution_count="13">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> langchain.messages <span class="im">import</span> HumanMessage</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> uuid</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Configuration for this conversation thread</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>thread_id <span class="op">=</span> <span class="bu">str</span>(uuid.uuid4())</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>config <span class="op">=</span> {<span class="st">"configurable"</span>: {<span class="st">"thread_id"</span>: thread_id}}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<div id="bc72f9b1" class="cell" data-execution_count="39">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Turn 1: Initial message - starts with warranty_collector step</span></span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"=== Turn 1: Warranty Collection ==="</span>)</span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>result1 <span class="op">=</span> agent.invoke(</span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>    {<span class="st">"messages"</span>: [HumanMessage(<span class="st">"Hi, my phone screen is cracked"</span>)]},</span>
-<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>    config</span>
-<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="aed1c3bb" class="cell" data-execution_count="32">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pprint <span class="im">import</span> pprint</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>pprint(config)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>{'configurable': {'thread_id': 'eb40af56-b211-449c-b934-0f2ca299b140'}}</code></pre>
+</div>
+</div>
+<div id="bc72f9b1" class="cell" data-execution_count="14">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Turn 1: Initial message - starts with warranty_collector step</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"=== Turn 1: Warranty Collection ==="</span>)</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>result1 <span class="op">=</span> agent.invoke(</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>    {<span class="st">"messages"</span>: [HumanMessage(<span class="st">"Hi, my phone screen is cracked"</span>)]},</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>    config</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>=== Turn 1: Warranty Collection ===</code></pre>
 </div>
 </div>
-<div id="12118a57" class="cell" data-execution_count="91">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> msg <span class="kw">in</span> result1[<span class="st">'messages'</span>]:</span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>    msg.pretty_print()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="12118a57" class="cell" data-execution_count="15">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> msg <span class="kw">in</span> result1[<span class="st">'messages'</span>]:</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>    msg.pretty_print()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <div class="ansi-escaped-output">
 <pre>================================<span class="ansi-bold"> Human Message </span>=================================
@@ -578,26 +652,26 @@ Hi, my phone screen is cracked
 
 
 
-Hello! I’m sorry to hear about your cracked screen. To get started, could you let me know if your phone is currently under warranty?
+Hello! I'm sorry to hear about your cracked screen. Just so I can help you further, could you let me know if your device is currently under warranty?
 </pre>
 </div>
 </div>
 </div>
-<div id="1676bd1a" class="cell" data-execution_count="43">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Turn 2: User responds about warranty</span></span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"</span><span class="ch">\n</span><span class="st">=== Turn 2: Warranty Response ==="</span>)</span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>result2 <span class="op">=</span> agent.invoke(</span>
-<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>    {<span class="st">"messages"</span>: [HumanMessage(<span class="st">"Yes, it's still under warranty"</span>)]},</span>
-<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>    config</span>
-<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="1676bd1a" class="cell" data-execution_count="19">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Turn 2: User responds about warranty</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"</span><span class="ch">\n</span><span class="st">=== Turn 2: Warranty Response ==="</span>)</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>result2 <span class="op">=</span> agent.invoke(</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>    {<span class="st">"messages"</span>: [HumanMessage(<span class="st">"Yes, it's still under warranty"</span>)]},</span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>    config</span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
 === Turn 2: Warranty Response ===</code></pre>
 </div>
 </div>
-<div id="4531bef2" class="cell" data-execution_count="90">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> msg <span class="kw">in</span> result2[<span class="st">'messages'</span>]:</span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>    msg.pretty_print()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="4531bef2" class="cell" data-execution_count="20">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> msg <span class="kw">in</span> result2[<span class="st">'messages'</span>]:</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>    msg.pretty_print()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <div class="ansi-escaped-output">
 <pre>================================<span class="ansi-bold"> Human Message </span>=================================
@@ -610,7 +684,7 @@ Hi, my phone screen is cracked
 
 
 
-Hello! I’m sorry to hear about your cracked screen. To get started, could you let me know if your phone is currently under warranty?
+Hello! I'm sorry to hear about your cracked screen. Just so I can help you further, could you let me know if your device is currently under warranty?
 
 ================================<span class="ansi-bold"> Human Message </span>=================================
 
@@ -622,9 +696,9 @@ Yes, it's still under warranty
 
 Tool Calls:
 
-  record_warranty_status (call_232b61c6f5bf4bb0aa46936b)
+  record_warranty_status (call_eb60fd3b738d4236b698d708)
 
- Call ID: call_232b61c6f5bf4bb0aa46936b
+ Call ID: call_eb60fd3b738d4236b698d708
 
   Args:
 
@@ -642,9 +716,9 @@ Warranty status recorded as: in_warranty
 
 Tool Calls:
 
-  record_issue_type (call_3cb7f21f13a14bfda05dbc2c)
+  record_issue_type (call_a09313f1d6cb4301b10f111b)
 
- Call ID: call_3cb7f21f13a14bfda05dbc2c
+ Call ID: call_a09313f1d6cb4301b10f111b
 
   Args:
 
@@ -662,29 +736,13 @@ Issue type recorded as: hardware
 
 Tool Calls:
 
-  provide_solution (call_638da44373d7435aa2afbd4b)
+  provide_solution (call_0095f6ac8d0c40b1a90338b0)
 
- Call ID: call_638da44373d7435aa2afbd4b
+ Call ID: call_0095f6ac8d0c40b1a90338b0
 
   Args:
 
-    solution: Since your phone is under warranty and the issue is a hardware problem (cracked screen), we can arrange a free repair or replacement at an authorized service center. Here’s what to do:
-
-
-
-1. **Schedule a repair** – Contact us via the support app, website, or phone to set up an appointment.
-
-2. **Bring your device** – Bring the phone, proof of purchase, and a valid ID to the service center.
-
-3. **Assessment &amp; repair** – Our technicians will assess the damage. If the screen is covered under warranty, we’ll repair or replace it at no cost.
-
-4. **Turnaround time** – Repairs typically take 3–5 business days; we’ll let you know as soon as it’s ready.
-
-5. **Loan device (if needed)** – We can provide a temporary replacement while yours is being serviced.
-
-
-
-If you prefer, you can also mail the device to our authorized repair center (we’ll provide a prepaid shipping label). Let us know your preferred method, and we’ll get the process started right away.
+    solution: Since your phone is under warranty and the issue is hardware (cracked screen), you can get it repaired or replaced at no cost. Please bring the device and proof of purchase to an authorized service center, or schedule a repair through our online portal. Our technicians will assess the damage and, if it's covered under warranty, replace the screen for free.
 
 =================================<span class="ansi-bold"> Tool Message </span>=================================
 
@@ -692,68 +750,48 @@ Name: provide_solution
 
 
 
-Solution provided: Since your phone is under warranty and the issue is a hardware problem (cracked screen), we can arrange a free repair or replacement at an authorized service center. Here’s what to do:
-
-
-
-1. **Schedule a repair** – Contact us via the support app, website, or phone to set up an appointment.
-
-2. **Bring your device** – Bring the phone, proof of purchase, and a valid ID to the service center.
-
-3. **Assessment &amp; repair** – Our technicians will assess the damage. If the screen is covered under warranty, we’ll repair or replace it at no cost.
-
-4. **Turnaround time** – Repairs typically take 3–5 business days; we’ll let you know as soon as it’s ready.
-
-5. **Loan device (if needed)** – We can provide a temporary replacement while yours is being serviced.
-
-
-
-If you prefer, you can also mail the device to our authorized repair center (we’ll provide a prepaid shipping label). Let us know your preferred method, and we’ll get the process started right away.
+Solution provided: Since your phone is under warranty and the issue is hardware (cracked screen), you can get it repaired or replaced at no cost. Please bring the device and proof of purchase to an authorized service center, or schedule a repair through our online portal. Our technicians will assess the damage and, if it's covered under warranty, replace the screen for free.
 
 ==================================<span class="ansi-bold"> Ai Message </span>==================================
 
 
 
-Thank you for confirming that your device is still under warranty. Since the cracked screen is a hardware issue and your warranty is active, the repair or replacement will be covered at no cost to you.
+Since your phone is still under warranty and the issue is hardware (cracked screen), you can get it repaired or replaced at no cost.  
 
 
 
-**Next steps**
+**What to do next:**  
+
+1. Bring the device (and proof of purchase) to an authorized service center, **or**  
+
+2. Schedule a repair through our online portal.  
 
 
 
-1. **Choose a repair option**  
-
-   - **In‑person service center** – We can schedule an appointment for you at the nearest authorized repair center.  
-
-   - **Mail‑in program** – We’ll send you a prepaid shipping label so you can mail the phone to our repair facility.
+Our technicians will assess the damage, and if it’s covered under warranty, the screen will be replaced for free.  
 
 
 
-2. **Provide a quick detail (optional)** – If you have your device’s serial number or IMEI handy, please share it so we can pull up the exact warranty record and expedite the process.
-
-
-
-Let me know which option you’d prefer (or if you have any other questions), and I’ll get the repair process started right away.
+Would you like help locating an authorized service center or scheduling a repair appointment?
 </pre>
 </div>
 </div>
 </div>
-<div id="c403045c" class="cell" data-execution_count="69">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Turn 3: User describes the issue</span></span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"</span><span class="ch">\n</span><span class="st">=== Turn 3: Issue Description ==="</span>)</span>
-<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>result3 <span class="op">=</span> agent.invoke(</span>
-<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>    {<span class="st">"messages"</span>: [HumanMessage(<span class="st">"The screen is physically cracked from dropping it"</span>)]},</span>
-<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>    config</span>
-<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="c403045c" class="cell" data-execution_count="21">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Turn 3: User describes the issue</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"</span><span class="ch">\n</span><span class="st">=== Turn 3: Issue Description ==="</span>)</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>result3 <span class="op">=</span> agent.invoke(</span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>    {<span class="st">"messages"</span>: [HumanMessage(<span class="st">"The screen is physically cracked from dropping it"</span>)]},</span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>    config</span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
 === Turn 3: Issue Description ===</code></pre>
 </div>
 </div>
-<div id="03195b22" class="cell" data-execution_count="89">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> msg <span class="kw">in</span> result3[<span class="st">'messages'</span>]:</span>
-<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>    msg.pretty_print()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="03195b22" class="cell" data-execution_count="22">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> msg <span class="kw">in</span> result3[<span class="st">'messages'</span>]:</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>    msg.pretty_print()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <div class="ansi-escaped-output">
 <pre>================================<span class="ansi-bold"> Human Message </span>=================================
@@ -766,7 +804,7 @@ Hi, my phone screen is cracked
 
 
 
-Hello! I’m sorry to hear about your cracked screen. To get started, could you let me know if your phone is currently under warranty?
+Hello! I'm sorry to hear about your cracked screen. Just so I can help you further, could you let me know if your device is currently under warranty?
 
 ================================<span class="ansi-bold"> Human Message </span>=================================
 
@@ -778,9 +816,9 @@ Yes, it's still under warranty
 
 Tool Calls:
 
-  record_warranty_status (call_232b61c6f5bf4bb0aa46936b)
+  record_warranty_status (call_eb60fd3b738d4236b698d708)
 
- Call ID: call_232b61c6f5bf4bb0aa46936b
+ Call ID: call_eb60fd3b738d4236b698d708
 
   Args:
 
@@ -798,9 +836,9 @@ Warranty status recorded as: in_warranty
 
 Tool Calls:
 
-  record_issue_type (call_3cb7f21f13a14bfda05dbc2c)
+  record_issue_type (call_a09313f1d6cb4301b10f111b)
 
- Call ID: call_3cb7f21f13a14bfda05dbc2c
+ Call ID: call_a09313f1d6cb4301b10f111b
 
   Args:
 
@@ -818,29 +856,13 @@ Issue type recorded as: hardware
 
 Tool Calls:
 
-  provide_solution (call_638da44373d7435aa2afbd4b)
+  provide_solution (call_0095f6ac8d0c40b1a90338b0)
 
- Call ID: call_638da44373d7435aa2afbd4b
+ Call ID: call_0095f6ac8d0c40b1a90338b0
 
   Args:
 
-    solution: Since your phone is under warranty and the issue is a hardware problem (cracked screen), we can arrange a free repair or replacement at an authorized service center. Here’s what to do:
-
-
-
-1. **Schedule a repair** – Contact us via the support app, website, or phone to set up an appointment.
-
-2. **Bring your device** – Bring the phone, proof of purchase, and a valid ID to the service center.
-
-3. **Assessment &amp; repair** – Our technicians will assess the damage. If the screen is covered under warranty, we’ll repair or replace it at no cost.
-
-4. **Turnaround time** – Repairs typically take 3–5 business days; we’ll let you know as soon as it’s ready.
-
-5. **Loan device (if needed)** – We can provide a temporary replacement while yours is being serviced.
-
-
-
-If you prefer, you can also mail the device to our authorized repair center (we’ll provide a prepaid shipping label). Let us know your preferred method, and we’ll get the process started right away.
+    solution: Since your phone is under warranty and the issue is hardware (cracked screen), you can get it repaired or replaced at no cost. Please bring the device and proof of purchase to an authorized service center, or schedule a repair through our online portal. Our technicians will assess the damage and, if it's covered under warranty, replace the screen for free.
 
 =================================<span class="ansi-bold"> Tool Message </span>=================================
 
@@ -848,49 +870,29 @@ Name: provide_solution
 
 
 
-Solution provided: Since your phone is under warranty and the issue is a hardware problem (cracked screen), we can arrange a free repair or replacement at an authorized service center. Here’s what to do:
-
-
-
-1. **Schedule a repair** – Contact us via the support app, website, or phone to set up an appointment.
-
-2. **Bring your device** – Bring the phone, proof of purchase, and a valid ID to the service center.
-
-3. **Assessment &amp; repair** – Our technicians will assess the damage. If the screen is covered under warranty, we’ll repair or replace it at no cost.
-
-4. **Turnaround time** – Repairs typically take 3–5 business days; we’ll let you know as soon as it’s ready.
-
-5. **Loan device (if needed)** – We can provide a temporary replacement while yours is being serviced.
-
-
-
-If you prefer, you can also mail the device to our authorized repair center (we’ll provide a prepaid shipping label). Let us know your preferred method, and we’ll get the process started right away.
+Solution provided: Since your phone is under warranty and the issue is hardware (cracked screen), you can get it repaired or replaced at no cost. Please bring the device and proof of purchase to an authorized service center, or schedule a repair through our online portal. Our technicians will assess the damage and, if it's covered under warranty, replace the screen for free.
 
 ==================================<span class="ansi-bold"> Ai Message </span>==================================
 
 
 
-Thank you for confirming that your device is still under warranty. Since the cracked screen is a hardware issue and your warranty is active, the repair or replacement will be covered at no cost to you.
+Since your phone is still under warranty and the issue is hardware (cracked screen), you can get it repaired or replaced at no cost.  
 
 
 
-**Next steps**
+**What to do next:**  
+
+1. Bring the device (and proof of purchase) to an authorized service center, **or**  
+
+2. Schedule a repair through our online portal.  
 
 
 
-1. **Choose a repair option**  
-
-   - **In‑person service center** – We can schedule an appointment for you at the nearest authorized repair center.  
-
-   - **Mail‑in program** – We’ll send you a prepaid shipping label so you can mail the phone to our repair facility.
+Our technicians will assess the damage, and if it’s covered under warranty, the screen will be replaced for free.  
 
 
 
-2. **Provide a quick detail (optional)** – If you have your device’s serial number or IMEI handy, please share it so we can pull up the exact warranty record and expedite the process.
-
-
-
-Let me know which option you’d prefer (or if you have any other questions), and I’ll get the repair process started right away.
+Would you like help locating an authorized service center or scheduling a repair appointment?
 
 ================================<span class="ansi-bold"> Human Message </span>=================================
 
@@ -902,281 +904,74 @@ The screen is physically cracked from dropping it
 
 
 
-I’m sorry to hear that the drop caused a physical crack on your screen. Since the damage is a hardware issue and your device is still under warranty, we can arrange a **free repair or replacement**.
+I’m sorry to hear that the screen cracked after the drop. Since your device is still under warranty, we can have a technician inspect it to determine whether the damage is covered.  
 
 
 
-**How you’d like to proceed?**
+- **If the inspection shows the crack is due to a manufacturing defect**, the screen repair or replacement will be covered at no cost to you.  
+
+- **If the damage is classified as accidental (e.g., from a drop)**, it may not be covered under the standard warranty, and we can provide a paid‑repair option if you’d like to proceed.
 
 
 
-1. **In‑person service center** – I can schedule an appointment at the nearest authorized repair center.  
-
-2. **Mail‑in program** – I’ll send you a prepaid shipping label so you can mail the phone to our repair facility.
-
-
-
-If you have the device’s serial number or IMEI handy, please share it; that helps us pull up the exact warranty record and speeds up the process.
-
-
-
-Let me know which option you prefer (or if you have any other questions), and I’ll get the repair started right away.
+Would you like to bring the phone in for an evaluation, or would you prefer to schedule a repair appointment so we can check the device and let you know the next steps?
 </pre>
 </div>
 </div>
 </div>
-<div id="4b6bad8a" class="cell" data-execution_count="71">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Turn 4: Resolution</span></span>
-<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"</span><span class="ch">\n</span><span class="st">=== Turn 4: Resolution ==="</span>)</span>
-<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>result4 <span class="op">=</span> agent.invoke(</span>
-<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>    {<span class="st">"messages"</span>: [HumanMessage(<span class="st">"What should I do?"</span>)]},</span>
-<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>    config</span>
-<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="4b6bad8a" class="cell" data-execution_count="23">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Turn 4: Escalation</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"</span><span class="ch">\n</span><span class="st">=== Turn 4: Escalation ==="</span>)</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>result4 <span class="op">=</span> agent.invoke(</span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>    {<span class="st">"messages"</span>: [HumanMessage(<span class="st">"I don't want AI! Let me see your human manager!"</span>)]},</span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>    config</span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
-=== Turn 4: Resolution ===</code></pre>
+=== Turn 4: Escalation ===</code></pre>
 </div>
 </div>
-<div id="9940317c" class="cell" data-execution_count="88">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> msg <span class="kw">in</span> result4[<span class="st">'messages'</span>]:</span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>    msg.pretty_print()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><strong>Resuming after an escalation:</strong> If the agent had called <code>escalate_to_human</code>, you would see <code>result["__interrupt__"]</code>. To continue, invoke with <code>Command(resume=&lt;human_response&gt;)</code> and the same <code>config</code> (same <code>thread_id</code>). The human’s response becomes the tool result and the agent can reply to the user.</p>
+<div id="bf370240" class="cell" data-execution_count="28">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pprint <span class="im">import</span> pprint</span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>pprint(result4[<span class="st">'__interrupt__'</span>])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[Interrupt(value={'action': 'escalate',
+                  'message': 'Human input required.',
+                  'reason': 'User explicitly requests to speak with a human '
+                            'manager and does not want AI assistance.',
+                  'summary': 'User wants to see a human manager; request for '
+                             'escalation.'},
+           id='eb036d696249417bba7d576ced0949d8')]</code></pre>
+</div>
+</div>
+<div id="d527ebdc" class="cell" data-execution_count="29">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> langgraph.types <span class="im">import</span> Command</span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>resumed <span class="op">=</span> agent.invoke(</span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>    Command(resume<span class="op">=</span><span class="st">"Problem fixed. Let the customer know their ticket number is 123456789 and say goodbye to them."</span>),</span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>    config<span class="op">=</span>config</span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div id="79242f0b" class="cell" data-execution_count="30">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> msg <span class="kw">in</span> resumed[<span class="st">'messages'</span>][<span class="op">-</span><span class="dv">2</span>:]:</span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>    msg.pretty_print()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <div class="ansi-escaped-output">
-<pre>================================<span class="ansi-bold"> Human Message </span>=================================
+<pre>=================================<span class="ansi-bold"> Tool Message </span>=================================
+
+Name: escalate_to_human
 
 
 
-Hi, my phone screen is cracked
-
-==================================<span class="ansi-bold"> Ai Message </span>==================================
-
-
-
-Hello! I’m sorry to hear about your cracked screen. To get started, could you let me know if your phone is currently under warranty?
-
-================================<span class="ansi-bold"> Human Message </span>=================================
-
-
-
-Yes, it's still under warranty
+Problem fixed. Let the customer know their ticket number is 123456789 and say goodbye to them.
 
 ==================================<span class="ansi-bold"> Ai Message </span>==================================
 
-Tool Calls:
 
-  record_warranty_status (call_232b61c6f5bf4bb0aa46936b)
 
- Call ID: call_232b61c6f5bf4bb0aa46936b
-
-  Args:
-
-    status: in_warranty
-
-=================================<span class="ansi-bold"> Tool Message </span>=================================
-
-Name: record_warranty_status
-
-
-
-Warranty status recorded as: in_warranty
-
-==================================<span class="ansi-bold"> Ai Message </span>==================================
-
-Tool Calls:
-
-  record_issue_type (call_3cb7f21f13a14bfda05dbc2c)
-
- Call ID: call_3cb7f21f13a14bfda05dbc2c
-
-  Args:
-
-    issue_type: hardware
-
-=================================<span class="ansi-bold"> Tool Message </span>=================================
-
-Name: record_issue_type
-
-
-
-Issue type recorded as: hardware
-
-==================================<span class="ansi-bold"> Ai Message </span>==================================
-
-Tool Calls:
-
-  provide_solution (call_638da44373d7435aa2afbd4b)
-
- Call ID: call_638da44373d7435aa2afbd4b
-
-  Args:
-
-    solution: Since your phone is under warranty and the issue is a hardware problem (cracked screen), we can arrange a free repair or replacement at an authorized service center. Here’s what to do:
-
-
-
-1. **Schedule a repair** – Contact us via the support app, website, or phone to set up an appointment.
-
-2. **Bring your device** – Bring the phone, proof of purchase, and a valid ID to the service center.
-
-3. **Assessment &amp; repair** – Our technicians will assess the damage. If the screen is covered under warranty, we’ll repair or replace it at no cost.
-
-4. **Turnaround time** – Repairs typically take 3–5 business days; we’ll let you know as soon as it’s ready.
-
-5. **Loan device (if needed)** – We can provide a temporary replacement while yours is being serviced.
-
-
-
-If you prefer, you can also mail the device to our authorized repair center (we’ll provide a prepaid shipping label). Let us know your preferred method, and we’ll get the process started right away.
-
-=================================<span class="ansi-bold"> Tool Message </span>=================================
-
-Name: provide_solution
-
-
-
-Solution provided: Since your phone is under warranty and the issue is a hardware problem (cracked screen), we can arrange a free repair or replacement at an authorized service center. Here’s what to do:
-
-
-
-1. **Schedule a repair** – Contact us via the support app, website, or phone to set up an appointment.
-
-2. **Bring your device** – Bring the phone, proof of purchase, and a valid ID to the service center.
-
-3. **Assessment &amp; repair** – Our technicians will assess the damage. If the screen is covered under warranty, we’ll repair or replace it at no cost.
-
-4. **Turnaround time** – Repairs typically take 3–5 business days; we’ll let you know as soon as it’s ready.
-
-5. **Loan device (if needed)** – We can provide a temporary replacement while yours is being serviced.
-
-
-
-If you prefer, you can also mail the device to our authorized repair center (we’ll provide a prepaid shipping label). Let us know your preferred method, and we’ll get the process started right away.
-
-==================================<span class="ansi-bold"> Ai Message </span>==================================
-
-
-
-Thank you for confirming that your device is still under warranty. Since the cracked screen is a hardware issue and your warranty is active, the repair or replacement will be covered at no cost to you.
-
-
-
-**Next steps**
-
-
-
-1. **Choose a repair option**  
-
-   - **In‑person service center** – We can schedule an appointment for you at the nearest authorized repair center.  
-
-   - **Mail‑in program** – We’ll send you a prepaid shipping label so you can mail the phone to our repair facility.
-
-
-
-2. **Provide a quick detail (optional)** – If you have your device’s serial number or IMEI handy, please share it so we can pull up the exact warranty record and expedite the process.
-
-
-
-Let me know which option you’d prefer (or if you have any other questions), and I’ll get the repair process started right away.
-
-================================<span class="ansi-bold"> Human Message </span>=================================
-
-
-
-The screen is physically cracked from dropping it
-
-==================================<span class="ansi-bold"> Ai Message </span>==================================
-
-
-
-I’m sorry to hear that the drop caused a physical crack on your screen. Since the damage is a hardware issue and your device is still under warranty, we can arrange a **free repair or replacement**.
-
-
-
-**How you’d like to proceed?**
-
-
-
-1. **In‑person service center** – I can schedule an appointment at the nearest authorized repair center.  
-
-2. **Mail‑in program** – I’ll send you a prepaid shipping label so you can mail the phone to our repair facility.
-
-
-
-If you have the device’s serial number or IMEI handy, please share it; that helps us pull up the exact warranty record and speeds up the process.
-
-
-
-Let me know which option you prefer (or if you have any other questions), and I’ll get the repair started right away.
-
-================================<span class="ansi-bold"> Human Message </span>=================================
-
-
-
-What should I do?
-
-==================================<span class="ansi-bold"> Ai Message </span>==================================
-
-
-
-Here’s a quick, step‑by‑step guide for getting your cracked screen fixed under warranty:
-
-
-
-1. **Pick a repair option**  
-
-   - **In‑person at an authorized service center** – We’ll set up an appointment for you.  
-
-   - **Mail‑in program** – We’ll send you a prepaid shipping label so you can mail the phone to our repair facility.
-
-
-
-2. **Gather a couple of items**  
-
-   - Your phone’s **serial number or IMEI** (you can find it on the box, on the device’s back, or in the settings).  
-
-   - **Proof of purchase** (receipt or order confirmation).  
-
-   - A **valid photo ID** (driver’s license, passport, etc.).
-
-
-
-3. **Let us know which option you prefer** (in‑person or mail‑in) and, if you can, share the serial number/IMEI. Once we have that, we’ll:
-
-   - **Schedule the appointment** (or generate the shipping label).  
-
-   - **Confirm the appointment date/time** or **send the label** to the address you provide.
-
-
-
-4. **At the service center (or when you ship it)**  
-
-   - Our technicians will assess the damage.  
-
-   - Because the device is still under warranty, the screen repair or replacement will be **free of charge**.  
-
-   - If we need to keep the phone for a few days, we can provide a **temporary loan device** so you stay connected.
-
-
-
-5. **Turnaround**  
-
-   - Repairs usually take **3–5 business days**. We’ll let you know as soon as your phone is ready for pickup or shipment back to you.
-
-
-
----
-
-
-
-**What would you like to do next?**  
-
-- Choose **in‑person** or **mail‑in** service?  
-
-- Share the **serial number/IMEI** (or let us know if you need help finding it)?
-
-
-
-Just let me know your preference, and I’ll get the process started right away.
+Your request has been forwarded to a human manager. Your ticket number is **123456789**. Goodbye!
 </pre>
 </div>
 </div>
@@ -1193,10 +988,10 @@ Just let me know your preference, and I’ll get the process started right away.
 <p>Let’s trace what happens at each turn:</p>
 <section id="turn-1-initial-message" class="level3">
 <h3 class="anchored" data-anchor-id="turn-1-initial-message">Turn 1: Initial message</h3>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>{</span>
-<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">"messages"</span>: [HumanMessage(<span class="st">"Hi, my phone screen is cracked"</span>)],</span>
-<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">"current_step"</span>: <span class="st">"warranty_collector"</span>  <span class="co"># Default value</span></span>
-<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb31"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">"messages"</span>: [HumanMessage(<span class="st">"Hi, my phone screen is cracked"</span>)],</span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">"current_step"</span>: <span class="st">"warranty_collector"</span>  <span class="co"># Default value</span></span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Middleware applies:</p>
 <ul>
 <li>System prompt: <code>WARRANTY_COLLECTOR_PROMPT</code></li>
@@ -1206,10 +1001,10 @@ Just let me know your preference, and I’ll get the process started right away.
 <section id="turn-2-after-warranty-recorded" class="level3">
 <h3 class="anchored" data-anchor-id="turn-2-after-warranty-recorded">Turn 2: After warranty recorded</h3>
 <p>Tool call: <code>record_warranty_status("in_warranty")</code> returns:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>Command(update<span class="op">=</span>{</span>
-<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">"warranty_status"</span>: <span class="st">"in_warranty"</span>,</span>
-<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">"current_step"</span>: <span class="st">"issue_classifier"</span>  <span class="co"># State transition!</span></span>
-<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>})</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>Command(update<span class="op">=</span>{</span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">"warranty_status"</span>: <span class="st">"in_warranty"</span>,</span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">"current_step"</span>: <span class="st">"issue_classifier"</span>  <span class="co"># State transition!</span></span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>})</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Next turn, middleware applies:</p>
 <ul>
 <li>System prompt: <code>ISSUE_CLASSIFIER_PROMPT</code> (formatted with <code>warranty_status="in_warranty"</code>)</li>
@@ -1219,10 +1014,10 @@ Just let me know your preference, and I’ll get the process started right away.
 <section id="turn-3-after-issue-classified" class="level3">
 <h3 class="anchored" data-anchor-id="turn-3-after-issue-classified">Turn 3: After issue classified</h3>
 <p>Tool call: <code>record_issue_type("hardware")</code> returns:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>Command(update<span class="op">=</span>{</span>
-<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">"issue_type"</span>: <span class="st">"hardware"</span>,</span>
-<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">"current_step"</span>: <span class="st">"resolution_specialist"</span>  <span class="co"># State transition!</span></span>
-<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>})</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb33"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>Command(update<span class="op">=</span>{</span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">"issue_type"</span>: <span class="st">"hardware"</span>,</span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">"current_step"</span>: <span class="st">"resolution_specialist"</span>  <span class="co"># State transition!</span></span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a>})</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Next turn, middleware applies:</p>
 <ul>
 <li>System prompt: <code>RESOLUTION_SPECIALIST_PROMPT</code> (formatted with <code>warranty_status</code> and <code>issue_type</code>)</li>
@@ -1234,28 +1029,29 @@ Just let me know your preference, and I’ll get the process started right away.
 <section id="manage-message-history" class="level2">
 <h2 class="anchored" data-anchor-id="manage-message-history">8. Manage message history</h2>
 <p>As the agent progresses through steps, message history grows. Use <a href="https://docs.langchain.com/oss/python/langchain/short-term-memory#summarize-messages">summarization middleware</a> to compress earlier messages while preserving conversational context:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> langchain.agents <span class="im">import</span> create_agent</span>
-<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> langchain.agents.middleware <span class="im">import</span> SummarizationMiddleware</span>
-<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> langgraph.checkpoint.memory <span class="im">import</span> InMemorySaver</span>
-<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>agent <span class="op">=</span> create_agent(</span>
-<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>    model<span class="op">=</span>model_nemotron3_nano,</span>
-<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a>    tools<span class="op">=</span>all_tools,</span>
-<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a>    state_schema<span class="op">=</span>SupportState,</span>
-<span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a>    middleware<span class="op">=</span>[</span>
-<span id="cb26-10"><a href="#cb26-10" aria-hidden="true" tabindex="-1"></a>        apply_step_config,</span>
-<span id="cb26-11"><a href="#cb26-11" aria-hidden="true" tabindex="-1"></a>        SummarizationMiddleware(</span>
-<span id="cb26-12"><a href="#cb26-12" aria-hidden="true" tabindex="-1"></a>            model<span class="op">=</span>model_nemotron3_nano,</span>
-<span id="cb26-13"><a href="#cb26-13" aria-hidden="true" tabindex="-1"></a>            trigger<span class="op">=</span>(<span class="st">"tokens"</span>, <span class="dv">4000</span>),</span>
-<span id="cb26-14"><a href="#cb26-14" aria-hidden="true" tabindex="-1"></a>            keep<span class="op">=</span>(<span class="st">"messages"</span>, <span class="dv">10</span>)</span>
-<span id="cb26-15"><a href="#cb26-15" aria-hidden="true" tabindex="-1"></a>        )</span>
-<span id="cb26-16"><a href="#cb26-16" aria-hidden="true" tabindex="-1"></a>    ],</span>
-<span id="cb26-17"><a href="#cb26-17" aria-hidden="true" tabindex="-1"></a>    checkpointer<span class="op">=</span>InMemorySaver(),</span>
-<span id="cb26-18"><a href="#cb26-18" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb34"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> langchain.agents <span class="im">import</span> create_agent</span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> langchain.agents.middleware <span class="im">import</span> SummarizationMiddleware</span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> langgraph.checkpoint.memory <span class="im">import</span> InMemorySaver</span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a>agent <span class="op">=</span> create_agent(</span>
+<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a>    model<span class="op">=</span>model_nemotron3_nano,</span>
+<span id="cb34-7"><a href="#cb34-7" aria-hidden="true" tabindex="-1"></a>    tools<span class="op">=</span>all_tools,</span>
+<span id="cb34-8"><a href="#cb34-8" aria-hidden="true" tabindex="-1"></a>    state_schema<span class="op">=</span>SupportState,</span>
+<span id="cb34-9"><a href="#cb34-9" aria-hidden="true" tabindex="-1"></a>    middleware<span class="op">=</span>[</span>
+<span id="cb34-10"><a href="#cb34-10" aria-hidden="true" tabindex="-1"></a>        apply_step_config,</span>
+<span id="cb34-11"><a href="#cb34-11" aria-hidden="true" tabindex="-1"></a>        SummarizationMiddleware(</span>
+<span id="cb34-12"><a href="#cb34-12" aria-hidden="true" tabindex="-1"></a>            model<span class="op">=</span>model_nemotron3_nano,</span>
+<span id="cb34-13"><a href="#cb34-13" aria-hidden="true" tabindex="-1"></a>            trigger<span class="op">=</span>(<span class="st">"tokens"</span>, <span class="dv">4000</span>),</span>
+<span id="cb34-14"><a href="#cb34-14" aria-hidden="true" tabindex="-1"></a>            keep<span class="op">=</span>(<span class="st">"messages"</span>, <span class="dv">10</span>)</span>
+<span id="cb34-15"><a href="#cb34-15" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="cb34-16"><a href="#cb34-16" aria-hidden="true" tabindex="-1"></a>    ],</span>
+<span id="cb34-17"><a href="#cb34-17" aria-hidden="true" tabindex="-1"></a>    checkpointer<span class="op">=</span>InMemorySaver(),</span>
+<span id="cb34-18"><a href="#cb34-18" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>See the <a href="https://docs.langchain.com/oss/python/langchain/short-term-memory">short-term memory guide</a> for other memory management techniques.</p>
 </section>
-<section id="add-flexibility-go-back" class="level2">
-<h2 class="anchored" data-anchor-id="add-flexibility-go-back">9. Add flexibility: Go back</h2>
+<section id="add-the-flexibility-to-go-back-and-correct-things" class="level2">
+<h2 class="anchored" data-anchor-id="add-the-flexibility-to-go-back-and-correct-things">9. Add the flexibility to go back and correct things</h2>
+<p>Right now, the system is so rigid that we cannot undo or correct things. There is a reason why we have an undo (i.e., <code>ctrl + z</code>) functionality in almost all software. It is because humans make mistakes all the time.</p>
 <p>Some workflows need to allow users to return to previous steps to correct information (e.g., changing warranty status or issue classification). However, not all transitions make sense—for example, you typically can’t go back once a refund has been processed. For this support workflow, we’ll add tools to return to the warranty verification and issue classification steps.</p>
 <div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center">
@@ -1271,52 +1067,52 @@ Tip
 </div>
 </div>
 <p>Add “go back” tools to the resolution step:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="at">@tool</span></span>
-<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> go_back_to_warranty() <span class="op">-&gt;</span> Command:</span>
-<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Go back to warranty verification step."""</span></span>
-<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> Command(update<span class="op">=</span>{<span class="st">"current_step"</span>: <span class="st">"warranty_collector"</span>})</span>
-<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a><span class="at">@tool</span></span>
-<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> go_back_to_classification() <span class="op">-&gt;</span> Command:</span>
-<span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Go back to issue classification step."""</span></span>
-<span id="cb27-10"><a href="#cb27-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> Command(update<span class="op">=</span>{<span class="st">"current_step"</span>: <span class="st">"issue_classifier"</span>})</span>
-<span id="cb27-11"><a href="#cb27-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-12"><a href="#cb27-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-13"><a href="#cb27-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Update the resolution_specialist configuration to include these tools</span></span>
-<span id="cb27-14"><a href="#cb27-14" aria-hidden="true" tabindex="-1"></a>STEP_CONFIG[<span class="st">"resolution_specialist"</span>][<span class="st">"tools"</span>].extend([</span>
-<span id="cb27-15"><a href="#cb27-15" aria-hidden="true" tabindex="-1"></a>    go_back_to_warranty,</span>
-<span id="cb27-16"><a href="#cb27-16" aria-hidden="true" tabindex="-1"></a>    go_back_to_classification</span>
-<span id="cb27-17"><a href="#cb27-17" aria-hidden="true" tabindex="-1"></a>])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb35"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="at">@tool</span></span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> go_back_to_warranty() <span class="op">-&gt;</span> Command:</span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Go back to warranty verification step."""</span></span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> Command(update<span class="op">=</span>{<span class="st">"current_step"</span>: <span class="st">"warranty_collector"</span>})</span>
+<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-7"><a href="#cb35-7" aria-hidden="true" tabindex="-1"></a><span class="at">@tool</span></span>
+<span id="cb35-8"><a href="#cb35-8" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> go_back_to_classification() <span class="op">-&gt;</span> Command:</span>
+<span id="cb35-9"><a href="#cb35-9" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Go back to issue classification step."""</span></span>
+<span id="cb35-10"><a href="#cb35-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> Command(update<span class="op">=</span>{<span class="st">"current_step"</span>: <span class="st">"issue_classifier"</span>})</span>
+<span id="cb35-11"><a href="#cb35-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-12"><a href="#cb35-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-13"><a href="#cb35-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Update the resolution_specialist configuration to include these tools</span></span>
+<span id="cb35-14"><a href="#cb35-14" aria-hidden="true" tabindex="-1"></a>STEP_CONFIG[<span class="st">"resolution_specialist"</span>][<span class="st">"tools"</span>].extend([</span>
+<span id="cb35-15"><a href="#cb35-15" aria-hidden="true" tabindex="-1"></a>    go_back_to_warranty,</span>
+<span id="cb35-16"><a href="#cb35-16" aria-hidden="true" tabindex="-1"></a>    go_back_to_classification</span>
+<span id="cb35-17"><a href="#cb35-17" aria-hidden="true" tabindex="-1"></a>])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Update the resolution specialist’s prompt to mention these tools:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>RESOLUTION_SPECIALIST_PROMPT <span class="op">=</span> <span class="st">"""You are a customer support agent helping with device issues.</span></span>
-<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a><span class="st">CURRENT STAGE: Resolution</span></span>
-<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a><span class="st">CUSTOMER INFO: Warranty status is </span><span class="sc">{warranty_status}</span><span class="st">, issue type is </span><span class="sc">{issue_type}</span></span>
-<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a><span class="st">At this step, you need to:</span></span>
-<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a><span class="st">1. For SOFTWARE issues: provide troubleshooting steps using provide_solution</span></span>
-<span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a><span class="st">2. For HARDWARE issues:</span></span>
-<span id="cb28-9"><a href="#cb28-9" aria-hidden="true" tabindex="-1"></a><span class="st">   - If IN WARRANTY: explain warranty repair process using provide_solution</span></span>
-<span id="cb28-10"><a href="#cb28-10" aria-hidden="true" tabindex="-1"></a><span class="st">   - If OUT OF WARRANTY: escalate_to_human for paid repair options</span></span>
-<span id="cb28-11"><a href="#cb28-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-12"><a href="#cb28-12" aria-hidden="true" tabindex="-1"></a><span class="st">If the customer indicates any information was wrong, use:</span></span>
-<span id="cb28-13"><a href="#cb28-13" aria-hidden="true" tabindex="-1"></a><span class="st">- go_back_to_warranty to correct warranty status</span></span>
-<span id="cb28-14"><a href="#cb28-14" aria-hidden="true" tabindex="-1"></a><span class="st">- go_back_to_classification to correct issue type</span></span>
-<span id="cb28-15"><a href="#cb28-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-16"><a href="#cb28-16" aria-hidden="true" tabindex="-1"></a><span class="st">Be specific and helpful in your solutions."""</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb36"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>RESOLUTION_SPECIALIST_PROMPT <span class="op">=</span> <span class="st">"""You are a customer support agent helping with device issues.</span></span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a><span class="st">CURRENT STAGE: Resolution</span></span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a><span class="st">CUSTOMER INFO: Warranty status is </span><span class="sc">{warranty_status}</span><span class="st">, issue type is </span><span class="sc">{issue_type}</span></span>
+<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a><span class="st">At this step, you need to:</span></span>
+<span id="cb36-7"><a href="#cb36-7" aria-hidden="true" tabindex="-1"></a><span class="st">1. For SOFTWARE issues: provide troubleshooting steps using provide_solution</span></span>
+<span id="cb36-8"><a href="#cb36-8" aria-hidden="true" tabindex="-1"></a><span class="st">2. For HARDWARE issues:</span></span>
+<span id="cb36-9"><a href="#cb36-9" aria-hidden="true" tabindex="-1"></a><span class="st">   - If IN WARRANTY: explain warranty repair process using provide_solution</span></span>
+<span id="cb36-10"><a href="#cb36-10" aria-hidden="true" tabindex="-1"></a><span class="st">   - If OUT OF WARRANTY: escalate_to_human for paid repair options</span></span>
+<span id="cb36-11"><a href="#cb36-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-12"><a href="#cb36-12" aria-hidden="true" tabindex="-1"></a><span class="st">If the customer indicates any information was wrong, use:</span></span>
+<span id="cb36-13"><a href="#cb36-13" aria-hidden="true" tabindex="-1"></a><span class="st">- go_back_to_warranty to correct warranty status</span></span>
+<span id="cb36-14"><a href="#cb36-14" aria-hidden="true" tabindex="-1"></a><span class="st">- go_back_to_classification to correct issue type</span></span>
+<span id="cb36-15"><a href="#cb36-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-16"><a href="#cb36-16" aria-hidden="true" tabindex="-1"></a><span class="st">Be specific and helpful in your solutions."""</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Now the agent can handle corrections:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>result <span class="op">=</span> agent.invoke(</span>
-<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>    {<span class="st">"messages"</span>: [HumanMessage(</span>
-<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Actually, I made a mistake - my device is out of warranty"</span></span>
-<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>    )]},</span>
-<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>    config</span>
-<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Agent will call go_back_to_warranty and</span></span>
-<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a><span class="co"># restart the warranty verification step</span></span>
-<span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-10"><a href="#cb29-10" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> msg <span class="kw">in</span> result[<span class="st">'messages'</span>]:</span>
-<span id="cb29-11"><a href="#cb29-11" aria-hidden="true" tabindex="-1"></a>    msg.pretty_print()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb37"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>result <span class="op">=</span> agent.invoke(</span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>    {<span class="st">"messages"</span>: [HumanMessage(</span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Actually, I made a mistake - my device is out of warranty"</span></span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a>    )]},</span>
+<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a>    config</span>
+<span id="cb37-6"><a href="#cb37-6" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb37-7"><a href="#cb37-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Agent will call go_back_to_warranty and</span></span>
+<span id="cb37-8"><a href="#cb37-8" aria-hidden="true" tabindex="-1"></a><span class="co"># restart the warranty verification step</span></span>
+<span id="cb37-9"><a href="#cb37-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-10"><a href="#cb37-10" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> msg <span class="kw">in</span> result[<span class="st">'messages'</span>]:</span>
+<span id="cb37-11"><a href="#cb37-11" aria-hidden="true" tabindex="-1"></a>    msg.pretty_print()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
 <section id="complete-example" class="level2">
 <h2 class="anchored" data-anchor-id="complete-example">Complete example</h2>
