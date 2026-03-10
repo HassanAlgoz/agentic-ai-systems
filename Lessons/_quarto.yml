@@ -31,13 +31,17 @@ format:
     smooth-scroll: true
     mermaid: 
       theme: default
+    respect-user-color-scheme: true
+    theme: 
+      light: cosmo
+      dark: darkly
     
   revealjs:
     slide-number: c/t
     show-slide-number: all
     transition: slide
     background-transition: fade
-    chalkboard: true
+    chalkboard: false
     progress: true
     history: false
     scrollable: true
