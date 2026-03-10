@@ -49,8 +49,8 @@ graph TD
         H[/User Query/] --> I["Embedding models (same)"]
         I --> J[/Vector/]
         J --> K[Retrievers]
-        K --> G
-        G --> K
+        K -- Vector --> G
+        G -- Chunks --> K
         K --> L[/Relevant context/]
     end
 
